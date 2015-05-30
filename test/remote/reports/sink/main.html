@@ -1,0 +1,175 @@
+<style>
+    section {page-break-inside: avoid;}
+    table {
+        width: 100%;
+        border: 1px solid #ccc;
+        background: #f8f8f8;
+        border-radius: 4px;
+        th:first-child, td:first-child {text-align: left;}
+        th, td {padding: 0.4em; text-align: center;}
+        tr:nth-child(odd) td {background-color: #efefef;}
+    }
+    [negative] { color: red; }
+    img { height: 2em; }
+</style>
+
+
+<header>
+    <h1>Page Header</h1>
+</header>
+<footer>
+    <h1>Page Footer</h1>
+</footer>
+
+
+<h2>Report Header</h2>
+
+
+<h2>Groups</h2>
+<ul>
+    {{#groups}}
+    <li>{{name}}</li>
+        <ul>
+            {{#items}}
+            <li>{{name}}</li>
+            {{/items}}
+        </ul>
+    {{/groups}}
+</ul>
+
+
+<h2>Charts</h2>
+<div style="text-align: center">{{> charts.chart}}</div>
+
+
+<h2>Images</h2>
+<table>
+    <tbody>
+    <tr>
+        <td>Local</td>
+        <td><img src="/images/person.png"/></td>
+    </tr>
+    <tr>
+        <td>Remote</td>
+        <td><img src="http://www.panosoft.com/img/panoLogo.png"/></td>
+    </tr>
+    </tbody>
+</table>
+
+
+<h2>Fonts</h2>
+<style>
+    @font-face {
+        font-family: "local";
+        src: url("/fonts/PrecisionID MICR.ttf");
+    }
+    @font-face {
+        font-family: "remote";
+        src: url("https://www.dabitat.com/resources/fonts/cartonSlab/carton-slab.woff");
+    }
+</style>
+<table>
+    <tbody>
+    <tr>
+        <td>Local</td>
+        <td style="font-family: local;">12345 abcdefg</td>
+    </tr>
+    <tr>
+        <td>Remote</td>
+        <td style="font-family: remote;">12345 abcdefg</td>
+    </tr>
+    </tbody>
+</table>
+
+
+<section>
+    <h2>Formatting</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Format</th>
+            <th>Unformatted</th>
+            <th>Formatted</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Date</td>
+            <td>{{date}}</td>
+            <td>{{formatDate date}}</td>
+        </tr>
+        <tr>
+            <td>Time</td>
+            <td>{{date}}</td>
+            <td>{{formatTime date}}</td>
+        </tr>
+        <tr>
+            <td>Currency</td>
+            <td>{{number}}</td>
+            <td>{{formatMoney number}}</td>
+        </tr>
+        <tr>
+            <td>Currency</td>
+            <td>{{numberNegative}}</td>
+            <td>{{formatMoney numberNegative}}</td>
+        </tr>
+        <tr>
+            <td>Conditional</td>
+            <td>{{numberNegative}}</td>
+            <td><span {{isNegative numberNegative}}>{{formatMoney numberNegative}}</span></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+
+<h2>Extending</h2>
+<h3>Helpers</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Location</th>
+        <th>Embedded</th>
+        <th>Imported</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Remote (*local)</td>
+        <td>{{remoteHelperEmbedded}}</td>
+        <td>{{remoteHelperImported}}</td>
+    </tr>
+    <tr>
+        <td>Local</td>
+        <td>{{localHelperEmbedded}}</td>
+        <td>{{localHelperImported}}</td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Partials</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Location</th>
+        <th>Embedded</th>
+        <th>Imported</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Remote (*local)</td>
+        <td>{{> remotePartialEmbedded}}</td>
+        <td>{{> remotePartialImported}}</td>
+    </tr>
+    <tr>
+        <td>Local</td>
+        <td>{{> localPartialEmbedded}}</td>
+        <td>{{> localPartialImported}}</td>
+    </tr>
+    </tbody>
+</table>
+
+
+
+<h2>Report Footer</h2>

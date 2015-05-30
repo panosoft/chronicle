@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head>
+    <style>
+        @page {
+            @top { content: flow(header); }
+            @bottom { content: flow(footer); }
+        }
+        body > header { flow: static(header); }
+        body > footer { flow: static(footer); }
+    </style>
+</head>
+<body>
+    {{> main }}
+</body>
+</html>
