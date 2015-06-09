@@ -1,23 +1,20 @@
 var path = require('path');
 var fs = require('fs');
 var suspend = require('suspend');
+var resume = suspend.resume;
 var Phantom = require('../phantom');
 // d3 required below
 // c3 required below
 
-var create = suspend.promise(function * (options) {
-	// js
-	var dependencies = [
+var create = function (options) {
+	// options // Note: render function is evaluated on phantom page (input -> html)
+	var js = [
 		path.join(__dirname, '../../node_modules/d3/d3.js'),
 		path.join(__dirname, '../../node_modules/c3/c3.js')
 	];
-	// css
 	var css = [
 		path.join(__dirname, '../../node_modules/c3/c3.min.css')
 	];
-	var c3Css = fs.readFileSync(css[0], 'utf8');
-	c3Css = '<style>' + c3Css + '</style>';
-	// render // function runs on phantom page (input -> html)
 	var render = function (config) {
 		var container = document.createElement('div');
 		document.body.appendChild(container);
@@ -50,21 +47,36 @@ var create = suspend.promise(function * (options) {
 		setTimeout(done, 2);
 	};
 
-	var phantom = yield Phantom.create();
+	var initialized;
+	var phantom;
+	var style;
+	var initialize = suspend.promise(function * () {
+		if (initialized) throw new Error('Already initialized');
+		// Load css style block
+		style = yield fs.readFile(css[0], 'utf8', resume());
+		style = '<style>' + style + '</style>';
+		phantom = Phantom.create();
+		yield phantom.initialize();
+		initialized = true;
+	});
+	var shutdown = function () {
+		phantom.shutdown();
+	};
 	var generate = suspend.promise(function * (config) {
+		if (!initialized) throw new Error('Not initialized');
 		var page = yield phantom.createPage();
-		yield page.injectJs(dependencies);
-		// render html
+		yield page.injectJs(js);
 		var output = yield page.evaluate(render, config);
-		output = c3Css + output;
+		output = style + output;
 		page.close();
 		return output;
 	});
 	return {
-		generate: generate,
-		shutdown: phantom.exit
+		initialize: initialize,
+		shutdown: shutdown,
+		generate: generate
 	}
-});
+};
 module.exports = {
 	create: create
 };

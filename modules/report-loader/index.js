@@ -12,11 +12,11 @@ var reportMainPath = './index.js'; // TODO consider // default value can be over
 								   // property // would have to check for a package.json first, load main specified if
 								   // found, otherwise look for index.js
 
-var initialized;
 var fileLoader;
 var helpers;
 var partials;
 var template;
+var initialized;
 /**
  *
  * @param config
@@ -42,7 +42,7 @@ var initialize = suspend.promise(function * (config) {
 	initialized = true;
 });
 var create = function () {
-	if (!initialized) throw new Error('This module has not been initialized.');
+	if (!initialized) throw new Error('Module not initialized');
 	var load = suspend.promise(function * (reportUrl) {
 		var definition = yield fileLoader.load(reportMainPath, {basePath: reportUrl, moduleDirname: __dirname});
 		var config = ReportConfig.create(definition);

@@ -6,7 +6,7 @@ var PhantomJs = require('PhantomJs');
 var Phantom = require('phantom');
 
 // Create a running phantom process
-var create = suspend.promise(function * (options) {
+var create = function (options) {
 	options = options || {};
 	options.binary = PhantomJs.path;
 
@@ -16,13 +16,22 @@ var create = suspend.promise(function * (options) {
 	//	options.onStdout = console.log; // (data) // contains browser js errors when evaluating code on a page
 	//	options.onExit(code, signal)
 
-	// TODO handle creating mult phantoms by passing unique port number to each instance // options.port
-	var resume = suspend.resume();
-	var phantom = yield Phantom.create(options, function (phantom) {
-		resume(null, phantom);
+	var initialized;
+	var phantom;
+	var initialize = suspend.promise(function * () {
+		if (initialized) throw new Error('Already initialized');
+		// TODO handle creating mult phantoms by passing unique port number to each instance // options.port
+		var resume = suspend.resume();
+		phantom = yield Phantom.create(options, function (phantom) {
+			resume(null, phantom);
+		});
+		initialized = true;
 	});
-
+	var shutdown = function () {
+		phantom.exit();
+	};
 	var createPage = suspend.promise(function * (options) {
+		if (!initialized) throw new Error('Not initialized');
 		options = _.defaults(options || {}, {
 			viewportSize: {width: 1024, height: 768}
 		});
@@ -84,12 +93,12 @@ var create = suspend.promise(function * (options) {
 			injectJs: injectJs
 		};
 	});
-
 	return {
-		createPage: createPage,
-		exit: phantom.exit
+		initialize: initialize,
+		shutdown: shutdown,
+		createPage: createPage
 	};
-});
+};
 module.exports = {
 	create: create
 };

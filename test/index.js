@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var suspend = require('suspend');
-var ReportRunner = require('../');
+var Chronicle = require('../');
 
 suspend(function * () {
 	try {
@@ -11,14 +11,15 @@ suspend(function * () {
 
 
 		// Run report
-		yield ReportRunner.initialize({
+		var chronicle = Chronicle.create({
 			fileroot: path.join(__dirname, 'local'),
 			license: path.join(__dirname, 'local/princeLicense.dat')
 		});
-		var reportRunner = ReportRunner.create();
+		yield chronicle.initialize();
 		console.time('Run');
-		var pdf = yield reportRunner.run(url, parameters);
+		var pdf = yield chronicle.run(url, parameters);
 		console.timeEnd('Run');
+		chronicle.shutdown();
 
 
 		// Capture output
