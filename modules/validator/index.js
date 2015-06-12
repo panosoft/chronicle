@@ -1,10 +1,8 @@
 var _ = require('lodash');
 var validator = require('validator');
+var path = require('path');
 
-var isAbsolutePath = function (value) {
-	// starts with `/` and ends with anything
-	return _.isString(value) && /^\/.*/.test(value);
-};
+var isAbsolutePath = path.isAbsolute;
 var	isRelativePath = function (value) {
 	// starts with `./` or `../` and ends with anything
 	return _.isString(value) && /^(\.{1,2})\/.*/.test(value);

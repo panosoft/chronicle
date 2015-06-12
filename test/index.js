@@ -5,6 +5,11 @@ var Chronicle = require('../');
 
 suspend(function * () {
 	try {
+		// start local server // use nock instead?
+		// serve up remote files
+		// stop local server
+
+
 		// Setup
 		var url = path.resolve('./remote/reports/sink/');
 		var parameters = {};
