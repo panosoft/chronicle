@@ -10,10 +10,13 @@ var validator = require('../validator');
 var requireString = require('../require-string');
 var callsite = require('callsite');
 var request = require('request');
+var Cache = require('lru-cache');
+var status = require('statuses');
 
 // TODO consider // throttle how many files are loaded at once
 // fs reads relative paths relative to process.cwd()
 // require reads relative paths relative to the module __dirname
+
 
 // returns dirname of first file in stack that is not: current __dirname, native, or suspend
 var getCallerDirname = function () {
@@ -50,50 +53,13 @@ var resolvePaths = function (paths, basePath) {
 	});
 };
 /**
- * Load files from path(s)
- *    if local absolute path
- *        if js file or directory, load with require()
- *        else load with fs.readFile()
- *    if remote url
- *        if directory, look for index.js
- *        load files with request
- *        load js files with requireString
- *
- * @params {String[]} paths
- *    Resolved paths of files to load
- *
- * @returns {Object.<String, String>} files
- *    {path: contents}
- */
-var loadFiles = suspend.promise(function * (paths) {
-	_.forEach(paths, function (path) {
-		if (validator.isURL(path)) {
-			loadRemoteFile(path, fork());
-		}
-		else {
-			fs.readFile(path, 'utf8', fork());
-		}
-	});
-	var contents = yield join();
-	return _.zipObject(paths, contents);
-});
-var loadRemoteFile = suspend(function * (path, callback) {
-	var result = yield request(path, suspend.resumeRaw());
-	var error = result[0];
-	var response = result[1];
-	var body = result[2];
-	// if response 200, there is a body
-	// cache file
-	// if response 304, no body -> use cached version (have to send special type of request though so that server knows our version
-	return (error ? callback(error) : callback(null, body));
-});
-/**
- * Compile modules from strings.
+ * Compile modules from file content strings.
  *
  * @param {Object} files
  *    {path: content}
- * @param {Object} options
- * @param {String} options.dirname
+ *    path is a fully qualified uri or absolute path
+ * @param {Object} [options]
+ * @param {String} [options.dirname]
  *    Directory to use to override the modules default directory
  *
  * @returns {Object} files
@@ -109,55 +75,142 @@ var loadModules = function (files, options) {
 		return content;
 	});
 };
+
 /**
- * Loads file contents and js modules from both remote and local paths.
- * Shallow search (i.e. only top level properties of an object are scanned)
+ * Create a new File Loader
  *
- * @param {String|Object} manifest
- *    path | {name: path | *}
- *    paths can be any one of the following:
- *    - fully qualified uri
- *    - absolute path (i.e. starting with /)
- *    - prefixed relative path (i.e. starting with ./ or ../)
- *    Note: Relative paths with no prefix (i.e. 'local/test.txt') are not supported because they can not be
- *     differentiated from a standard string
- * @param {Object} [options]
- * @param {String} [options.basePath]
- *    Base path used to resolve relative paths
- *    Defaults to the calling modules __dirname
- * @param {String} [options.dirname]
- *    Directory used to set __dirname for modules.
- *    For remote files, this defaults to the calling modules __dirname
- *    For local files, this defaults to the dirname of the local file
+ * @param [options]
+ * @param [options.max]
+ * 	Maximum cache size. Calculated using sum of the results from `options.length` function on each item in the cache
+ * @param [options.length]
+ * 	Function used to calculate length of each item in cache
  *
- * @returns {String|Object} manifest
- *    file | {name: file}
+ * @returns {{load}}
  */
-var load = suspend.promise(function * (manifest, options) {
-	var callerDirname = getCallerDirname(); // TODO consider removing // doesn't feel very robust ... // could use cwd instead ...
-	// Set defaults
-	manifest = _.isPlainObject(manifest) ? manifest : {path: manifest};
+var create = function (options) {
 	options = _.defaults(options || {}, {
-		basePath: callerDirname || '',
-		callerDirname: callerDirname
+		max: 500,
+		length: function (value) {
+			return 1;
+		}
 	});
 
-	var namePaths = _.pick(manifest, validator.isPath);
-	namePaths = resolvePaths(namePaths, options.basePath);
+	var cache = new Cache({
+		max: options.max,
+		length: options.length
+	});
+	var loadRemoteFile = suspend(function * (path, callback) {
+		var cachedFile = cache.get(path); // cached file item: path: {etag, lastmodified, contents}
+		var headers = {};
+		if (cachedFile) {
+			headers = {
+				'if-modified-since': cachedFile.lastModified,
+				'if-none-match': cachedFile.eTag
+			};
+		}
+		var result = yield request({
+			url: path,
+			headers: headers
+		}, suspend.resumeRaw());
+		var error = result[0];
+		var response = result[1];
+		var body = result[2];
+		if (error) {
+			return callback(error);
+		}
+		else if (response.statusCode === 200) {
+			cache.set(path, {
+				eTag: response.headers.etag,
+				lastModified: response.headers['last-modified'],
+				contents: body
+			});
+		}
+		else if (response.statusCode === 304) {
+			body = cachedFile.contents;
+		}
+		else {
+			return callback(new Error('Unrecognized statusCode: ' + response.statusCode + ': ' + status[response.statusCode]));
+		}
+		return callback(null, body);
+	});
+	/**
+	 * Load files from path(s)
+	 *
+	 * @params {String[]} paths
+	 *    Resolved paths of files to load
+	 *
+	 * @returns {Object.<String, String>} files
+	 *    {path: contents}
+	 */
+	var loadFiles = suspend.promise(function * (paths) {
+		_.forEach(paths, function (path) {
+			if (validator.isURL(path)) {
+				// TODO use a control flow lib instead of using fork()
+				// then we can return promise instead taking a callback in loadRemoteFile
+				loadRemoteFile(path, fork());
+			}
+			else {
+				fs.readFile(path, 'utf8', fork());
+			}
+		});
+		var contents = yield join();
+		return _.zipObject(paths, contents);
+	});
+	/**
+	 * Loads file contents and js modules from both remote and local paths.
+	 * Shallow search (i.e. only top level properties of an object are scanned)
+	 *
+	 * @param {String|Object} manifest
+	 *    path | {name: path | *}
+	 *    paths can be any one of the following:
+	 *    - fully qualified uri (i.e. http://test.com/file.txt)
+	 *    - absolute path (i.e. starting with /)
+	 *    - prefixed relative path (i.e. starting with ./ or ../)
+	 * @param {Object} [options]
+	 * @param {String} [options.basePath]
+	 *    Base path used to resolve relative paths
+	 *    Defaults to the calling modules __dirname
+	 * @param {String} [options.dirname]
+	 *    Directory used to set __dirname for modules.
+	 *    For remote files: defaults to the calling modules __dirname
+	 *    For local files: defaults to the dirname of the file
+	 *
+	 * @returns {String|Object} manifest
+	 *    file | {name: file contents | module export | *}
+	 */
+	var load = suspend.promise(function * (manifest, options) {
+		// TODO consider removing callerDirname
+		// not very robust since depends on how load() is called
+		// could use process.cwd() instead as default
+		// then make dirname option for FileLoader.create(options) to override the cwd default
+		// this could be used to more reliably set the default dirname to be the dir of the calling module
+		var callerDirname = getCallerDirname();
 
-	var paths = _.values(namePaths);
-	var pathFiles = yield loadFiles(paths);
-	pathFiles = loadModules(pathFiles, options);
+		// Set defaults
+		manifest = _.isPlainObject(manifest) ? manifest : {path: manifest};
+		options = _.defaults(options || {}, {
+			basePath: callerDirname || '',
+			callerDirname: callerDirname
+		});
 
-	var nameFiles = _.mapValues(namePaths, function (path) {
-		return pathFiles[path];
+		var namePaths = _.pick(manifest, validator.isPath);
+		namePaths = resolvePaths(namePaths, options.basePath);
+		var paths = _.values(namePaths);
+		var pathFiles = yield loadFiles(paths);
+		pathFiles = loadModules(pathFiles, options);
+		var nameFiles = _.mapValues(namePaths, function (path) {
+			return pathFiles[path];
+		});
+
+		_.assign(manifest, nameFiles);
+		return (_.size(manifest) === 1) ? manifest.path : manifest;
 	});
 
-	// Return loaded object
-	_.assign(manifest, nameFiles);
-	return (_.size(manifest) === 1) ? manifest.path : manifest;
-});
+	return {
+		load: load
+	};
+};
 
 module.exports = {
-	load: load
+	create: create
 };

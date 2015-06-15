@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var path = require('path');
 var suspend = require('suspend');
-var fileLoader = require('./modules/file-loader');
+var FileLoader = require('./modules/file-loader');
 
 var Prince = require('./modules/prince');
 var ReportLoader = require('./modules/report-loader');
@@ -9,8 +9,9 @@ var TemplateEngine = require('./modules/template-engine');
 
 var create = function (options) {
 	options = _.defaults(options || {}, {
-		license: '',
-		fileroot: ''
+		license: '',  // TODO add to config
+		fileroot: '', // TODO add to config
+		max: 500 // TODO add to config // maximum number of remote report definitions to cache // lru removed after that
 	});
 	var initialized;
 	var templateEngine;
@@ -22,10 +23,13 @@ var create = function (options) {
 		yield templateEngine.initialize();
 
 		htmlRenderer = Prince.create({
-			licenseFile: options.license, // TODO add to config
-			fileroot: options.fileroot // TODO add to config
+			licenseFile: options.license,
+			fileroot: options.fileroot
 		});
 
+		var fileLoader = FileLoader.create({
+			max: options.max
+		});
 		yield ReportLoader.initialize({
 			fileLoader: fileLoader // default this in the loader?
 			// data library

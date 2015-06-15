@@ -44,13 +44,13 @@ var initialize = suspend.promise(function * (config) {
 var create = function () {
 	if (!initialized) throw new Error('Module not initialized');
 	var load = suspend.promise(function * (reportUrl) {
-		var definition = yield fileLoader.load(reportMainPath, {basePath: reportUrl, moduleDirname: __dirname});
+		var definition = yield fileLoader.load(reportMainPath, {basePath: reportUrl, dirname: __dirname});
 		var config = ReportConfig.create(definition);
 		// Deep load report object ... // TODO consider generalizing to automatically handle deep loading
-		yield fileLoader.load(config.charts, {basePath: reportUrl, moduleDirname: __dirname});
-		yield fileLoader.load(config.helpers, {basePath: reportUrl, moduleDirname: __dirname});
-		yield fileLoader.load(config.partials, {basePath: reportUrl, moduleDirname: __dirname});
-		config.template = yield fileLoader.load(config.template, {basePath: reportUrl, moduleDirname: __dirname});
+		yield fileLoader.load(config.charts, {basePath: reportUrl, dirname: __dirname});
+		yield fileLoader.load(config.helpers, {basePath: reportUrl, dirname: __dirname});
+		yield fileLoader.load(config.partials, {basePath: reportUrl, dirname: __dirname});
+		config.template = yield fileLoader.load(config.template, {basePath: reportUrl, dirname: __dirname});
 		return Report.create(config);
 	});
 	return {

@@ -18,9 +18,11 @@
     "handlebars": "^3.0.3",
     "less": "^2.5.1",
     "lodash": "^3.9.1",
+    "lru-cache": "^2.6.4",
     "phantom": "^0.7.2",
     "phantomjs": "^1.9.16",
     "request": "^2.57.0",
+    "statuses": "^1.2.1",
     "suspend": "^0.6.1",
     "validator": "^3.40.0"
   },
