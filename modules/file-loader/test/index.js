@@ -6,24 +6,6 @@ var url = require('url');
 var nock = require('nock');
 
 
-// Later:
-// TODO add support for manifest to be an array of paths (i.e. [path])
-// TODO support ./assets/index -> ./assets/index.js (like require)
-// TODO support ./assets -> ./assets/index.js (like require)
-// TODO override default basePath on fileLoader instance in addition to #load options
-//   could be a more robust way of loading from calling module __dirname instead of using callsite() ...
-// TODO override default dirname on fileLoader instance in addition to #load options
-// TODO add support to #load for [option.encoding='utf8']
-//	 problem here is that each file in an object of paths may need different encoding and this will force all of
-// 	 them to have the same value ...
-// ? should loader return buffer by default with encoding option?
-// ? support relative path/to/file with basePath for local files?
-// require.resolve doesn't ...
-// /path/to/file with basePath
-// have to assume this is an absolute path since basePath is always defaulted
-// UNLESS basePath is a Url, then this is a valid relative path ...
-
-
 describe('file-loader', function () {
 	var fileLoader = FileLoader.create({
 		max: 500,
@@ -31,6 +13,8 @@ describe('file-loader', function () {
 			return 1;
 		}
 	});
+
+
 	describe('#load', function () {
 
 
@@ -126,8 +110,22 @@ describe('file-loader', function () {
 					expect(module).to.be.an('object');
 				})();
 			});
-			it('options.dirname defaults to the calling modules directory', function () {
-				expect(module.__dirname).to.equal(__dirname);
+			it('options.dirname defaults to the current working directory', function () {
+				expect(module.__dirname).to.equal(path.resolve());
+			});
+			it('options.dirname overrides a modules default __dirname', function () {
+				return suspend.promise(function * () {
+					var domain = 'http://test.com';
+					var filePath = '/index.js';
+					var uri = url.resolve(domain, filePath);
+					var scope = nock(domain)
+						.get(filePath)
+						.replyWithFile(200, path.resolve(__dirname, './assets/index.js'));
+					var dirname = path.resolve(__dirname, 'assets');
+					module = yield fileLoader.load(uri, {dirname: dirname});
+					scope.done();
+					expect(module.__dirname).to.equal(dirname);
+				})();
 			});
 			it('require native module', function () {
 				var native = module.require('path');
@@ -138,15 +136,16 @@ describe('file-loader', function () {
 				expect(installed).to.be.an('object');
 			});
 			it('require relative module', function () {
-				var relative = module.require('./assets/relative');
+				var relative = module.require('./relative');
 				expect(relative).to.be.an('object');
 			});
 		});
 
 
-		it('options.basePath defaults to the __dirname of the script file calling the loader', function () {
+		it('options.basePath defaults to the current working directory of the process', function () {
 			return suspend.promise(function * () {
-				var file = yield fileLoader.load('./assets/file.txt');
+				var filePath = './' + path.relative(path.resolve('.'), path.resolve(__dirname, './assets/file.txt'));
+				var file = yield fileLoader.load(filePath);
 				expect(file).to.be.a('string')
 					.and.to.equal('Text');
 			})();
@@ -162,7 +161,8 @@ describe('file-loader', function () {
 
 		it('options.dirname overrides a modules default __dirname', function () {
 			return suspend.promise(function * () {
-				var module = yield fileLoader.load('./assets/index.js', {dirname: __dirname});
+				var filePath = path.resolve(__dirname, './assets/index.js');
+				var module = yield fileLoader.load(filePath, {dirname: __dirname});
 				expect(module.__dirname).to.equal(__dirname);
 			})();
 		});
@@ -171,8 +171,8 @@ describe('file-loader', function () {
 		it('paths in an object can be loaded', function () {
 			return suspend.promise(function * () {
 				var paths = {
-					file: './assets/file.txt',
-					module: './assets/index.js',
+					file: path.resolve(__dirname, './assets/file.txt'),
+					module: path.resolve(__dirname, './assets/index.js'),
 					property: 0,
 					object: {one: 1},
 					fn: function () {

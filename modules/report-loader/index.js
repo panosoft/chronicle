@@ -5,9 +5,9 @@ var ReportConfig = require('./report-config');
 var Report = require('./report');
 
 // Configs
-var helpersPath = path.join(__dirname, './helpers');
-var partialsPath = path.join(__dirname, './partials'); // TODO use resolve
-var templatePath = path.join(__dirname, './template.html');
+var helpersPath = path.resolve(__dirname, './helpers');
+var partialsPath = path.resolve(__dirname, './partials');
+var templatePath = path.resolve(__dirname, './template.html');
 var reportMainPath = './index.js'; // TODO consider // default value can be overridden by reports `package.json:main`
 								   // property // would have to check for a package.json first, load main specified if
 								   // found, otherwise look for index.js

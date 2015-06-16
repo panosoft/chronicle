@@ -18,19 +18,6 @@ var status = require('statuses');
 // require reads relative paths relative to the module __dirname
 
 
-// returns dirname of first file in stack that is not: current __dirname, native, or suspend
-var getCallerDirname = function () {
-	var stack = callsite();
-	var site = _.find(stack, function (site) {
-		var filename = site.getFileName();
-		return (
-			path.dirname(site.getFileName()) !== __dirname
-			&& !site.isNative()
-			&& !/suspend/ig.test(filename)
-		);
-	});
-	return path.dirname(site.getFileName());
-};
 var isJs = function (filePath) {
 	return path.extname(filePath) === '.js';
 };
@@ -68,7 +55,7 @@ var resolvePaths = function (paths, basePath) {
 var loadModules = function (files, options) {
 	return _.mapValues(files, function (content, filePath) {
 		if (isJs(filePath)) {
-			var dirname = options.dirname || (validator.isURL(filePath) ? options.callerDirname : path.dirname(filePath));
+			var dirname = options.dirname || (validator.isURL(filePath) ? path.resolve() : path.dirname(filePath));
 			var filename = path.join(dirname, path.basename(filePath));
 			content = requireString(content, filename);
 		}
@@ -94,7 +81,6 @@ var create = function (options) {
 			return 1;
 		}
 	});
-
 	var cache = new Cache({
 		max: options.max,
 		length: options.length
@@ -145,8 +131,6 @@ var create = function (options) {
 	var loadFiles = suspend.promise(function * (paths) {
 		_.forEach(paths, function (path) {
 			if (validator.isURL(path)) {
-				// TODO use a control flow lib instead of using fork()
-				// then we can return promise instead taking a callback in loadRemoteFile
 				loadRemoteFile(path, fork());
 			}
 			else {
@@ -169,28 +153,21 @@ var create = function (options) {
 	 * @param {Object} [options]
 	 * @param {String} [options.basePath]
 	 *    Base path used to resolve relative paths
-	 *    Defaults to the calling modules __dirname
+	 *    Defaults to the current working directory
 	 * @param {String} [options.dirname]
 	 *    Directory used to set __dirname for modules.
-	 *    For remote files: defaults to the calling modules __dirname
+	 *    For remote files: defaults to the current working directory
 	 *    For local files: defaults to the dirname of the file
 	 *
 	 * @returns {String|Object} manifest
 	 *    file | {name: file contents | module export | *}
 	 */
 	var load = suspend.promise(function * (manifest, options) {
-		// TODO consider removing callerDirname
-		// not very robust since depends on how load() is called
-		// could use process.cwd() instead as default
-		// then make dirname option for FileLoader.create(options) to override the cwd default
-		// this could be used to more reliably set the default dirname to be the dir of the calling module
-		var callerDirname = getCallerDirname();
-
 		// Set defaults
 		manifest = _.isPlainObject(manifest) ? manifest : {path: manifest};
 		options = _.defaults(options || {}, {
-			basePath: callerDirname || '',
-			callerDirname: callerDirname
+			basePath: '',
+			dirname: null
 		});
 
 		var namePaths = _.pick(manifest, validator.isPath);

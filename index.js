@@ -32,8 +32,8 @@ var create = function (options) {
 		});
 		yield ReportLoader.initialize({
 			fileLoader: fileLoader // default this in the loader?
-			// data library
-			// inject dependencies and other libraries that reports may use?
+			// data library // maybe broswerify instead of passed in here
+			// inject dependencies and other libraries that reports may use? // maybe broswerify instead of passed in here
 		});
 		reportLoader = ReportLoader.create();
 
