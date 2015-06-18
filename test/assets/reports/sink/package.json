@@ -1,0 +1,20 @@
+{
+  "name": "sink",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "brfs": "^1.4.0",
+    "browserify": "^10.2.4",
+    "watchify": "^3.2.2"
+  },
+  "dependencies": {
+    "lodash": "^3.9.3",
+    "suspend": "^0.6.1"
+  }
+}

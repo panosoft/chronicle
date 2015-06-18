@@ -53,14 +53,17 @@
     <tbody>
         {{#clients}}
         <tr>
-            <td rowspan="2" class="image" style="background-image: url({{imageUrl}});"></td>
-            <td>{{last}}, {{first}}</td>
-            <td {{isNegative checking}}>{{formatMoney checking}}</td>
-            <td {{isNegative savings}}>{{formatMoney savings}}</td>
-            <td {{isNegative total}}>{{formatMoney total}}</td>
+            <td rowspan="2" class="image" style="background-image: url({{image}});"></td>
+            <td>{{firstName}}</td>
+            <td {{isNegative checking}}>{{formatNumber checking "currency"}}</td>
+            <td {{isNegative savings}}>{{formatNumber savings "currency"}}</td>
+            <td {{isNegative total}}>{{formatNumber total "currency"}}</td>
         </tr>
         <tr>
-            <td colspan="5">{{> address}}</td>
+            <td colspan="5">
+                <div>{{> address}}</div>
+                <div>Id: {{id}}, Modified: {{formatDate modified}}</div>
+            </td>
         </tr>
         {{/clients}}
         <tr>
@@ -68,7 +71,7 @@
             <td></td>
             <td></td>
             <td><h4>Total:</h4></td>
-            <td {{isNegative clientTotal}}>{{formatMoney clientTotal}}</td>
+            <td {{isNegative clientTotal}}>{{formatNumber clientTotal "currency"}}</td>
         </tr>
     </tbody>
 </table>

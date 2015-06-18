@@ -1,13 +1,13 @@
 var _ = require('lodash');
-var path = require('path');
 var suspend = require('suspend');
+var fs = require('fs');
 
 var fetch = function (parameters) {
 	return {
 		title: "Kitchen Sink",
-		string: 'string',
-		number: 10.00,
-		numberNegative: -10.00,
+		string: 'A string',
+		number: 4321.1234,
+		numberNegative: -4321.1234,
 		groups: [
 			{
 				name: "Group 1",
@@ -39,16 +39,16 @@ var getData = suspend.promise(function * (parameters) {
 
 module.exports = {
 	getData: getData,
-	template: './template.html', // (optional) Path || String
+	template: fs.readFileSync('./template.html', 'utf8'), // (optional) Path || String
 	helpers: {
 		remoteHelperEmbedded: function () {return 'Remote Helper Embedded';},
-		remoteHelperImported: './helper.js'
+		remoteHelperImported: require('./helper.js')
 		// Server helpers (automatically loaded, can be overridden)
 	},
 	partials: {
-		main: './main.html',
+		main: fs.readFileSync('./main.html', 'utf8'),
 		remotePartialEmbedded: 'Remote Partial Embedded',
-		remotePartialImported: './partial.html'
+		remotePartialImported: fs.readFileSync('./partial.html', 'utf8')
 		// Server helpers(automatically loaded, can be overridden)
 	},
 	charts: {

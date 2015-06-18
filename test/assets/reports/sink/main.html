@@ -87,36 +87,72 @@
     <table>
         <thead>
         <tr>
+            <th>Type</th>
             <th>Format</th>
-            <th>Unformatted</th>
+            <th>Value</th>
             <th>Formatted</th>
         </tr>
         </thead>
         <tbody>
         <tr>
             <td>Date</td>
+            <td>-</td>
             <td>{{date}}</td>
             <td>{{formatDate date}}</td>
         </tr>
         <tr>
-            <td>Time</td>
+            <td>Date</td>
+            <td>long</td>
             <td>{{date}}</td>
-            <td>{{formatTime date}}</td>
+            <td>{{formatDate date "long"}}</td>
         </tr>
         <tr>
-            <td>Currency</td>
+            <td>Date</td>
+            <td>hhmm</td>
+            <td>{{date}}</td>
+            <td>{{formatTime date "hhmm"}}</td>
+        </tr>
+        <tr>
+            <td>Date</td>
+            <td>hhmmss</td>
+            <td>{{date}}</td>
+            <td>{{formatTime date "hhmmss"}}</td>
+        </tr>
+        <tr>
+            <td>Number</td>
+            <td>-</td>
             <td>{{number}}</td>
-            <td>{{formatMoney number}}</td>
+            <td>{{formatNumber number}}</td>
         </tr>
         <tr>
-            <td>Currency</td>
-            <td>{{numberNegative}}</td>
-            <td>{{formatMoney numberNegative}}</td>
+            <td>Number</td>
+            <td>currency</td>
+            <td>{{number}}</td>
+            <td>{{formatNumber number "currency"}}</td>
+        </tr>
+        <tr>
+            <td>Number</td>
+            <td>percent</td>
+            <td>{{number}}</td>
+            <td>{{formatNumber number "percent"}}</td>
+        </tr>
+        <tr>
+            <td>Number</td>
+            <td>toWords</td>
+            <td>{{number}}</td>
+            <td>{{formatNumber number "words"}}</td>
+        </tr>
+        <tr>
+            <td>String</td>
+            <td>upperCase</td>
+            <td>{{string}}</td>
+            <td>{{formatString string "upperCase"}}</td>
         </tr>
         <tr>
             <td>Conditional</td>
+            <td>-</td>
             <td>{{numberNegative}}</td>
-            <td><span {{isNegative numberNegative}}>{{formatMoney numberNegative}}</span></td>
+            <td><span {{isNegative numberNegative}}>{{formatNumber numberNegative}}</span></td>
         </tr>
         </tbody>
     </table>

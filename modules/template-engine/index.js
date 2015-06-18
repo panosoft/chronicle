@@ -28,12 +28,16 @@ var renderInlineLess = suspend.promise(function * (html) {
 	output = $.html();
 	return output;
 });
-var create = function () {
+var create = function (config) {
+	config = _.defaults(config || {}, {
+		helpers: {},
+		partials: {}
+	});
+	var environment = createEnvironment(config);
+	var chartEngine = ChartEngine.create();
 	var initialized;
-	var chartEngine;
 	var initialize = suspend.promise(function * () {
 		if (initialized) throw new Error('Already initialized');
-		chartEngine = ChartEngine.create();
 		yield chartEngine.initialize();
 		initialized = true;
 	});
@@ -51,13 +55,12 @@ var create = function () {
 	var generate = suspend.promise(function * (report, data) {
 		if (!initialized) throw new Error('Not initialized');
 		var chartPartials = yield generateChartPartials(report.charts, data);
-		var partials = _.assign({}, report.partials, chartPartials);
-		var environment = createEnvironment({
-			helpers: report.helpers,
-			partials: partials
-		});
 		var template = environment.compile(report.template);
-		var html = template(data);
+		var options = {
+			helpers: report.helpers,
+			partials: _.assign({}, report.partials, chartPartials)
+		};
+		var html = template(data, options);
 		html = renderInlineLess(html);
 		return html;
 	});

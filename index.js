@@ -9,34 +9,41 @@ var TemplateEngine = require('./modules/template-engine');
 
 var create = function (options) {
 	options = _.defaults(options || {}, {
-		license: '',  // TODO add to config
-		fileroot: '', // TODO add to config
-		max: 500 // TODO add to config // maximum number of remote report definitions to cache // lru removed after that
+		license: '',	// TODO add to config
+		fileroot: '',	// TODO add to config
+		max: 500,		// TODO add to config // max number of report definitions to cache // lru removed after that
+		helpers: {},
+		partials: {},
+		template: null
+		// ?renderers (like charts?)
 	});
+
+	// Combine/override builtin default helpers/partials with those passed in
+	var helpers = require('./modules/helpers');
+	var partials = require('./modules/partials');
+	_.assign(helpers, options.helpers);
+	_.assign(partials, options.partials);
+	var templateEngine = TemplateEngine.create({
+		helpers: helpers,
+		partials: partials
+	});
+
+	var htmlRenderer = Prince.create({
+		licenseFile: options.license,
+		fileroot: options.fileroot
+	});
+
+	var fileLoader = FileLoader.create({
+		max: options.max
+	});
+	var reportLoader = ReportLoader.create({
+		fileLoader: fileLoader // default this in the loader? // TODO remove after refactoring into TE
+	});
+
 	var initialized;
-	var templateEngine;
-	var htmlRenderer;
-	var reportLoader;
 	var initialize = suspend.promise(function * () {
 		if (initialized) throw new Error('Already initialized');
-		templateEngine = TemplateEngine.create();
 		yield templateEngine.initialize();
-
-		htmlRenderer = Prince.create({
-			licenseFile: options.license,
-			fileroot: options.fileroot
-		});
-
-		var fileLoader = FileLoader.create({
-			max: options.max
-		});
-		yield ReportLoader.initialize({
-			fileLoader: fileLoader // default this in the loader?
-			// data library // maybe broswerify instead of passed in here
-			// inject dependencies and other libraries that reports may use? // maybe broswerify instead of passed in here
-		});
-		reportLoader = ReportLoader.create();
-
 		initialized = true;
 	});
 	var shutdown = function () {
