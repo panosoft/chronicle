@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var suspend = require('suspend');
-var Chronicle = require('../');
+var Chronicle = require('../lib');
 
 suspend(function * () {
 	try {
