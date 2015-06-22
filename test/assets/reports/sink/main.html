@@ -102,21 +102,15 @@
         </tr>
         <tr>
             <td>Date</td>
-            <td>long</td>
+            <td>MM/DD/YY</td>
             <td>{{date}}</td>
-            <td>{{formatDate date "long"}}</td>
+            <td>{{formatDate date "MM/DD/YY"}}</td>
         </tr>
         <tr>
             <td>Date</td>
-            <td>hhmm</td>
+            <td>h:mm:ss a</td>
             <td>{{date}}</td>
-            <td>{{formatTime date "hhmm"}}</td>
-        </tr>
-        <tr>
-            <td>Date</td>
-            <td>hhmmss</td>
-            <td>{{date}}</td>
-            <td>{{formatTime date "hhmmss"}}</td>
+            <td>{{formatDate date "h:mm:ss a"}}</td>
         </tr>
         <tr>
             <td>Number</td>
@@ -126,19 +120,19 @@
         </tr>
         <tr>
             <td>Number</td>
-            <td>currency</td>
+            <td>($0,00.00)</td>
             <td>{{number}}</td>
-            <td>{{formatNumber number "currency"}}</td>
+            <td>{{formatNumber number "($0,00.00)"}}</td>
         </tr>
         <tr>
             <td>Number</td>
-            <td>percent</td>
+            <td>0,0.00%</td>
             <td>{{number}}</td>
-            <td>{{formatNumber number "percent"}}</td>
+            <td>{{formatNumber number "0,0.00%"}}</td>
         </tr>
         <tr>
             <td>Number</td>
-            <td>toWords</td>
+            <td>words</td>
             <td>{{number}}</td>
             <td>{{formatNumber number "words"}}</td>
         </tr>
