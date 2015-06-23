@@ -5,9 +5,7 @@ var Chronicle = require('../lib');
 
 suspend(function * () {
 	try {
-		// start local server // use nock instead?
-		// serve up remote files
-		// stop local server
+		// use nock to serve up remote files
 
 
 		// Setup
