@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "lodash": "^3.9.3",
-    "suspend": "^0.6.1"
+    "suspend": "^0.6.1",
+    "treeize": "^2.0.2"
   }
 }

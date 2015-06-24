@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "c3": "^0.4.10",
-    "callsite": "^1.0.0",
     "cheerio": "^0.19.0",
     "d3": "^3.5.5",
     "dargs": "^4.0.0",

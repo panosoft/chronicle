@@ -1,38 +1,45 @@
 var _ = require('lodash');
 var suspend = require('suspend');
 var fs = require('fs');
+var sql = require('../../../../lib/sql-internal');
+var Tree = require('treeize');
 
-var fetch = function (parameters) {
-	return {
+var fetch = suspend.promise(function * (parameters) {
+	// Build Sql script(s)
+	var script = "" +
+		"SELECT name," +
+		"	string AS 'items.string', number AS 'items.number', date AS 'items.date'" +
+		"FROM Group" +
+		"LEFT OUTER JOIN Item ON Item.groupName = Group.name";
+
+	// Execute script on appropriate server with proper auth
+	var resultSets = yield sql.execute(script, {
+		baseUrl: parameters.report.baseUrl, // base url of app to call SqlInternal on
+		callerId: parameters.report.callerId // auth token to use for call
+	});
+
+	return resultSets;
+});
+var process = function (data) {
+	// Convert data from flat to structured
+	var tree = new Tree({input: {delimiter: '.'}});
+	tree.grow(data[0]);
+	var groups = tree.getData();
+
+	// Construct result
+	var result = {
 		title: "Kitchen Sink",
 		string: 'A string',
 		number: 4321.1234,
 		numberNegative: -4321.1234,
-		groups: [
-			{
-				name: "Group 1",
-				items: [
-					{"name": "Item A"},
-					{"name": "Item B"}
-				]
-			},
-			{
-				name: "Group 2",
-				items: [
-					{"name": "Item A"},
-					{"name": "Item B"},
-					{"name": "Item C"}
-				]
-			}
-		]
+		date: new Date(),
+		groups: groups
 	};
-};
-var process = function (data) {
-	data.date = new Date();
-	return data;
+
+	return result;
 };
 var getData = suspend.promise(function * (parameters) {
-	var data = fetch(parameters);
+	var data = yield fetch(parameters);
 	data = process(data);
 	return data;
 });
