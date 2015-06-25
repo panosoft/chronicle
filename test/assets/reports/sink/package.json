@@ -11,6 +11,7 @@
   "devDependencies": {
     "brfs": "^1.4.0",
     "browserify": "^10.2.4",
+    "minifyify": "^7.0.1",
     "watchify": "^3.2.2"
   },
   "dependencies": {

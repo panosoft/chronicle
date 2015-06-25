@@ -44,8 +44,8 @@ suspend(function * () {
 
 		// Setup
 		var chronicle = Chronicle.create({
-			fileroot: path.join(__dirname, 'assets'),
-			license: path.join(__dirname, 'assets/princeLicense.dat'),
+			fileroot: path.join(__dirname, 'assets'), // renderer // used to lookup relative urls (`/path`) in html
+			license: path.join(__dirname, 'assets/princeLicense.dat'), // renderer // prince license file
 			helpers: require('./assets/helpers'),
 			partials: require('./assets/partials')
 		});
@@ -55,13 +55,16 @@ suspend(function * () {
 		// Run report
 		var reportUrl = url.resolve(baseUrl, reportPath);
 		var parameters = {
+			renderer: {
+				userPassword: 'pass'
+			},
 			report: {
 				callerId: callerId,
 				baseUrl: baseUrl
 			}
 		};
 		console.time('Run');
-		var pdf = yield chronicle.run(reportUrl, parameters); // TODO (path | url | def, param)
+		var pdf = yield chronicle.run(reportUrl, parameters);
 		console.timeEnd('Run');
 
 
