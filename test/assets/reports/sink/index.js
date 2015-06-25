@@ -14,8 +14,8 @@ var fetch = suspend.promise(function * (parameters) {
 
 	// Execute script on appropriate server with proper auth
 	var resultSets = yield sql.execute(script, {
-		baseUrl: parameters.report.baseUrl, // base url of app to call SqlInternal on
-		callerId: parameters.report.callerId // auth token to use for call
+		appUrl: parameters.report.appUrl,
+		callerId: parameters.report.callerId
 	});
 
 	return resultSets;

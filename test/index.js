@@ -8,7 +8,7 @@ var suspend = require('suspend');
 suspend(function * () {
 	try {
 		// nock bundle.js and sql-internal api call
-		var baseUrl = 'http://test.com/App/';
+		var appUrl = 'http://test.com/App/';
 		var reportPath = 'reports/sink/bundle.js';
 		var filePath = path.resolve(__dirname, './assets/reports/sink/bundle.js');
 		var callerId = '1';
@@ -31,10 +31,10 @@ suspend(function * () {
 				]
 			}
 		];
-		var bundle = nock(baseUrl)
+		var bundle = nock(appUrl)
 			.get('/' + reportPath)
 			.replyWithFile(200, filePath);
-		var api = nock(baseUrl)
+		var api = nock(appUrl)
 			.post('/SQLInternal', {
 				callerId: callerId,
 				sqlCmd: sqlCmd
@@ -53,14 +53,14 @@ suspend(function * () {
 
 
 		// Run report
-		var reportUrl = url.resolve(baseUrl, reportPath);
+		var reportUrl = url.resolve(appUrl, reportPath);
 		var parameters = {
 			renderer: {
-				userPassword: 'pass'
+//				userPassword: 'pass'
 			},
 			report: {
 				callerId: callerId,
-				baseUrl: baseUrl
+				appUrl: appUrl
 			}
 		};
 		console.time('Run');
