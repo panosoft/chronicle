@@ -21,7 +21,7 @@ var fetch = suspend.promise(function * (parameters) {
 	return resultSets;
 });
 var process = function (data) {
-	// Convert data from flat to structured
+	// Unflatten data
 	var tree = new Tree({input: {delimiter: '.'}});
 	tree.grow(data[0]);
 	var groups = tree.getData();
@@ -46,7 +46,7 @@ var getData = suspend.promise(function * (parameters) {
 
 module.exports = {
 	getData: getData,
-	template: fs.readFileSync('./template.html', 'utf8'), // (optional) Path || String
+	template: fs.readFileSync('./template.html', 'utf8'), // (optional) String
 	helpers: {
 		remoteHelperEmbedded: function () {return 'Remote Helper Embedded';},
 		remoteHelperImported: require('./helper.js')
