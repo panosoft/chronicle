@@ -1,16 +1,58 @@
+<!doctype html>
+<html>
+<head>
+    <style>
+        @page {
+            @top {
+                content: flow(header);
+            }
+            @bottom {
+                content: flow(footer);
+            }
+        }
+
+        body > header {
+            flow: static(header);
+        }
+
+        body > footer {
+            flow: static(footer);
+        }
+    </style>
+</head>
+<body>
 <style>
-    section {page-break-inside: avoid;}
+    section {
+        page-break-inside: avoid;
+    }
+
     table {
         width: 100%;
         border: 1px solid #ccc;
         background: #f8f8f8;
         border-radius: 4px;
-        th:first-child, td:first-child {text-align: left;}
-        th, td {padding: 0.4em; text-align: center;}
-        tr:nth-child(odd) td {background-color: #efefef;}
+
+    th:first-child, td:first-child {
+        text-align: left;
     }
-    [negative] { color: red; }
-    img { height: 2em; }
+
+    th, td {
+        padding: 0.4em;
+        text-align: center;
+    }
+
+    tr:nth-child(odd) td {
+        background-color: #efefef;
+    }
+
+    }
+    [negative] {
+        color: red;
+    }
+
+    img {
+        height: 2em;
+    }
 </style>
 
 
@@ -29,16 +71,17 @@
 <ul>
     {{#groups}}
     <li>{{name}}</li>
-        <ul>
-            {{#items}}
-            <li>{{string}}, {{number}}, {{date}}</li>
-            {{/items}}
-        </ul>
+    <ul>
+        {{#items}}
+        <li>{{string}}, {{number}}, {{date}}</li>
+        {{/items}}
+    </ul>
     {{/groups}}
 </ul>
 
 
 <h2>Charts</h2>
+
 <div style="text-align: center">{{> charts.chart}}</div>
 
 
@@ -47,7 +90,7 @@
     <tbody>
     <tr>
         <td>Local</td>
-        <td><img src="/images/person.png"/></td>
+        <td><img src="{{> importedImage}}"/></td>
     </tr>
     <tr>
         <td>Remote</td>
@@ -61,8 +104,9 @@
 <style>
     @font-face {
         font-family: "local";
-        src: url("/fonts/PrecisionID MICR.ttf");
+        src: url({{> importedFont}});
     }
+
     @font-face {
         font-family: "remote";
         src: url("https://www.dabitat.com/resources/fonts/cartonSlab/carton-slab.woff");
@@ -154,6 +198,7 @@
 
 
 <h2>Extending</h2>
+
 <h3>Helpers</h3>
 <table>
     <thead>
@@ -166,8 +211,8 @@
     <tbody>
     <tr>
         <td>Remote (*local)</td>
-        <td>{{remoteHelperEmbedded}}</td>
-        <td>{{remoteHelperImported}}</td>
+        <td>{{embedded}}</td>
+        <td>{{imported}}</td>
     </tr>
     <tr>
         <td>Local</td>
@@ -189,8 +234,8 @@
     <tbody>
     <tr>
         <td>Remote (*local)</td>
-        <td>{{> remotePartialEmbedded}}</td>
-        <td>{{> remotePartialImported}}</td>
+        <td>{{> embedded}}</td>
+        <td>{{> importedText}}</td>
     </tr>
     <tr>
         <td>Local</td>
@@ -201,5 +246,7 @@
 </table>
 
 
-
 <h2>Report Footer</h2>
+
+</body>
+</html>

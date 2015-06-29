@@ -1,7 +1,8 @@
 var _ = require('lodash');
 var suspend = require('suspend');
 var fs = require('fs');
-var sql = require('../../../../lib/sql-internal');
+var datauri = require('datauri');
+var sql = require('../../../lib/sql-internal');
 var Tree = require('treeize');
 
 var fetch = suspend.promise(function * (parameters) {
@@ -15,7 +16,7 @@ var fetch = suspend.promise(function * (parameters) {
 	// Execute script on appropriate server with proper auth
 	var resultSets = yield sql.execute(script, {
 		appUrl: parameters.report.appUrl,
-		callerId: parameters.report.callerId
+		authToken: parameters.report.authToken
 	});
 
 	return resultSets;
@@ -46,22 +47,19 @@ var getData = suspend.promise(function * (parameters) {
 
 module.exports = {
 	getData: getData,
-	template: fs.readFileSync('./template.html', 'utf8'), // (optional) String
+	template: fs.readFileSync('./template.html', 'utf8'),
 	helpers: {
-		remoteHelperEmbedded: function () {return 'Remote Helper Embedded';},
-		remoteHelperImported: require('./helper.js')
-		// Server helpers (automatically loaded, can be overridden)
+		embedded: function () {return 'Remote Helper Embedded';},
+		imported: require('./helper.js')
 	},
 	partials: {
-		main: fs.readFileSync('./main.html', 'utf8'),
-		remotePartialEmbedded: 'Remote Partial Embedded',
-		remotePartialImported: fs.readFileSync('./partial.html', 'utf8')
-		// Server helpers(automatically loaded, can be overridden)
+		embedded: 'Remote Partial Embedded',
+		importedText: fs.readFileSync('./partial.html', 'utf8'), // text asset
+		importedFont: datauri('./assets/PrecisionID MICR.ttf'), // binary asset
+		importedImage: datauri('./assets/person.png') // binary asset
 	},
 	charts: {
 		chart: function (data) {
-			// Restructuring logic here
-			// NOTE: all processing logic should be done in process()
 			var columns = _.map(data.groups, function (group) {
 				return [group.name, group.items.length];
 			});

@@ -1,3 +1,4 @@
+var Prince = require('../lib/prince');
 var Chronicle = require('../lib');
 var fs = require('fs');
 var url = require('url');
@@ -8,10 +9,11 @@ var suspend = require('suspend');
 suspend(function * () {
 	try {
 		// nock bundle.js and sql-internal api call
+		// bundlePath, resultSets, api flag
 		var appUrl = 'http://test.com/App/';
 		var reportPath = 'reports/sink/bundle.js';
-		var filePath = path.resolve(__dirname, './assets/reports/sink/bundle.js');
-		var callerId = '1';
+		var filePath = path.resolve(__dirname, './reports/sink/bundle.js');
+		var authToken = '1';
 		var sqlCmd = [
 			"SELECT name," +
 			"	string AS 'items.string', number AS 'items.number', date AS 'items.date'" +
@@ -36,18 +38,20 @@ suspend(function * () {
 			.replyWithFile(200, filePath);
 		var api = nock(appUrl)
 			.post('/SQLInternal', {
-				callerId: callerId,
+				authToken: authToken,
 				sqlCmd: sqlCmd
 			})
 			.reply(200, {resultSets: resultSets});
 
 
 		// Setup
+		var renderer = Prince.create({
+			licenseFile: path.join(__dirname, './assets/princeLicense.dat')
+		});
 		var chronicle = Chronicle.create({
-			fileroot: path.join(__dirname, 'assets'), // renderer // used to lookup relative urls (`/path`) in html
-			license: path.join(__dirname, 'assets/princeLicense.dat'), // renderer // prince license file
-			helpers: require('./assets/helpers'),
-			partials: require('./assets/partials')
+			renderer: renderer,
+			helpers: require('./assets/helpers'), // TODO move into package
+			partials: require('./assets/partials') // TODO move into package
 		});
 		yield chronicle.initialize();
 
@@ -56,10 +60,10 @@ suspend(function * () {
 		var reportUrl = url.resolve(appUrl, reportPath);
 		var parameters = {
 			renderer: {
-//				userPassword: 'pass'
+//				userPassword: 'pass' // --user-password=pass
 			},
 			report: {
-				callerId: callerId,
+				authToken: authToken,
 				appUrl: appUrl
 			}
 		};
@@ -74,9 +78,9 @@ suspend(function * () {
 
 		// Capture output
 		fs.writeFileSync(path.join(__dirname, './test.pdf'), pdf);
-		console.log('Report generated');
 	}
 	catch (error) {
+		console.error('Error:\n', error);
 		console.trace(error);
 	}
 })();

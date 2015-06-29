@@ -12,9 +12,11 @@
     "brfs": "^1.4.0",
     "browserify": "^10.2.4",
     "minifyify": "^7.0.1",
+    "urify": "^1.0.6",
     "watchify": "^3.2.2"
   },
   "dependencies": {
+    "datauri": "^0.7.1",
     "lodash": "^3.9.3",
     "suspend": "^0.6.1",
     "treeize": "^2.0.2"
