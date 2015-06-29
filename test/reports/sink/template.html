@@ -18,49 +18,61 @@
         body > footer {
             flow: static(footer);
         }
+
+        section {
+            page-break-inside: avoid;
+        }
+
+        table {
+            width: 100%;
+            border: 1px solid #ccc;
+            background: #f8f8f8;
+            border-radius: 4px;
+            th:first-child, td:first-child {
+                text-align: left;
+            }
+            th, td {
+                padding: 0.4em;
+                text-align: center;
+            }
+            tr:nth-child(odd) td {
+                background-color: #efefef;
+            }
+        }
+        header {
+            text-align: center;
+        }
+        footer {
+            > div {
+                display: table;
+                width: 100%;
+                > div {
+                    display: table-cell;
+                    text-align: center;
+                    vertical-align: middle;
+                    &:first-child { text-align: left; }
+                    &:last-child { text-align: right; }
+                }
+            }
+        }
+        [negative] {
+            color: red;
+        }
+        img {
+            height: 2em;
+        }
     </style>
 </head>
-<body>
-<style>
-    section {
-        page-break-inside: avoid;
-    }
-
-    table {
-        width: 100%;
-        border: 1px solid #ccc;
-        background: #f8f8f8;
-        border-radius: 4px;
-
-    th:first-child, td:first-child {
-        text-align: left;
-    }
-
-    th, td {
-        padding: 0.4em;
-        text-align: center;
-    }
-
-    tr:nth-child(odd) td {
-        background-color: #efefef;
-    }
-
-    }
-    [negative] {
-        color: red;
-    }
-
-    img {
-        height: 2em;
-    }
-</style>
-
 
 <header>
     <h1>Page Header</h1>
 </header>
 <footer>
-    <h1>Page Footer</h1>
+    <div>
+        <div>Page Footer</div>
+        <div><img src="{{> logo}}" alt=""/></div>
+        <div>Page {{> page}} of {{> pages}}</div>
+    </div>
 </footer>
 
 
@@ -199,48 +211,24 @@
 
 <h2>Extending</h2>
 
-<h3>Helpers</h3>
 <table>
     <thead>
     <tr>
-        <th>Location</th>
+        <th>Type</th>
         <th>Embedded</th>
         <th>Imported</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td>Remote (*local)</td>
+        <td>Helpers</td>
         <td>{{embedded}}</td>
         <td>{{imported}}</td>
     </tr>
     <tr>
-        <td>Local</td>
-        <td>{{localHelperEmbedded}}</td>
-        <td>{{localHelperImported}}</td>
-    </tr>
-    </tbody>
-</table>
-
-<h3>Partials</h3>
-<table>
-    <thead>
-    <tr>
-        <th>Location</th>
-        <th>Embedded</th>
-        <th>Imported</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Remote (*local)</td>
+        <td>Partials</td>
         <td>{{> embedded}}</td>
         <td>{{> importedText}}</td>
-    </tr>
-    <tr>
-        <td>Local</td>
-        <td>{{> localPartialEmbedded}}</td>
-        <td>{{> localPartialImported}}</td>
     </tr>
     </tbody>
 </table>

@@ -4,7 +4,9 @@ var fs = require('fs');
 var url = require('url');
 var path = require('path');
 var nock = require('nock');
+var ip = require('ip');
 var suspend = require('suspend');
+
 
 suspend(function * () {
 	try {
@@ -39,19 +41,18 @@ suspend(function * () {
 		var api = nock(appUrl)
 			.post('/SQLInternal', {
 				authToken: authToken,
-				sqlCmd: sqlCmd
+				sqlCmd: sqlCmd,
+				ipAddress: ip.address()
 			})
 			.reply(200, {resultSets: resultSets});
 
 
 		// Setup
 		var renderer = Prince.create({
-			licenseFile: path.join(__dirname, './assets/princeLicense.dat')
+			licenseFile: path.join(__dirname, './external/princeLicense.dat')
 		});
 		var chronicle = Chronicle.create({
-			renderer: renderer,
-			helpers: require('./assets/helpers'), // TODO move into package
-			partials: require('./assets/partials') // TODO move into package
+			renderer: renderer
 		});
 		yield chronicle.initialize();
 

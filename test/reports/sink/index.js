@@ -2,8 +2,9 @@ var _ = require('lodash');
 var suspend = require('suspend');
 var fs = require('fs');
 var datauri = require('datauri');
-var sql = require('../../../lib/sql-internal');
-var Tree = require('treeize');
+var sql = require('../../../common/sql-internal');
+var helpers = require('../../../common/helpers');
+var partials = require('../../../common/partials');
 
 var fetch = suspend.promise(function * (parameters) {
 	// Build Sql script(s)
@@ -22,10 +23,7 @@ var fetch = suspend.promise(function * (parameters) {
 	return resultSets;
 });
 var process = function (data) {
-	// Unflatten data
-	var tree = new Tree({input: {delimiter: '.'}});
-	tree.grow(data[0]);
-	var groups = tree.getData();
+	var groups = data[0];
 
 	// Construct result
 	var result = {
@@ -48,16 +46,17 @@ var getData = suspend.promise(function * (parameters) {
 module.exports = {
 	getData: getData,
 	template: fs.readFileSync('./template.html', 'utf8'),
-	helpers: {
-		embedded: function () {return 'Remote Helper Embedded';},
+	helpers: _.assign(helpers, {
+		embedded: function () {return 'Embedded Helper';},
 		imported: require('./helper.js')
-	},
-	partials: {
-		embedded: 'Remote Partial Embedded',
+	}),
+	partials: _.assign(partials, {
+		embedded: 'Embedded Partial',
 		importedText: fs.readFileSync('./partial.html', 'utf8'), // text asset
 		importedFont: datauri('./assets/PrecisionID MICR.ttf'), // binary asset
-		importedImage: datauri('./assets/person.png') // binary asset
-	},
+		importedImage: datauri('./assets/person.png'), // binary asset
+		logo: datauri('../../../common/assets/images/panoLogo.png') // binary asset
+	}),
 	charts: {
 		chart: function (data) {
 			var columns = _.map(data.groups, function (group) {
