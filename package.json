@@ -25,6 +25,7 @@
     "request": "^2.57.0",
     "statuses": "^1.2.1",
     "suspend": "^0.6.1",
+    "treeize": "^2.0.2",
     "validator": "^3.40.0",
     "written-number": "^0.2.0"
   },

@@ -18,7 +18,6 @@
   "dependencies": {
     "datauri": "^0.7.1",
     "lodash": "^3.9.3",
-    "suspend": "^0.6.1",
-    "treeize": "^2.0.2"
+    "suspend": "^0.6.1"
   }
 }
