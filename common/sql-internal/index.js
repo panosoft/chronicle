@@ -24,6 +24,7 @@ var post = suspend.promise(function * (location, form) {
 	var request = http.request({
 		hostname: location.hostname,
 		path: location.path,
+		port: location.port,
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded',

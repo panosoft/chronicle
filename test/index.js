@@ -1,5 +1,5 @@
-var Prince = require('../lib/prince');
-var Chronicle = require('../lib');
+var Prince = require('../../../../lib/prince');
+var Chronicle = require('../../../../lib');
 var fs = require('fs');
 var url = require('url');
 var path = require('path');
@@ -11,17 +11,9 @@ var suspend = require('suspend');
 suspend(function * () {
 	try {
 		// nock bundle.js and sql-internal api call
-		// bundlePath, resultSets, api flag
+		// appUrl, reportPath, resultSets, api flag
 		var appUrl = 'http://test.com/App/';
 		var reportPath = 'reports/sink/bundle.js';
-		var filePath = path.resolve(__dirname, './reports/sink/bundle.js');
-		var authToken = '1';
-		var sqlCmd = [
-			"SELECT name," +
-			"	string AS 'items.string', number AS 'items.number', date AS 'items.date'" +
-			"FROM Group" +
-			"LEFT OUTER JOIN Item ON Item.groupName = Group.name"
-		].join(';');
 		var resultSets = [
 			{
 				fields: ['name', 'items.string', 'items.number', 'items.date'],
@@ -35,6 +27,15 @@ suspend(function * () {
 				]
 			}
 		];
+
+		var filePath = path.resolve(__dirname, '../bundle.js');
+		var authToken = '1';
+		var sqlCmd = [
+			"SELECT name," +
+			"	string AS 'items.string', number AS 'items.number', date AS 'items.date'" +
+			"FROM Group" +
+			"LEFT OUTER JOIN Item ON Item.groupName = Group.name"
+		].join(';');
 		var bundle = nock(appUrl)
 			.get('/' + reportPath)
 			.replyWithFile(200, filePath);
@@ -46,16 +47,11 @@ suspend(function * () {
 			})
 			.reply(200, {resultSets: resultSets});
 
-
 		// Setup
-		var renderer = Prince.create({
-			licenseFile: path.join(__dirname, './external/princeLicense.dat')
-		});
 		var chronicle = Chronicle.create({
-			renderer: renderer
+			renderer: Prince.create()
 		});
 		yield chronicle.initialize();
-
 
 		// Run report
 		var reportUrl = url.resolve(appUrl, reportPath);
@@ -72,13 +68,10 @@ suspend(function * () {
 		var pdf = yield chronicle.run(reportUrl, parameters);
 		console.timeEnd('Run');
 
-
-		// Cleanup
-		chronicle.shutdown();
-
-
 		// Capture output
 		fs.writeFileSync(path.join(__dirname, './test.pdf'), pdf);
+		// Cleanup
+		chronicle.shutdown();
 	}
 	catch (error) {
 		console.error('Error:\n', error);

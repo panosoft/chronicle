@@ -14,28 +14,21 @@ var fetch = suspend.promise(function * (parameters) {
 		"FROM Group" +
 		"LEFT OUTER JOIN Item ON Item.groupName = Group.name";
 
-	// Execute script on appropriate server with proper auth
-	var resultSets = yield sql.execute(script, {
+	// Execute script(s)
+	return yield sql.execute(script, {
 		appUrl: parameters.report.appUrl,
 		authToken: parameters.report.authToken
 	});
-
-	return resultSets;
 });
 var process = function (data) {
-	var groups = data[0];
-
-	// Construct result
-	var result = {
+	return {
 		title: "Kitchen Sink",
 		string: 'A string',
 		number: 4321.1234,
 		numberNegative: -4321.1234,
 		date: new Date(),
-		groups: groups
+		groups: data[0]
 	};
-
-	return result;
 };
 var getData = suspend.promise(function * (parameters) {
 	var data = yield fetch(parameters);
