@@ -1,6 +1,6 @@
 {
-  "name": "sink",
-  "version": "1.0.0",
+  "name": "press",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,10 +8,9 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {},
   "dependencies": {
-    "datauri": "^0.7.1",
-    "lodash": "^3.9.3",
-    "suspend": "^0.6.1"
+    "brfs": "^1.4.0",
+    "urify": "^1.0.6",
+    "watchify": "^3.2.3"
   }
 }
