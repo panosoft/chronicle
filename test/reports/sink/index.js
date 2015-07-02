@@ -15,7 +15,7 @@ var fetch = suspend.promise(function * (parameters) {
 		"LEFT OUTER JOIN Item ON Item.groupName = Group.name";
 
 	// Execute script(s)
-	return yield sql.execute(script, parameters.report);
+	return yield sql.execute(script, parameters);
 });
 var process = function (data) {
 	return {
@@ -27,14 +27,14 @@ var process = function (data) {
 		groups: data[0]
 	};
 };
-var getData = suspend.promise(function * (parameters) {
+var data = suspend.promise(function * (parameters) {
 	var data = yield fetch(parameters);
 	data = process(data);
 	return data;
 });
 
 module.exports = {
-	getData: getData,
+	data: data,
 	template: fs.readFileSync('./assets/template.html', 'utf8'),
 	helpers: _.assign(
 		helpers,

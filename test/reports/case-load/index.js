@@ -9,7 +9,7 @@ var partials = require('../../../common/partials');
 
 var fetch = suspend.promise(function * (parameters) {
 	// Build Sql script(s)
-	var ids = parameters.report.ids;
+	var ids = parameters.ids;
 	var scripts = [
 		"SELECT id, name" +
 		"FROM Managers" +
@@ -20,7 +20,7 @@ var fetch = suspend.promise(function * (parameters) {
 	];
 
 	// Execute script(s)
-	return yield sql.execute(scripts, parameters.report);
+	return yield sql.execute(scripts, parameters);
 });
 var process = function (data) {
 	var managers = data[0];
@@ -47,14 +47,14 @@ var process = function (data) {
 		managers: managers
 	};
 };
-var getData = suspend.promise(function * (parameters) {
+var data = suspend.promise(function * (parameters) {
 	var data = yield fetch(parameters);
 	data = process(data);
 	return data;
 });
 
 module.exports = {
-	getData: getData,
+	data: data,
 	template: fs.readFileSync('../assets/template.html', 'utf8'),
 	helpers: helpers,
 	partials: _.assign(

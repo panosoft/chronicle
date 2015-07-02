@@ -10,7 +10,7 @@ var fetch = suspend.promise(function * (parameters) {
 	var script = "" +
 		"SELECT payor, payee, number, amount" +
 		"FROM Check";
-	return yield sql.execute(script, parameters.report);
+	return yield sql.execute(script, parameters);
 });
 var process = function (data) {
 	return {
@@ -18,21 +18,21 @@ var process = function (data) {
 		checks: data[0]
 	};
 };
-var getData = suspend.promise(function * (parameters) {
+var data = suspend.promise(function * (parameters) {
 	var data = yield fetch(parameters);
 	data = process(data);
 	return data;
 });
 
 module.exports = {
-	getData: getData,
+	data: data,
 	template: fs.readFileSync('./assets/template.html', 'utf8'),
 	helpers: helpers,
 	partials: _.assign(
 		partials,
 		{
 			signatureFont: datauri('../../../common/assets/fonts/YourSignature.ttf'),
-			micrFont: datauri('../../../common/assets/fonts/YourSignature.ttf'),
+			micrFont: datauri('../../../common/assets/fonts/PrecisionID MICR.ttf'),
 			logo: datauri('../../../common/assets/images/panoLogo.png')
 		}
 	)
