@@ -15,10 +15,7 @@ var fetch = suspend.promise(function * (parameters) {
 		"LEFT OUTER JOIN Item ON Item.groupName = Group.name";
 
 	// Execute script(s)
-	return yield sql.execute(script, {
-		appUrl: parameters.report.appUrl,
-		authToken: parameters.report.authToken
-	});
+	return yield sql.execute(script, parameters.report);
 });
 var process = function (data) {
 	return {
@@ -38,18 +35,24 @@ var getData = suspend.promise(function * (parameters) {
 
 module.exports = {
 	getData: getData,
-	template: fs.readFileSync('./template.html', 'utf8'),
-	helpers: _.assign(helpers, {
-		embedded: function () {return 'Embedded Helper';},
-		imported: require('./helper.js')
-	}),
-	partials: _.assign(partials, {
-		embedded: 'Embedded Partial',
-		importedText: fs.readFileSync('./partial.html', 'utf8'), // text asset
-		importedFont: datauri('./assets/PrecisionID MICR.ttf'), // binary asset
-		importedImage: datauri('./assets/person.png'), // binary asset
-		logo: datauri('../../../common/assets/images/panoLogo.png') // binary asset
-	}),
+	template: fs.readFileSync('./assets/template.html', 'utf8'),
+	helpers: _.assign(
+		helpers,
+		{
+			embedded: function () {return 'Embedded Helper';},
+			imported: require('./assets/helper.js')
+		}
+	),
+	partials: _.assign(
+		partials,
+		{
+			embedded: 'Embedded Partial',
+			importedText: fs.readFileSync('./assets/partial.html', 'utf8'), // text asset
+			importedFont: datauri('./assets/PrecisionID MICR.ttf'), // binary asset
+			importedImage: datauri('./assets/person.png'), // binary asset
+			logo: datauri('../../../common/assets/images/panoLogo.png') // binary asset
+		}
+	),
 	charts: {
 		chart: function (data) {
 			var columns = _.map(data.groups, function (group) {

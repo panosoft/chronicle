@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <style>
+        @page {
+            @top { content: flow(header); }
+            @bottom { content: flow(footer); }
+        }
+        body > header { flow: static(header); }
+        body > footer { flow: static(footer); }
+        footer {
+            display: table; table-layout: fixed; width: 100%;
+            img { height: 40px; }
+            > div {
+                display: table-cell; vertical-align: middle; text-align: center;
+                &:first-child { text-align: left; }
+                &:last-child { text-align: right; }
+            }
+        }
+    </style>
+</head>
+<body>
+    <footer>
+        <div>
+            <div>{{formatDate date "MM/DD/YYYY"}}</div>
+            <div>{{formatDate date "hh:mm A"}}</div>
+        </div>
+        <div><img src="{{> logo}}"/></div>
+        <div>Page {{> page}} of {{> pages}}</div>
+    </footer>
+    {{> main}}
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "chart",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "datauri": "^0.7.1",
+    "lodash": "^3.10.0",
+    "suspend": "^0.6.1"
+  }
+}

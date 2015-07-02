@@ -7,7 +7,22 @@ var nock = require('nock');
 var ip = require('ip');
 var suspend = require('suspend');
 
-
+/**
+ * TODO rewrite test for chronicle
+ * always expect fully loaded definition
+ * test:
+ * 	renderer
+ * 	parameters
+ * 		renderer
+ * 		report
+ * 	template
+ * 	getData (optional) // TODO consider renaming to data {*} and then `data = ( data fn ? yield report.data() : report.data)`
+ * 	partials (optional)
+ * 		utf8
+ * 		datauri
+ * 	helpers (optional)
+ * 	charts (optional)
+ */
 suspend(function * () {
 	try {
 		// nock bundle.js and sql-internal api call

@@ -1,7 +1,7 @@
 var utils = require('../../../../common/utils');
 
 utils.testReport({
-	url: 'http://localhost/App/reports/sink/bundle.js',
+	url: 'http://localhost:8080/App/reports/sink/bundle.js',
 	parameters: {
 		renderer: {
 			// userPassword: 'pass' // --user-password=pass

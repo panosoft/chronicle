@@ -1,78 +1,45 @@
-var _ = require('lodash');
+var fs = require('fs');
 var path = require('path');
+var _ = require('lodash');
 var suspend = require('suspend');
+var datauri = require('datauri');
+var sql = require('../../../common/sql-internal');
+var helpers = require('../../../common/helpers');
+var partials = require('../../../common/partials');
 
-
-var fetch = function (parameters) {
-	var result;
-	// SQLInternal call using parameters
-	var resultSets = [
-		// Managers
-		{
-			fields: ['id', 'name'],
-			types: ['bigint', 'varchar'],
-			rows: [
-				['2', 'Charles'],
-				['1', 'Alex']
-			]
-		},
-		// Clients
-		{
-			fields: ['id', 'managerId', 'firstName', 'checking', 'savings', 'street', 'city', 'state', 'zip', 'image', 'modified'],
-			types: ['bigint', 'bigint', 'varchar', 'money', 'money', 'varchar', 'varchar', 'varchar', 'varchar', 'varchar', 'date'],
-			rows: [
-				['1', '1', 'Jim', '10.00', '10.00', '9124 Through St.', 'Irvine', 'Ca', '92620', '/images/person.png', '2015-06-03'],
-				['2', '1', 'Jane', '-20.00', '10.00', '2752 Ocean Blvd.', 'Irvine', 'Ca', '92620', '/images/person.png', '2015-06-05'],
-				['3', '1', 'John', '30.00', '30.00', '7298 Beach Blvd.', 'Irvine', 'Ca', '92620', '/images/person.png', '2015-06-01'],
-				['4', '2', 'Jim', '10.00', '10.00', '9124 Through St.', 'Irvine', 'Ca', '92620', '/images/person.png', '2015-06-06'],
-				['5', '2', 'Jane', '-20.00', '10.00', '2752 Ocean Blvd.', 'Irvine', 'Ca', '92620', '/images/person.png', '2015-06-02'],
-				['6', '2', 'John', '30.00', '30.00', '7298 Beach Blvd.', 'Irvine', 'Ca', '92620', '/images/person.png', '2015-06-04']
-			]
-		}
+var fetch = suspend.promise(function * (parameters) {
+	// Build Sql script(s)
+	var ids = parameters.report.ids;
+	var scripts = [
+		"SELECT id, name" +
+		"FROM Managers" +
+		"WHERE id IN (" + ids.join(',') + ")",
+		"SELECT id, managerId, firstName, checking, savings, street, city, state, zip, image, modified" +
+		"FROM Clients" +
+		"WHERE managerId IN (" + ids.join(',') + ")"
 	];
-	// Normalize
-	return result;
-};
-var process = function (data) {
-	// deflatten
 
+	// Execute script(s)
+	return yield sql.execute(scripts, parameters.report);
+});
+var process = function (data) {
 	var managers = data[0];
 	var clients = data[1];
 
-	// Sort // TODO
-	// name (string)
-	managers = _.sortByOrder(managers, 'name', true);
-	// checking (number)
-	clients = _.sortByOrder(clients, 'checking', true);
-	// modified (date)
+	_.forEach(clients, function (client) {
+		client.total = client.checking + client.savings;
+	});
 	clients = _.sortByOrder(clients, 'modified', false);
+	clients = _.groupBy(clients, 'managerId');
 
-	// Join
-	// [{id, managerId, ...}] -> {managerId: [{id, managerId, ...}]}
-	clients = _.groupBy(clients, function (client) {
-		return client.managerId;
-	});
-	// [{id, name}] -> [{id, name, clients: []}]
-	managers = _.map(managers, function (manager) {
+	_.forEach(managers, function (manager) {
 		manager.clients = clients[manager.id];
-		return manager;
-	});
-
-	// Aggregate
-	managers = _.map(managers, function (manager) {
-		// total for client
-		manager.clients = _.map(manager.clients, function (client) {
-			client.total = client.checking + client.savings;
-			return client;
-		});
-		// client total for manager
+		manager.clientCount = manager.clients.length;
 		manager.clientTotal = _.reduce(manager.clients, function (total, client) {
 			return total + client.total;
 		}, 0);
-		// client count for manager
-		manager.clientCount = manager.clients.length;
-		return manager;
 	});
+	managers = _.sortByOrder(managers, 'name', true);
 
 	return {
 		title: 'Case Load Report',
@@ -81,20 +48,22 @@ var process = function (data) {
 	};
 };
 var getData = suspend.promise(function * (parameters) {
-	var data = fetch(parameters);
+	var data = yield fetch(parameters);
 	data = process(data);
 	return data;
 });
 
 module.exports = {
 	getData: getData,
-	helpers: {
-		formatMoney: './formatMoney.js',
-		isNegative: function (value) {
-			return (value < 0) ? 'negative' : '';
+	template: fs.readFileSync('../assets/template.html', 'utf8'),
+	helpers: helpers,
+	partials: _.assign(
+		partials,
+		{
+			main: fs.readFileSync('./assets/main.html', 'utf8'),
+			address: fs.readFileSync('./assets/address.html', 'utf8'),
+			person: datauri('./assets/person.png'),
+			logo: datauri('../../../common/assets/images/panoLogo.png')
 		}
-	},
-	partials: {
-		address: './address.html'
-	}
+	)
 };

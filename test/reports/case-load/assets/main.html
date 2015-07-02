@@ -1,0 +1,63 @@
+<style>
+    table { width: 100%; border-collapse: collapse;}
+    td, th { text-align: right; padding: 0.2em;}
+    td:nth-child(1), td:nth-child(2), th:first-child { text-align: left; }
+    thead + tbody tr:nth-child(odd) { background: #f5f5f5; }
+    thead + tbody tr:last-child { background: none; }
+    [negative] { color: red; }
+    .image {
+        width: 3em;
+        height: 3em;
+        background-size: cover;
+        background-position: center;
+    }
+</style>
+
+<header>
+    <h1>{{title}}</h1>
+</header>
+
+{{#managers}}
+<table>
+    <tr>
+        <td><h2>{{name}}</h2></td>
+        <td style="text-align: right">Clients: {{clientCount}}</td>
+    </tr>
+</table>
+<table>
+    <thead>
+    <tr>
+        <th colspan="2">Name</th>
+        <th>Checking</th>
+        <th>Savings</th>
+        <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#clients}}
+    <tr>
+        <td rowspan="2" class="image" style="background-image: url({{> person}});"></td>
+        <td>{{firstName}}</td>
+        <td>{{formatNumber checking "($0.00)"}}</td>
+        <td>{{formatNumber savings "($0.00)"}}</td>
+        <td {{isNegative total}}>{{formatNumber total "($0.00)"}}</td>
+    </tr>
+    <tr>
+        <td colspan="5">
+            <div>{{> address}}</div>
+            <div>Id: {{id}}, Modified: {{formatDate modified "MM/DD/YY"}}</div>
+        </td>
+    </tr>
+    {{/clients}}
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><h4>Total:</h4></td>
+        <td {{isNegative clientTotal}}>{{formatNumber clientTotal "($0.00)"}}</td>
+    </tr>
+    </tbody>
+</table>
+{{/managers}}
+
+

@@ -1,0 +1,19 @@
+{
+  "name": "case-load",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "datauri": "^0.7.1",
+    "lodash": "^3.10.0",
+    "suspend": "^0.6.1"
+  }
+}

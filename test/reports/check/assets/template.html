@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <style>
+        @page {
+            margin: 1.25in 0 1.25in;
+        }
+        @font-face {
+            font-family: "Signature";
+            src: url("{{> signatureFont}}");
+        }
+        @font-face {
+            font-family: "MICR";
+            src: url("{{> micrFont}}");
+        }
+        .check {
+            position: relative;
+            page-break-before: always;
+            page-break-after: always;
+            box-sizing: border-box;
+            height: 3.5in;
+            padding: 1em;
+            border: 1px solid black;
+            font-size: 1.2em;
+            .date {
+                margin-bottom: 2.4em;
+                text-align: right;
+                span {
+                    text-decoration: underline;
+                }
+            }
+            .signature {
+                font-family: Signature;
+                font-size: 3em;
+                text-align: right;
+            }
+            .micr {
+                font-family: MICR;
+                position: absolute;
+                bottom: 0;
+                left:0;
+            }
+        }
+    </style>
+</head>
+<body>
+    {{#checks}}
+    <div class="check">
+        <div>{{payor}}</div>
+        <div class="date">Date: <span>{{formatDate date "MM/DD/YYYY"}}</span></div>
+        <div>
+            <span>Pay to the Order of: <span style="text-decoration: underline">{{payee}}</span></span>
+            <span style="float: right">{{formatNumber amount "$0.00"}}</span>
+        </div>
+        <br/>
+        <br/>
+        <div class="signature">s</div>
+        {{> micr auxiliaryOnUs="C1234567C" transitNumber="123456789" onUs=number}}
+    </div>
+    {{/checks}}
+</body>
+</html>
+

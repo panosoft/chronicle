@@ -1,26 +1,39 @@
-var _ = require('lodash');
-var path = require('path');
 var suspend = require('suspend');
+var _ = require('lodash');
+var fs = require('fs');
+var datauri = require('datauri');
+var sql = require('../../../common/sql-internal');
+var helpers = require('../../../common/helpers');
+var partials = require('../../../common/partials');
 
-var fetch = function (parameters) {
+var fetch = suspend.promise(function * (parameters) {
+	var script = "" +
+		"SELECT payor, payee, number, amount" +
+		"FROM Check";
+	return yield sql.execute(script, parameters.report);
+});
+var process = function (data) {
 	return {
-		"checks" : [
-			{ "payorFirst": "Maite", "payorLast": "Marquez", "checkNumber": 10000, "amount": 135, "payee": "Vulputate Ullamcorper Magna Ltd" },
-			{ "payorFirst": "Inga", "payorLast": "Hester", "checkNumber": 10001, "amount": 300, "payee": "In Company" },
-			{ "payorFirst": "Renee", "payorLast": "Mooney", "checkNumber": 10002, "amount": 372, "payee": "Ridiculus Mus Ltd" }
-		]
+		date: new Date(),
+		checks: data[0]
 	};
 };
-var process = function (data) {
-	data.date = new Date();
-	return data;
-};
 var getData = suspend.promise(function * (parameters) {
-	var data = fetch(parameters);
+	var data = yield fetch(parameters);
 	data = process(data);
 	return data;
 });
 
 module.exports = {
-	getData: getData
+	getData: getData,
+	template: fs.readFileSync('./assets/template.html', 'utf8'),
+	helpers: helpers,
+	partials: _.assign(
+		partials,
+		{
+			signatureFont: datauri('../../../common/assets/fonts/YourSignature.ttf'),
+			micrFont: datauri('../../../common/assets/fonts/YourSignature.ttf'),
+			logo: datauri('../../../common/assets/images/panoLogo.png')
+		}
+	)
 };

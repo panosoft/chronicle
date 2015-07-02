@@ -1,37 +1,46 @@
+var fs = require('fs');
+var datauri = require('datauri');
 var _ = require('lodash');
 var suspend = require('suspend');
+var sql = require('../../../common/sql-internal');
+var helpers = require('../../../common/helpers');
+var partials = require('../../../common/partials');
 
-var fetch = function (parameters) {
+var fetch = suspend.promise(function * (parameters) {
+	var script = "" +
+		"SELECT id, name, count(clientId) AS 'count'" +
+		"FROM Manager" +
+		"LEFT OUTER JOIN Client ON Client.managerId = Manager.id" +
+		"GROUP BY id, name";
+	return yield sql.execute(script, parameters.report);
+});
+var process = function (data) {
 	return {
-		"title": "Clients by Manager",
-		"managers": [
-			{
-				"name": "Alex",
-				"clientCount": 2
-			},
-			{
-				"name": "Charles",
-				"clientCount": 5
-			}
-		]
+		date: new Date(),
+		managers: data[0]
 	};
 };
-var process = function (data) {
-	data.date = new Date();
-	return data;
-};
 var getData = suspend.promise(function * (parameters) {
-	var data = fetch(parameters);
+	var data = yield fetch(parameters);
 	data = process(data);
 	return data;
 });
 
 module.exports = {
 	getData: getData,
+	template: fs.readFileSync('../assets/template.html', 'utf8'),
+	helpers: helpers,
+	partials: _.assign(
+		partials,
+		{
+			main: fs.readFileSync('./assets/main.html', 'utf8'),
+			logo: datauri('../../../common/assets/images/panoLogo.png')
+		}
+	),
 	charts: {
 		clientsByManager: function (data) {
 			var columns = _.map(data.managers, function (manager) {
-				return [manager.name, manager.clientCount];
+				return [manager.name, manager.count];
 			});
 			return {
 				data: {
