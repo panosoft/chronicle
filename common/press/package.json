@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babelify": "^6.1.2",
     "brfs": "^1.4.0",
+    "browserify": "^10.2.4",
     "urify": "^1.0.6",
     "watchify": "^3.2.3"
   }
