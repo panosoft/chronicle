@@ -23,15 +23,13 @@ describe('#execute', function () {
 					sqlCmd: sqlCmd,
 					ipAddress: ip.address()
 				})
-				.reply(200, {
-					resultSets: [
-						{fields: ['boolean'], types: ['bit'], rows: [['true'], ['false']]},
-						{fields: ['date'], types: ['date'], rows: [['1/1/15'], ['2/1/15 EST']]},
-						{fields: ['number'], types: ['bigint'], rows: [['1']]},
-						{fields: ['string'], types: ['varchar'], rows: [['a']]},
-						{fields: ['id', 'items.name'], types: ['bigint', 'varchar'], rows: [['1', 'a'], ['1', 'b'], ['1', 'c']]}
-					]
-				});
+				.reply(200, [
+					{fields: ['boolean'], types: ['bit'], rows: [['true'], ['false']]},
+					{fields: ['date'], types: ['date'], rows: [['1/1/15'], ['2/1/15 EST']]},
+					{fields: ['number'], types: ['bigint'], rows: [['1']]},
+					{fields: ['string'], types: ['varchar'], rows: [['a']]},
+					{fields: ['id', 'items.name'], types: ['bigint', 'varchar'], rows: [['1', 'a'], ['1', 'b'], ['1', 'c']]}
+				]);
 
 			var resultSets = yield sql.execute(scripts, {appUrl: appUrl, authToken: authToken});
 

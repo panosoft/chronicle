@@ -164,7 +164,7 @@ var execute = suspend.promise(function * (scripts, options) {
 	var body = JSON.parse(result.body);
 	if (body.error) throw new Error(body.error);
 
-	return deserialize(body.resultSets, options);
+	return deserialize(body, options);
 });
 module.exports = {
 	execute: execute
