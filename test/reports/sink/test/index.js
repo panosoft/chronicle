@@ -8,7 +8,7 @@ utils.testReport({
 		},
 		report: {}
 	},
-	mock: true,
+	mockData: true,
 	resultSets: [
 		{
 			fields: ['name', 'items.string', 'items.number', 'items.date'],

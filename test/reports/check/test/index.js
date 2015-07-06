@@ -6,7 +6,7 @@ utils.testReport({
 		renderer: {},
 		report: {}
 	},
-	mock: true,
+	mockData: true,
 	resultSets: [
 		{
 			fields: ['payor', 'payee', 'number', 'amount'],

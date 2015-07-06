@@ -11,7 +11,7 @@ var testReport = suspend.promise(function * (options) {
 	options = _.defaults(options || {}, {
 		url: null,
 		parameters: {},
-		mock: true,
+		mockData: true,
 		resultSets: []
 	});
 	var bundlePath = '../bundle.js';
@@ -37,13 +37,19 @@ var testReport = suspend.promise(function * (options) {
 	});
 
 	// Initialize mock environment
-	if (options.mock) {
-		var bundle = nock(appUrl)
-			.get(reportPath)
-			.replyWithFile(200, bundlePath);
-		var api = nock(appUrl)
-			.post(apiPath)
-			.reply(200, {resultSets: options.resultSets});
+	var scope = nock(appUrl, {
+			// Allow unmocked requests on this domain to pass through
+			allowUnmocked: true
+		})
+		.log(console.log)
+		// Note: allowUnmocked option above doesn't apply if this scope is inactive
+		// => persist() must be called so that an unmocked requests can pass through
+		.persist()
+		.get(reportPath)
+		.replyWithFile(200, bundlePath);
+	if (options.mockData) {
+		scope.post(apiPath)
+			.reply(200, options.resultSets);
 	}
 
 	// Start
@@ -58,10 +64,6 @@ var testReport = suspend.promise(function * (options) {
 		console.time('Run');
 		var pdf = yield chronicle.run(url.format(reportUrl), parameters);
 		console.timeEnd('Run');
-		if (options.mock) {
-			bundle.done();
-			api.done();
-		}
 		fs.writeFileSync(pdfPath, pdf);
 	}
 	catch (error) {
