@@ -1,0 +1,21 @@
+{
+  "name": "sql-internal",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ip": "^0.3.3",
+    "lodash": "^3.10.0",
+    "statuses": "^1.2.1",
+    "suspend": "^0.6.1",
+    "treeize": "^2.0.2"
+  }
+}

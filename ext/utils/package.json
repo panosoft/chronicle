@@ -1,6 +1,6 @@
 {
-  "name": "prince-x",
-  "version": "1.0.0",
+  "name": "utils",
+  "version": "0.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "prince": "^1.0.5",
+    "chronicle": "file:../..",
+    "chronicle-prince": "file:../chronicle-prince",
+    "lodash": "^3.10.0",
+    "nock": "^2.7.0",
     "suspend": "^0.6.1"
   }
 }

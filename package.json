@@ -1,7 +1,7 @@
 {
   "name": "chronicle",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.0.0",
+  "description": "Reporting engine for developers",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,24 +12,17 @@
     "c3": "^0.4.10",
     "cheerio": "^0.19.0",
     "d3": "^3.5.5",
-    "dargs": "^4.0.0",
-    "datauri": "^0.7.1",
     "es5-shim": "^4.1.1",
     "handlebars": "^3.0.3",
-    "ip": "^0.3.3",
     "less": "^2.5.1",
     "lodash": "^3.9.1",
     "lru-cache": "^2.6.4",
-    "moment": "^2.10.3",
-    "numeral": "^1.5.3",
     "phantom": "^0.7.2",
     "phantomjs": "^1.9.16",
     "request": "^2.57.0",
     "statuses": "^1.2.1",
     "suspend": "^0.6.1",
-    "treeize": "^2.0.2",
-    "validator": "^3.40.0",
-    "written-number": "^0.2.0"
+    "validator": "^3.40.0"
   },
   "devDependencies": {
     "chai": "^2.3.0",

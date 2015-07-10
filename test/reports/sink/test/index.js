@@ -1,25 +1,44 @@
-var utils = require('../../../../common/utils');
+var Chronicle = require('chronicle');
+var Prince = require('chronicle-prince');
+var fs = require('fs');
+var url = require('url');
+var path = require('path');
+var nock = require('nock');
+var suspend = require('suspend');
 
-utils.testReport({
-	url: 'http://localhost:8080/App/reports/sink/bundle.js',
-	parameters: {
-		renderer: {
-			// userPassword: 'pass' // --user-password=pass
-		},
-		report: {}
-	},
-	mockData: true,
-	resultSets: [
-		{
-			fields: ['name', 'items.string', 'items.number', 'items.date'],
-			types: ['varchar', 'varchar', 'bigint', 'date'],
-			rows: [
-				['Group 1', 'a', '1', '1/1/2015 00:00:00'],
-				['Group 1', 'b', '2', '2/1/2015 00:00:00'],
-				['Group 2', 'c', '3', '3/1/2015 00:00:00'],
-				['Group 2', 'd', '4', '4/1/2015 00:00:00'],
-				['Group 2', 'e', '5', '5/1/2015 00:00:00']
-			]
-		}
-	]
-});
+suspend(function * () {
+	try {
+		var baseUrl = 'http://www.test.com';
+		var reportPath = '/report/bundle.js';
+		var filePath = path.resolve(__dirname, '../bundle.js');
+
+		// Mock Network
+		var bundle = nock(baseUrl)
+			.get(reportPath)
+			.replyWithFile(200, filePath);
+
+		// Setup
+		var chronicle = Chronicle.create({
+			renderer: Prince.create()
+		});
+		yield chronicle.initialize();
+		// Run report
+		var reportUrl = url.resolve(baseUrl, reportPath);
+		var parameters = {
+			renderer: {},
+			report: {}
+		};
+		console.time('Run');
+		var pdf = yield chronicle.run(reportUrl, parameters);
+		console.timeEnd('Run');
+		// Cleanup
+		chronicle.shutdown();
+
+		// Capture output
+		fs.writeFileSync(path.join(__dirname, './test.pdf'), pdf);
+	}
+	catch (error) {
+		console.error('Error:\n', error);
+		console.trace(error);
+	}
+})();

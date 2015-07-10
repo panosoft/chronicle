@@ -1,56 +1,56 @@
+var fs = require('fs');
+var path = require('path');
 var _ = require('lodash');
 var suspend = require('suspend');
-var fs = require('fs');
 var datauri = require('datauri');
-var sql = require('../../../common/sql-internal');
-var helpers = require('../../../common/helpers');
-var partials = require('../../../common/partials');
+var common = require('common');
 
-var fetch = suspend.promise(function * (parameters) {
-	// Build Sql script(s)
-	var script = "" +
-		"SELECT name," +
-		"	string AS 'items.string', number AS 'items.number', date AS 'items.date'" +
-		"FROM Group" +
-		"LEFT OUTER JOIN Item ON Item.groupName = Group.name";
-
-	// Execute script(s)
-	return yield sql.execute(script, parameters);
-});
-var process = function (data) {
+var data = suspend.promise(function * (parameters) {
 	return {
 		title: "Kitchen Sink",
 		string: 'A string',
 		number: 4321.1234,
 		numberNegative: -4321.1234,
 		date: new Date(),
-		groups: data[0]
+		groups: [
+			{
+				name: 'Group 1',
+				items: [
+					{string: 'a', number: 1, date: new Date('1/1/2015 00:00:00')},
+					{string: 'b', number: 2, date: new Date('2/1/2015 00:00:00')}
+				]
+			},
+			{
+				name: 'Group 2',
+				items: [
+					{string: 'c', number: 3, date: new Date('3/1/2015 00:00:00')},
+					{string: 'd', number: 4, date: new Date('4/1/2015 00:00:00')},
+					{string: 'e', number: 5, date: new Date('5/1/2015 00:00:00')}
+				]
+			}
+		]
 	};
-};
-var data = suspend.promise(function * (parameters) {
-	var data = yield fetch(parameters);
-	data = process(data);
-	return data;
 });
 
 module.exports = {
 	data: data,
-	template: fs.readFileSync('./assets/template.html', 'utf8'),
+	template: fs.readFileSync(path.resolve(__dirname, './assets/template.html'), 'utf8'),
 	helpers: _.assign(
-		helpers,
+		common.helpers,
 		{
 			embedded: function () {return 'Embedded Helper';},
 			imported: require('./assets/helper.js')
 		}
 	),
 	partials: _.assign(
-		partials,
+		common.partials,
 		{
 			embedded: 'Embedded Partial',
-			importedText: fs.readFileSync('./assets/partial.html', 'utf8'), // text asset
-			importedFont: datauri('./assets/PrecisionID MICR.ttf'), // binary asset
-			importedImage: datauri('./assets/person.png'), // binary asset
-			logo: datauri('../../../common/assets/images/panoLogo.png') // binary asset
+			// text asset
+			importedText: fs.readFileSync(path.resolve(__dirname, './assets/partial.html'), 'utf8'),
+			// binary assets
+			importedFont: datauri(__dirname + '/assets/PrecisionID MICR.ttf'),
+			importedImage: datauri(__dirname + '/assets/person.png')
 		}
 	),
 	charts: {

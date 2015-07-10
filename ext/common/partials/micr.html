@@ -17,12 +17,17 @@
 
 -->
 <style>
+    @font-face {
+        font-family: "MICR";
+        src: url("{{> micrFont}}");
+    }
     .micr {
         @positionWidth: 0.125in;
         @clearBandHeight: 0.625in;
         @encodingBandRightMargin: 0.3125in;
         display: table;
         width: 100%;
+        font-family: MICR;
        .clearBand {
             display: table-cell;
             vertical-align: middle;

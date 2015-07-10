@@ -1,6 +1,6 @@
 {
-  "name": "press",
-  "version": "0.0.1",
+  "name": "chronicle-prince",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,10 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "babelify": "^6.1.2",
-    "brfs": "^1.4.0",
-    "browserify": "^10.2.4",
-    "urify": "^1.0.6",
-    "watchify": "^3.2.3"
+    "dargs": "^4.0.1",
+    "lodash": "^3.10.0",
+    "prince": "1.0.5",
+    "spawn": "file:../spawn",
+    "suspend": "^0.6.1"
   }
 }

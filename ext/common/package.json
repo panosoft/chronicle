@@ -1,0 +1,26 @@
+{
+  "name": "common",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "browserify": {
+    "transform": [
+      "brfs",
+      "urify"
+    ]
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "brfs": "^1.4.0",
+    "datauri": "^0.7.1",
+    "lodash": "^3.10.0",
+    "moment": "^2.10.3",
+    "numeral": "^1.5.3",
+    "urify": "^1.0.6",
+    "written-number": "^0.2.0"
+  }
+}
