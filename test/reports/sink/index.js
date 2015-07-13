@@ -49,8 +49,8 @@ module.exports = {
 			// text asset
 			importedText: fs.readFileSync(path.resolve(__dirname, './assets/partial.html'), 'utf8'),
 			// binary assets
-			importedFont: datauri(__dirname + '/assets/PrecisionID MICR.ttf'),
-			importedImage: datauri(__dirname + '/assets/person.png')
+			importedFont: datauri(path.resolve(__dirname, 'assets/PrecisionID MICR.ttf')),
+			importedImage: datauri(path.resolve(__dirname, 'assets/person.png'))
 		}
 	),
 	charts: {
