@@ -1,9 +1,9 @@
 var R = require('ramda');
 
-module.exports = {
+var DU = {
 	callOn: R.curry((obj, f) => f(obj)),
 	sumProps: R.curry((props, obj) => {
-		return R.sum(R.map(R.callOn(obj), R.map(R.prop, props)));
+		return R.sum(R.map(DU.callOn(obj), R.map(R.prop, props)));
 	}),
 	sumColumn: R.curry((prop, objs) => {
 		return R.sum(R.map(R.prop(prop), objs));
@@ -24,3 +24,5 @@ module.exports = {
 		return 0;
 	})
 };
+
+module.exports = DU;
