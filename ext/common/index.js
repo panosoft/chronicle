@@ -9,7 +9,7 @@ var Definition = require('./definition');
 var buildData = function (fetch, process) {
 	return suspend.promise(function * (parameters) {
 		var data = yield fetch(parameters);
-		data = process(data);
+		data = process(data, parameters);
 		return data;
 	});
 };
