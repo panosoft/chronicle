@@ -19,9 +19,7 @@ var DU = {
 		// return all properties equal
 		return 0;
 	}),
-	filterEmpty: R.filter(s => R.trim(s) != ''),
-	fullName: (f, m, l) => R.join(' ', DU.filterEmpty([f, m, l])),
-	cityStateZip: (c, s, z) => c + ', ' + s + ' ' + z
+	filterEmpty: R.filter(s => R.trim(s || '') != ''),
 };
 
 module.exports = DU;
