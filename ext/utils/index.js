@@ -10,6 +10,7 @@ var suspend = require('suspend');
 var definitionPath = path.resolve('../index.js');
 var bundlePath = path.resolve('../bundle.js');
 var pdfPath = './test.pdf';
+var htmlPath = './test.html';
 var apiPath = '/SQLInternal';
 var splitUrl = function (reportUrl) {
 	reportUrl = url.parse(reportUrl);
@@ -64,15 +65,18 @@ var testData = suspend.promise(function * (parameters) {
 	return results;
 });
 var testReport = suspend.promise(function * (url, parameters) {
-	var chronicle = Chronicle.create({
-		renderer: Prince.create()
-	});
+	var prince = Prince.create();
+	var chronicle = Chronicle.create();
 	yield chronicle.initialize();
 	console.time('Report');
-	var pdf = yield chronicle.run(url, parameters);
+	var html = yield chronicle.run(url, parameters.report);
+	var pdf = yield prince.render(pdf, parameters.renderer);
 	console.timeEnd('Report');
 	chronicle.shutdown();
-	return pdf;
+	return {
+		pdf: pdf,
+		html: html
+	};
 });
 /**
  *
@@ -88,8 +92,9 @@ var test = suspend.promise(function * (options) {
 	mockNetwork(options);
 	try {
 		var data = yield testData(parameters);
-		var pdf = yield testReport(options.url, parameters);
-		fs.writeFileSync(pdfPath, pdf);
+		var result = yield testReport(options.url, parameters);
+		fs.writeFileSync(htmlPath, result.html);
+		fs.writeFileSync(pdfPath, result.pdf);
 	}
 	catch (error) {
 		console.error('Error:\n', error);

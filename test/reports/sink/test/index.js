@@ -18,9 +18,8 @@ suspend(function * () {
 			.replyWithFile(200, filePath);
 
 		// Setup
-		var chronicle = Chronicle.create({
-			renderer: Prince.create()
-		});
+		var prince = Prince.create();
+		var chronicle = Chronicle.create();
 		yield chronicle.initialize();
 		// Run report
 		var reportUrl = url.resolve(baseUrl, reportPath);
@@ -29,12 +28,14 @@ suspend(function * () {
 			report: {}
 		};
 		console.time('Run');
-		var pdf = yield chronicle.run(reportUrl, parameters);
+		var html = yield chronicle.run(reportUrl, parameters.report);
+		var pdf = yield prince.render(html, parameters.renderer);
 		console.timeEnd('Run');
 		// Cleanup
 		chronicle.shutdown();
 
 		// Capture output
+		fs.writeFileSync(path.join(__dirname, './test.html'), html);
 		fs.writeFileSync(path.join(__dirname, './test.pdf'), pdf);
 	}
 	catch (error) {

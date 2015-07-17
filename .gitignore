@@ -1,3 +1,4 @@
 node_modules/
 bundle.js
-test.pdf
+**/test/test.pdf
+**/test/test.html
