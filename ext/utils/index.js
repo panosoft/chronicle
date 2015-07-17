@@ -70,7 +70,7 @@ var testReport = suspend.promise(function * (url, parameters) {
 	yield chronicle.initialize();
 	console.time('Report');
 	var html = yield chronicle.run(url, parameters.report);
-	var pdf = yield prince.render(pdf, parameters.renderer);
+	var pdf = yield prince.render(html, parameters.renderer);
 	console.timeEnd('Report');
 	chronicle.shutdown();
 	return {
