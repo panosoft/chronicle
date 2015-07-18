@@ -20,6 +20,7 @@
     "lodash": "^3.10.0",
     "moment": "^2.10.3",
     "numeral": "^1.5.3",
+    "ramda": "^0.16.0",
     "suspend": "^0.6.1",
     "urify": "^1.1.0",
     "written-number": "^0.2.0"
