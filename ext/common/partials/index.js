@@ -6,6 +6,7 @@ module.exports = {
 	page: '<span style="content: counter(page)"></span>',
 	pages: '<span style="content: counter(pages)"></span>',
 	fullName: '{{f}} {{m}} {{l}}',
+	lastNameFirst: '{{l}}, {{f}} {{m}}',
 	cityStateZip: '{{c}}, {{s}} {{z}}',
 	address: fs.readFileSync(path.resolve(__dirname, './address.html'), 'utf8'),
 	logo: datauri(path.resolve(__dirname, '../assets/images/panoLogo.png')),
