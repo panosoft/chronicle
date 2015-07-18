@@ -20,6 +20,8 @@ var DU = {
 		return 0;
 	}),
 	filterEmpty: R.filter(s => R.trim(s || '') != ''),
+	fullName: (f, m, l) => R.join(' ', DU.filterEmpty([f, m, l])),
+	lastNameFirst: (f, m, l) => R.trim(l + ', ' + f + m)
 };
 
 module.exports = DU;
