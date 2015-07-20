@@ -24,10 +24,14 @@ var args = [
  *
  *        { licenseFile: 'path/to/file' }
  *
+ * @param {Object} [defaultOptions.media=screen]
+ *
  * @constructor
  */
 var create = function (defaultOptions) {
-	defaultOptions = defaultOptions || {};
+	defaultOptions = _.defaults(defaultOptions || {}, {
+		media: 'screen'
+	});
 	/**
 	 * Render HTML input to PDF
 	 *
