@@ -13,7 +13,9 @@
   "license": "ISC",
   "dependencies": {
     "ip": "^0.3.3",
+    "is_js": "^0.7.4",
     "lodash": "^3.10.0",
+    "ramda": "^0.17.0",
     "statuses": "^1.2.1",
     "suspend": "^0.6.1",
     "treeize": "^2.0.2"

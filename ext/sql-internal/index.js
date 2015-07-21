@@ -1,4 +1,5 @@
-var _ = require('lodash');
+var R = require('ramda');
+var is = require('is_js');
 var url = require('url');
 var http = require('http');
 var querystring = require('querystring');
@@ -60,17 +61,20 @@ var post = suspend.promise(function * (location, form) {
  * @returns {*}
  */
 var convert = function (value, type, options) {
-	if (type.match(/bit|boolean/) && isNaN(value)) {
-		return (value.toLowerCase() === 'true');
-	}
-	if (type.match(/bit|int|money|decimal|numeric|float|real|double|currency|year|big|serial/)) {
-		return Number(value);
-	}
-	if (type.match(/date|timestamp/)) {
-		// if ends in a number (implies no timezone included) then apply the default timeZone
-		if (!isNaN(value[value.length - 1]))
-			value += ' ' + options.timeZone;
-		return new Date(value);
+	if (value)
+	{
+		if (type.match(/bit|boolean/) && isNaN(value)) {
+			return (value.toLowerCase() === 'true');
+		}
+		if (type.match(/bit|int|money|decimal|numeric|float|real|double|currency|year|big|serial/)) {
+			return Number(value);
+		}
+		if (type.match(/date|timestamp/)) {
+			// if ends in a number (implies no timezone included) then apply the default timeZone
+			if (!isNaN(value[value.length - 1]))
+				value += ' ' + options.timeZone;
+			return new Date(value);
+		}
 	}
 	return value;
 };
@@ -84,15 +88,15 @@ var convert = function (value, type, options) {
  */
 var parse = function (resultSets, options) {
 	var convert = options.convert;
-	_.forEach(resultSets, function (resultSet) {
-		_.forEach(resultSet.rows, function (row) {
-			_.forEach(row, function (value, index) {
+	return R.forEach(resultSet => {
+		R.forEach(row => {
+			var index = 0;
+			R.forEach(value => {
 				var type = resultSet.types[index];
-				row[index] = convert(value, type, options);
-			});
-		});
-	});
-	return resultSets;
+				row[index++] = convert(value, type, options);
+			}, row);
+		}, resultSet.rows);
+	}, resultSets);
 };
 /**
  * Normalize
@@ -102,13 +106,20 @@ var parse = function (resultSets, options) {
  *
  */
 var normalize = function (resultSets) {
-	_.forEach(resultSets, function (resultSet, index) {
+	var index = 0;
+	return R.forEach(resultSet => {
 		resultSet.rows.unshift(resultSet.fields);
-		var tree = new Tree({input: {delimiter: '.'}});
+		var tree = new Tree({
+			input: {
+				delimiter: '.'
+			},
+			output: {
+				prune: false
+			}
+		});
 		tree.grow(resultSet.rows);
-		resultSets[index] = tree.getData();
-	});
-	return resultSets;
+		resultSets[index++] = tree.getData();
+	}, resultSets);
 };
 /**
  *
@@ -141,13 +152,13 @@ var deserialize = function (resultSets, options) {
  * @returns {Promise}
  */
 var execute = suspend.promise(function * (scripts, options) {
-	scripts = _.isArray(scripts) ? scripts : [scripts];
-	options = _.defaults(options || {}, {
+	scripts = is.array(scripts) ? scripts : [scripts];
+	options = R.merge({
 		appUrl: null,
 		authToken: null,
 		convert: convert,
 		timeZone: 'PDT'
-	});
+	}, options || {});
 	var apiUrl = url.resolve(options.appUrl, 'SQLInternal');
 	var form = {
 		authToken: options.authToken,
@@ -166,6 +177,10 @@ var execute = suspend.promise(function * (scripts, options) {
 
 	return deserialize(body, options);
 });
+var quote = s => '\'' + s + '\'';
+var quoteList = R.compose(R.join(','), R.map(quote));
 module.exports = {
-	execute: execute
+	execute: execute,
+	quote: quote,
+	quoteList: quoteList
 };
