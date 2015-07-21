@@ -13,6 +13,7 @@
     "chronicle-prince": "file:../chronicle-prince",
     "lodash": "^3.10.0",
     "nock": "^2.7.0",
+    "ramda": "^0.17.0",
     "suspend": "^0.6.1"
   }
 }

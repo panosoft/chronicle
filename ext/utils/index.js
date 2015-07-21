@@ -12,6 +12,8 @@ var bundlePath = path.resolve('../bundle.js');
 var pdfPath = './test.pdf';
 var htmlPath = './test.html';
 var apiPath = '/SQLInternal';
+var R = require('ramda');
+
 var splitUrl = function (reportUrl) {
 	reportUrl = url.parse(reportUrl);
 	var appPath = reportUrl.path.match(/(^\/[^\/]*\/)/)[1];
@@ -91,7 +93,9 @@ var test = suspend.promise(function * (options) {
 	var parameters = buildParameters(options);
 	mockNetwork(options);
 	try {
-		var data = yield testData(parameters);
+		// CLONE parameters here since the report may mutate the parameter variable
+		// and it's used again in testReport()
+		var data = yield testData(R.clone(parameters));
 		var result = yield testReport(options.url, parameters);
 		fs.writeFileSync(htmlPath, result.html);
 		fs.writeFileSync(pdfPath, result.pdf);
