@@ -17,6 +17,7 @@
   "dependencies": {
     "brfs": "^1.4.0",
     "datauri": "^0.7.1",
+    "is_js": "^0.7.4",
     "lodash": "^3.10.0",
     "moment": "^2.10.3",
     "numeral": "^1.5.3",
