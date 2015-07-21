@@ -1,10 +1,11 @@
-var _ = require('lodash');
+var R = require('ramda');
+var is = require('is_js');
 var writtenNumber = require('written-number');
 var moment = require('moment');
 var numeral = require('numeral');
 
 var words = function (value) {
-	value = _(value).toString();
+	value = value.toString();
 	// number = [integer, decimal]
 	var number = value.replace(/[^\d\.]/g, '').match(/\d+/g);
 	var result = writtenNumber(number[0]);
@@ -14,20 +15,23 @@ var words = function (value) {
 
 module.exports = {
 	formatString: function (value, type) {
-		switch (type) {
-			case 'upperCase':
-				value = value.toUpperCase();
-				break;
-		}
-		return value;
+		var properCase = s => R.toUpper(s[0]) + R.toLower(R.slice(1, s.length, s));
+		var formatters = {
+			upperCase: R.toUpper,
+			lowerCase: R.toLower,
+			properCase: R.compose(R.join(' '), R.map(properCase), R.split(' '))
+		};
+		return formatters[type](value);
 	},
-	formatNumber: function (value, type) {
-		type = (_.isString(type) ? type : '');
+	formatNumber: function (value, type, options) {
+		if (options.hash.blankOnNull && !value)
+			return '';
+		type = (is.string(type) ? type : '');
 		return (type === 'words') ? words(value) : numeral(value).format(type);
 	},
 	formatDate: function (value, type) {
 		// type param might be options object => must check before passing to format
-		type = (_.isString(type) ? type : '');
+		type = (is.string(type) ? type : '');
 		return moment(value).format(type);
 	}
 };
