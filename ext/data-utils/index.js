@@ -1,10 +1,15 @@
 var R = require('ramda');
 
-var DU = {
-	callOn: R.curry((obj, f) => f(obj)),
-	sumProps: R.curry((props, obj) => R.sum(R.map(DU.callOn(obj), R.map(R.prop, props)))),
-	sumColumn: R.curry((prop, objs) => R.sum(R.map(R.prop(prop), objs))),
-	compareProps: R.curry(function(props, a, b) {
+var DU = R.merge({
+	filterNonEmpty: R.filter(s => R.trim(s || '') != ''),
+	fullName: (f, m, l) => R.join(' ', DU.filterEmpty([f, m, l])),
+	lastNameFirst: (f, m, l) => R.trim(l + ', ' + f + m),
+	pickValues: (ks) => R.compose(R.values, R.pick(ks))
+}, R.mapObj(R.curry, {
+	callOn: (obj, f) => f(obj),
+	sumProps: (props, obj) => R.sum(R.map(DU.callOn(obj), R.map(R.prop, props))),
+	sumColumn: (prop, objs) => R.sum(R.map(R.prop(prop), objs)),
+	compareProps: (props, a, b) => {
 		// determine property compare function (lt or gt) based on + or -
 		var propCompares = R.map(prop => prop[0] == '-' ? R.gt : R.lt, props);
 		// remove + and - from property names
@@ -18,10 +23,10 @@ var DU = {
 			return R.comparator(propCompares[index])(a[props[index]], b[props[index]]);
 		// return all properties equal
 		return 0;
-	}),
-	filterNonEmpty: R.filter(s => R.trim(s || '') != ''),
-	fullName: (f, m, l) => R.join(' ', DU.filterEmpty([f, m, l])),
-	lastNameFirst: (f, m, l) => R.trim(l + ', ' + f + m)
-};
+	},
+	toNumber: x => Number(x),
+	toString: x => String(x),
+	toDate: x => new Date(x)
+}));
 
 module.exports = DU;
