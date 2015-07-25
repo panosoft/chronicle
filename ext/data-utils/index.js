@@ -2,7 +2,7 @@ var R = require('ramda');
 
 var DU = R.merge({
 	filterNonEmpty: R.filter(s => R.trim(s || '') != ''),
-	fullName: (f, m, l) => R.join(' ', DU.filterEmpty([f, m, l])),
+	fullName: (f, m, l) => R.join(' ', DU.filterNonEmpty([f, m, l])),
 	lastNameFirst: (f, m, l) => R.trim(l + ', ' + f + m),
 	pickValues: (ks) => R.compose(R.values, R.pick(ks))
 }, R.mapObj(R.curry, {
