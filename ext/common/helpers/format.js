@@ -4,6 +4,7 @@ var writtenNumber = require('written-number');
 var moment = require('moment');
 var numeral = require('numeral');
 
+var defaults = R.flip(R.merge);
 var words = function (value) {
 	value = value.toString();
 	// number = [integer, decimal]
@@ -24,8 +25,10 @@ module.exports = {
 		return formatters[type](value);
 	},
 	formatNumber: function (value, type, options) {
-		if (options.hash.blankOnNull && !value)
-			return '';
+		options = defaults(options || {}, {
+			hash: {}
+		});
+		if (options.hash.blankOnNull && !value) return '';
 		type = (is.string(type) ? type : '');
 		return (type === 'words') ? words(value) : numeral(value).format(type);
 	},
