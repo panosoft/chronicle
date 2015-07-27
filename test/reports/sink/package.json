@@ -14,9 +14,10 @@
     "nock": "^2.7.0"
   },
   "dependencies": {
+    "co": "^4.6.0",
     "common": "file:../../../ext/common",
     "datauri": "^0.7.1",
-    "lodash": "^3.9.3",
-    "suspend": "^0.6.1"
+    "inline-html": "^0.0.1",
+    "lodash": "^3.9.3"
   }
 }

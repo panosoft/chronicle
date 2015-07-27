@@ -1,0 +1,63 @@
+@page {
+  @top {content: flow(header);}
+  @bottom {content: flow(footer);}
+}
+
+body > header {
+  flow: static(header);
+}
+
+body > footer {
+  flow: static(footer);
+}
+
+section {
+  page-break-inside: avoid;
+}
+
+table {
+  width: 100%;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  border-radius: 4px;
+  th:first-child, td:first-child {
+    text-align: left;
+  }
+  th, td {
+    padding: 0.4em;
+    text-align: center;
+  }
+  tr:nth-child(odd) td {
+    background-color: #efefef;
+  }
+}
+
+header {
+  text-align: center;
+}
+
+footer {
+  > div {
+    display: table;
+    width: 100%;
+    > div {
+      display: table-cell;
+      text-align: center;
+      vertical-align: middle;
+      &:first-child {
+        text-align: left;
+      }
+      &:last-child {
+        text-align: right;
+      }
+    }
+  }
+}
+
+[negative="true"] {
+  color: red;
+}
+
+img {
+  height: 2em;
+}

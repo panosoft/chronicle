@@ -1,11 +1,10 @@
-var fs = require('fs');
-var path = require('path');
 var _ = require('lodash');
-var suspend = require('suspend');
-var datauri = require('datauri');
+var co = require('co');
 var common = require('common');
+var inline = require('inline-html');
+var path = require('path');
 
-var data = suspend.promise(function * (parameters) {
+var data = co.wrap(function * (parameters) {
 	return {
 		title: "Kitchen Sink",
 		string: 'A string',
@@ -32,38 +31,27 @@ var data = suspend.promise(function * (parameters) {
 	};
 });
 
-module.exports = {
-	data: data,
-	template: fs.readFileSync(path.resolve(__dirname, './assets/template.html'), 'utf8'),
-	helpers: _.assign(
-		common.helpers,
-		{
-			embedded: function () {return 'Embedded Helper';},
+var definition = co.wrap(function * (parameters) {
+	return common.Definition.create({
+		data: data,
+		template: yield inline(path.resolve(__dirname, './assets/template.html')),
+		helpers: {
+			embedded: function () { return 'Embedded Helper'; },
 			imported: require('./assets/helper.js')
-		}
-	),
-	partials: _.assign(
-		common.partials,
-		{
+		},
+		partials: {
 			embedded: 'Embedded Partial',
-			// text asset
-			importedText: fs.readFileSync(path.resolve(__dirname, './assets/partial.html'), 'utf8'),
-			// binary assets
-			importedFont: datauri(path.resolve(__dirname, 'assets/PrecisionID MICR.ttf')),
-			importedImage: datauri(path.resolve(__dirname, 'assets/person.png'))
+			imported: yield inline(path.resolve(__dirname, './assets/partial.html'))
+		},
+		charts: {
+			chart: function (data) {
+				var columns = _.map(data.groups, function (group) {
+					return [group.name, group.items.length];
+				});
+				return { data: { columns: columns, type: 'donut'}};
+			}
 		}
-	),
-	charts: {
-		chart: function (data) {
-			var columns = _.map(data.groups, function (group) {
-				return [group.name, group.items.length];
-			});
-			return {
-				data: {
-					columns: columns,
-					type: 'donut'
-				}
-			};
-		}
-	}
-};
+	})
+});
+
+module.exports = definition;
