@@ -9,14 +9,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "chronicle": "file:../../..",
-    "chronicle-prince": "file:../../../ext/chronicle-prince",
-    "nock": "^2.7.0"
+    "nock": "^2.7.0",
+    "prince-promise": "^0.0.1"
   },
   "dependencies": {
     "co": "^4.6.0",
     "common": "file:../../../ext/common",
-    "datauri": "^0.7.1",
     "inline-html": "^0.0.1",
     "lodash": "^3.9.3"
   }

@@ -10,9 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "chronicle": "file:../..",
-    "chronicle-prince": "file:../chronicle-prince",
     "lodash": "^3.10.0",
     "nock": "^2.7.0",
+    "prince-promise": "^0.0.1",
     "ramda": "^0.17.0",
     "suspend": "^0.6.1"
   }

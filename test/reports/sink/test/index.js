@@ -1,10 +1,10 @@
-var Chronicle = require('chronicle');
-var Prince = require('chronicle-prince');
+var Chronicle = require('../../../../lib');
 var fs = require('fs');
-var url = require('url');
-var path = require('path');
 var nock = require('nock');
+var path = require('path');
+var Prince = require('prince-promise');
 var suspend = require('suspend');
+var url = require('url');
 
 suspend(function * () {
 	try {
@@ -12,27 +12,26 @@ suspend(function * () {
 		var reportPath = '/report/bundle.js';
 		var filePath = path.resolve(__dirname, '../bundle.js');
 
-		// Mock Network
-		var bundle = nock(baseUrl)
-			.get(reportPath)
-			.replyWithFile(200, filePath);
-
-		// Setup
-		var prince = Prince.create();
-		var chronicle = Chronicle.create();
-		yield chronicle.initialize();
-		// Run report
 		var reportUrl = url.resolve(baseUrl, reportPath);
 		var parameters = {
 			renderer: {},
 			report: {}
 		};
-		console.time('Run');
+
+		// Mock Network
+		var bundle = nock(baseUrl)
+			.get(reportPath)
+			.replyWithFile(200, filePath);
+
+		// Run report
+		var chronicle = Chronicle.create();
+		yield chronicle.initialize();
 		var html = yield chronicle.run(reportUrl, parameters.report);
-		var pdf = yield prince.render(html, parameters.renderer);
-		console.timeEnd('Run');
-		// Cleanup
 		chronicle.shutdown();
+
+		// Render PDF
+		var prince = Prince.create();
+		var pdf = yield prince.render(html, parameters.renderer);
 
 		// Capture output
 		fs.writeFileSync(path.join(__dirname, './test.html'), html);
