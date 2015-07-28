@@ -60,6 +60,8 @@ var mockNetwork = function (options) {
 };
 var testData = suspend.promise(function * (parameters) {
 	var definition = require(definitionPath);
+	if (_.isFunction(definition))
+		definition = yield definition(parameters.report);
 	var data = definition.data;
 	console.time('Data');
 	var results = (_.isFunction(data) ? yield data(parameters.report) : data);
@@ -93,10 +95,13 @@ var test = suspend.promise(function * (options) {
 	var parameters = buildParameters(options);
 	mockNetwork(options);
 	try {
-		// CLONE parameters here since the report may mutate the parameter variable
-		// and it's used again in testReport()
-		var data = yield testData(R.clone(parameters));
+		var oldParameters = R.clone(parameters);
+		var data = yield testData(parameters);
+		if (!R.equals(oldParameters, parameters))
+			throw new Error('Report mutates parameters (in testData)');
 		var result = yield testReport(options.url, parameters);
+		if (!R.equals(oldParameters, parameters))
+			throw new Error('Report mutates parameters (in testReport)');
 		fs.writeFileSync(htmlPath, result.html);
 		fs.writeFileSync(pdfPath, result.pdf);
 	}
