@@ -31,6 +31,7 @@ var splitUrl = function (reportUrl) {
 var buildParameters = function (options) {
 	var appUrl = splitUrl(options.url).appUrl;
 	var parameters = _.defaults(options.parameters || {}, {
+		renderer: {},
 		report: {}
 	});
 	_.assign(parameters.report, {
