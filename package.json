@@ -1,7 +1,8 @@
 {
-  "name": "chronicle",
+  "name": "@panosoft/chronicle",
   "version": "0.0.0",
-  "description": "Reporting engine for developers",
+  "description": "The developers reporting engine.",
+  "repository": "panosoft/chronicle",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
