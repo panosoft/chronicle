@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var co = require('co');
-var common = require('common');
+var Definition = require('report-definition');
 var inline = require('inline-html');
 var path = require('path');
 
@@ -32,7 +32,7 @@ var data = co.wrap(function * (parameters) {
 });
 
 var definition = co.wrap(function * (parameters) {
-	return common.Definition.create({
+	return yield Definition.create({
 		data: data,
 		template: yield inline(path.resolve(__dirname, './assets/template.html')),
 		helpers: {

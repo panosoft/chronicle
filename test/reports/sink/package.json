@@ -10,12 +10,12 @@
   "license": "ISC",
   "devDependencies": {
     "nock": "^2.7.0",
-    "prince-promise": "^0.0.1"
+    "prince-promise": "^0.1.0"
   },
   "dependencies": {
     "co": "^4.6.0",
-    "common": "file:../../../ext/common",
-    "inline-html": "^0.0.1",
-    "lodash": "^3.9.3"
+    "inline-html": "^0.1.0",
+    "lodash": "^3.9.3",
+    "report-definition": "git+ssh://gitosis@git.panosoft.com:chronicle/report-definition"
   }
 }

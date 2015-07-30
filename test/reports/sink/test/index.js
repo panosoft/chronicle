@@ -1,12 +1,12 @@
 var Chronicle = require('../../../../lib');
+var co = require('co');
 var fs = require('fs');
 var nock = require('nock');
 var path = require('path');
 var Prince = require('prince-promise');
-var suspend = require('suspend');
 var url = require('url');
 
-suspend(function * () {
+co(function * () {
 	try {
 		var baseUrl = 'http://www.test.com';
 		var reportPath = '/report/bundle.js';
@@ -41,4 +41,4 @@ suspend(function * () {
 		console.error('Error:\n', error);
 		console.trace(error);
 	}
-})();
+});
