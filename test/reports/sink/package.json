@@ -13,9 +13,9 @@
     "prince-promise": "^0.1.0"
   },
   "dependencies": {
+    "@panosoft/report-definition": "^0.2.4",
     "co": "^4.6.0",
     "inline-html": "^0.1.0",
-    "lodash": "^3.9.3",
-    "report-definition": "git+ssh://gitosis@git.panosoft.com:chronicle/report-definition"
+    "lodash": "^3.9.3"
   }
 }

@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var co = require('co');
-var Definition = require('report-definition');
+var Definition = require('@panosoft/report-definition');
 var inline = require('inline-html');
 var path = require('path');
 
