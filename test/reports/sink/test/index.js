@@ -1,4 +1,4 @@
-var Chronicle = require('../../../../lib');
+var chronicle = require('../../../../lib');
 var co = require('co');
 var fs = require('fs');
 var nock = require('nock');
@@ -24,10 +24,10 @@ co(function * () {
 			.replyWithFile(200, filePath);
 
 		// Run report
-		var chronicle = Chronicle.create();
-		yield chronicle.initialize();
-		var html = yield chronicle.run(reportUrl, parameters.report);
-		chronicle.shutdown();
+		var press = chronicle.Press.create();
+		yield press.initialize();
+		var html = yield press.run(reportUrl, parameters.report);
+		press.shutdown();
 
 		// Render PDF
 		var prince = Prince.create();

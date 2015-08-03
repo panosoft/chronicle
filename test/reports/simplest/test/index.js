@@ -1,16 +1,16 @@
 var report = require('../');
-var Chronicle = require('../../../../lib');
+var chronicle = require('../../../../lib');
 var fs = require('fs');
 var Prince = require('prince-promise');
 
-var chronicle = Chronicle.create();
-chronicle.initialize()
+var press = chronicle.Press.create();
+press.initialize()
 	.then(function () {
 		// Run report
-		return chronicle.run(report);
+		return press.run(report);
 	})
 	.then(function (html) {
-		chronicle.shutdown();
+		press.shutdown();
 		fs.writeFileSync('./test.html', html);
 		// Render PDF
 		var prince = Prince.create();
