@@ -30,6 +30,7 @@
     "lodash": "^3.10.0",
     "lru-cache": "^2.6.4",
     "moment": "^2.10.6",
+    "mz": "^2.0.0",
     "phantom-promise": "^0.1.0",
     "request": "^2.57.0",
     "statuses": "^1.2.1",
