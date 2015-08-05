@@ -27,6 +27,7 @@
     "get-stdin": "^4.0.1",
     "handlebars": "^3.0.3",
     "html-inlinify": "^0.1.0",
+    "is-local-path": "^0.1.0",
     "lodash": "^3.10.0",
     "lru-cache": "^2.6.4",
     "moment": "^2.10.6",
