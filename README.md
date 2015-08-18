@@ -83,7 +83,7 @@ Bundles are completely self contained and thus very portable. For instance, bund
 
 __Arguments__
 
-- `entry` - The main entry filename of a report [`Module`](#Module) to bundle. Defaults to `index.js`.
+- `entry` - The main entry filename of a report [`Module`](#Module) to bundle. If an entry is not specified, the `package.json`'s' `main` property will be used. If the `package.json` doesn't exist or if the `main` property is not specified, then `index.js` will be used as the entry.
 - `-o, --output` - The filename for the bundled module. Defaults to `bundle.js`.
 - `-w, --watch` - Enable watch mode. As files are modified, the bundle will be updated automatically and incrementally.
 
@@ -148,7 +148,7 @@ Upon completion, the bundle is written directly to the filesystem per `output` o
 
 __Arguments__
 
-- `entry` - The main entry filename of a report [`Module`](#Module) to bundle. Defaults to `index.js`.
+- `entry` - The main entry filename of a report [`Module`](#Module) to bundle. If an entry is not specified, the `package.json`'s' `main` property will be used. If the `package.json` doesn't exist or if the `main` property is not specified, then `index.js` will be used as the entry.
 - `options`
   - `output` - The filename for the bundled [`Module`](#Module). Defaults to `bundle.js`.
   - `watch` - A boolean used to enable watch mode. Supported values are:
