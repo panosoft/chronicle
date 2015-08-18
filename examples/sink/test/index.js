@@ -1,4 +1,4 @@
-var chronicle = require('../../../../lib');
+var chronicle = require('../../../lib');
 var co = require('co');
 var fs = require('fs');
 var nock = require('nock');

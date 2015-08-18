@@ -1,5 +1,5 @@
 var report = require('../');
-var chronicle = require('../../../../lib');
+var chronicle = require('../../../lib');
 var fs = require('fs');
 var Prince = require('prince-promise');
 
