@@ -53,6 +53,7 @@ var run = co.wrap(function * (definition, program) {
 	}
 	catch (error) {
 		console.error(error);
+		console.error(error.stack);
 	}
 	press.shutdown();
 });
