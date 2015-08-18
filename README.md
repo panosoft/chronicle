@@ -176,7 +176,7 @@ Creates a chronicle press. Presses are used to run reports.
 __Arguments__
 
 - `options`
-  -  `cacheMax` - A number used to determine the maximum number of remotely requested report [`Definition`](#Definition) bundles to cache. Once this limit is hit, the least recently used bundles will be replaced as new bundles are requested.
+  -  `cacheMax` - A number used to determine the maximum number of remotely requested report [`Module`](#Module) bundles to cache. Once this limit is hit, the least recently used bundles will be replaced as new bundles are requested.
 
 __Example__
 
