@@ -1,7 +1,7 @@
 #!/usr/bin/env node --harmony_arrow_functions
 
 var co = require('co');
-var chronicle = require('./');
+var chronicle = require('../lib');
 var fs = require('mz/fs');
 var path = require('path');
 var pkg = require('../package');
@@ -19,11 +19,8 @@ var getStdin = function () {
 		stdin(resolve);
 	});
 };
-var bundle = function (entries, program) {
-	// TODO support stdin (getStdin)
-	// TODO support stdout (console.log)
-	// TODO support stderr (console.error)
-	chronicle.bundle(entries, program.opts());
+var bundle = function (entry, program) {
+	chronicle.bundle(entry, program.opts());
 };
 /**
  *
@@ -62,8 +59,8 @@ var run = co.wrap(function * (definition, program) {
 
 program.version(pkg.version)
 	.description(pkg.description);
-program.command('bundle [entries...]')
-	.description('Bundle a definition and its dependencies into a single file.')
+program.command('bundle [entry]')
+	.description('Bundle a module and its dependencies into a single file.')
 	.option('-o, --output <output>', 'output file path')
 	.option('-w, --watch', 'press when dependencies change')
 	.action(bundle);
