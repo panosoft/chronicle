@@ -3,7 +3,7 @@ var co = require('co');
 var fs = require('fs');
 var nock = require('nock');
 var path = require('path');
-var Prince = require('prince-promise');
+var prince = require('prince-promise');
 var url = require('url');
 
 co(function * () {
@@ -29,16 +29,14 @@ co(function * () {
 		var html = yield press.run(reportUrl, parameters.report);
 		press.shutdown();
 
-		// Render PDF
-		var prince = Prince.create();
-		var pdf = yield prince.render(html, parameters.renderer);
+		// Render HTML as PDF
+		var pdf = yield prince(html, parameters.renderer);
 
 		// Capture output
 		fs.writeFileSync(path.join(__dirname, './test.html'), html);
 		fs.writeFileSync(path.join(__dirname, './test.pdf'), pdf);
 	}
 	catch (error) {
-		console.error('Error:\n', error);
-		console.trace(error);
+		console.trace(error.stack);
 	}
 });

@@ -2,15 +2,16 @@
   "name": "sink",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@panosoft/chronicle": "file:../../",
     "nock": "^2.7.0",
-    "prince-promise": "^0.1.0"
+    "prince-promise": "^0.2.0"
   },
   "dependencies": {
     "@panosoft/report-definition": "^0.2.4",

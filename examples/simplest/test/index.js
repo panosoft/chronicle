@@ -1,7 +1,7 @@
-var report = require('../');
-var chronicle = require('../../../lib');
+var chronicle = require('@panosoft/chronicle');
 var fs = require('fs');
-var Prince = require('prince-promise');
+var prince = require('prince-promise');
+var report = require('../lib');
 
 var press = chronicle.Press.create();
 press.initialize()
@@ -12,9 +12,8 @@ press.initialize()
 	.then(function (html) {
 		press.shutdown();
 		fs.writeFileSync('./test.html', html);
-		// Render PDF
-		var prince = Prince.create();
-		return prince.render(html);
+		// Render HTML as PDF
+		return prince(html);
 	})
 	.then(function (pdf) {
 		fs.writeFileSync('./test.pdf', pdf);

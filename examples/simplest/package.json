@@ -2,7 +2,7 @@
   "name": "simplest",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "directories": {
     "test": "test"
   },
@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "prince-promise": "^0.0.1"
+    "@panosoft/chronicle": "file:../../",
+    "prince-promise": "^0.2.0"
   }
 }
