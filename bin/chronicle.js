@@ -52,8 +52,8 @@ var run = co.wrap(function * (definition, program) {
 		}
 	}
 	catch (error) {
-		console.error(error);
 		console.error(error.stack);
+		process.exit(1);
 	}
 	press.shutdown();
 });
