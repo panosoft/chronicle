@@ -171,7 +171,7 @@ chronicle.bundle(entry, options);
 <a name="Press-create"/>
 #### Press.create ( options )
 
-Creates a chronicle press. Presses are used to run reports.
+Creates an instance of Chronicle [`Press`](#Press). Presses are used to run reports.
 
 __Arguments__
 
