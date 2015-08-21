@@ -2,11 +2,11 @@
 
 Build data driven reports using Web Standards and run them with Node.
 
-[![npm version](https://img.shields.io/npm/v/html-inlinify.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
-[![npm license](https://img.shields.io/npm/l/html-inlinify.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
-[![Travis](https://img.shields.io/travis/panosoft/html-inlinify.svg)](https://travis-ci.org/panosoft/chronicle)
-[![David](https://img.shields.io/david/panosoft/html-inlinify.svg)](https://david-dm.org/panosoft/chronicle)
-[![npm downloads](https://img.shields.io/npm/dm/html-inlinify.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
+[![npm version](https://img.shields.io/npm/v/@panosoft/chronicle.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
+[![npm license](https://img.shields.io/npm/l/@panosoft/chronicle.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
+[![Travis](https://img.shields.io/travis/panosoft/chronicle.svg)](https://travis-ci.org/panosoft/chronicle)
+[![David](https://img.shields.io/david/panosoft/chronicle.svg)](https://david-dm.org/panosoft/chronicle)
+[![npm downloads](https://img.shields.io/npm/dm/@panosoft/chronicle.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
 
 ## Installation
 
