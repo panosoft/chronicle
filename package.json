@@ -1,7 +1,7 @@
 {
   "name": "@panosoft/chronicle",
   "version": "0.4.2",
-  "description": "Build data driven reports using Web Standards and run them with Node.",
+  "description": "Use web technology to build reports and run them with Node.",
   "repository": "panosoft/chronicle",
   "main": "lib/index.js",
   "bin": {

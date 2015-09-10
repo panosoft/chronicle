@@ -1,6 +1,6 @@
 # Chronicle
 
-Build data driven reports using Web Standards and run them with Node.
+Use web technology to build reports and run them with Node.
 
 [![npm version](https://img.shields.io/npm/v/@panosoft/chronicle.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
 [![npm license](https://img.shields.io/npm/l/@panosoft/chronicle.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
