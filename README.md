@@ -129,13 +129,18 @@ chronicle run bundle.js -o report.html -p '{"sample": "parameter"}'
 ## API
 
 - [`bundle`](#bundle)
-- [`Press.create`](#Press-create)
 
 [`Press`](#Press)
 
+- [`create`](#create)
 - [`initialize`](#initialize)
 - [`run`](#run)
 - [`shutdown`](#shutdown)
+
+[`Report`](#Report)
+
+- [`Module`](#Module)
+- [`Definition`](#Definition)
 
 ---
 
@@ -168,10 +173,13 @@ chronicle.bundle(entry, options);
 
 ---
 
-<a name="Press-create"/>
-#### Press.create ( options )
+<a name="Press"/>
+### Press
 
-Creates an instance of Chronicle [`Press`](#Press). Presses are used to run reports.
+<a name="create"/>
+#### create ( options )
+
+Creates an instance of Chronicle [`Press`](#Press). Presses are used to run [`Report`](#Report)s and produce HTML output.
 
 __Arguments__
 
@@ -185,11 +193,6 @@ var press = chronicle.Press.create();
 ```
 
 ---
-
-<a name="Press"/>
-### Press
-
-A tool used to run [`Report`](#Report)s and produce HTML output.
 
 <a name="initialize"/>
 #### initialize ( )
@@ -286,7 +289,7 @@ __Properties__
 - `charts` - An object containing functions that return the [C3](http://c3js.org/) chart configurations for the charts available within the `template`. Each function will be called with the result of the `data` property and the `parameters` supplied when the [`Report`](#Report) is [`run`](#run).
 - `helpers` - An object containing the [Handlebars](http://handlebarsjs.com/) helpers available within the `template` and `partials`.
 - `partials` - An object containing the [Handlebars](http://handlebarsjs.com/) partials available within the `template`.
-- `template` - _(required)_ A [Handlebars](http://handlebarsjs.com/) template used to produce the report HTML.
+- `template` - _(Required)_ A [Handlebars](http://handlebarsjs.com/) template used to produce the report HTML.
 
 __Examples__
 
