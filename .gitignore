@@ -5,4 +5,4 @@ bundle.js
 **/test/test.pdf
 **/test/test.html
 !**/test/node_modules
-!**/test/fixtures
+!**/test/fixtures/**
