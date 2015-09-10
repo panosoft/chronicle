@@ -14,11 +14,6 @@ UpdateNotifier({
 	updateCheckInterval: 1000 * 60 * 60 // once an hour
 }).notify({defer: false});
 
-var getStdin = function () {
-	return new Promise(function (resolve, reject) {
-		stdin(resolve);
-	});
-};
 var bundle = function (entry, program) {
 	chronicle.bundle(entry, program.opts());
 };
@@ -29,7 +24,7 @@ var bundle = function (entry, program) {
  */
 var run = co.wrap(function * (definition, program) {
 	var options = program.opts();
-	if (!definition) definition = yield getStdin();
+	if (!definition) definition = yield stdin();
 	try {
 		definition = (definition ? JSON.parse(definition) : {});
 	}

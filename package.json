@@ -22,8 +22,8 @@
     "co": "^4.6.0",
     "commander": "^2.8.1",
     "d3": "^3.5.5",
-    "get-stdin": "^4.0.1",
-    "handlebars": "^3.0.3",
+    "get-stdin": "^5.0.0",
+    "handlebars": "^4.0.0",
     "html-inlinify": "^0.1.0",
     "is-local-path": "^0.1.0",
     "is-plain-object": "^2.0.1",
@@ -38,7 +38,7 @@
     "statuses": "^1.2.1",
     "suspend": "^0.6.1",
     "update-notifier": "^0.5.0",
-    "validator": "^3.40.0",
+    "validator": "^4.0.0",
     "watchify": "^3.3.1"
   },
   "devDependencies": {
