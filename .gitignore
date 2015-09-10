@@ -1,6 +1,8 @@
 node_modules
 .idea
-*.log
 bundle.js
+*.log
 **/test/test.pdf
 **/test/test.html
+!**/test/node_modules
+!**/test/fixtures
