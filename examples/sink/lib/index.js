@@ -1,8 +1,8 @@
-var _ = require('lodash');
 var co = require('co');
 var Definition = require('@panosoft/report-definition');
 var inline = require('inline-html');
 var path = require('path');
+var R = require('ramda');
 
 var data = co.wrap(function * (parameters) {
 	return {
@@ -45,9 +45,9 @@ var definition = co.wrap(function * (parameters) {
 		},
 		charts: {
 			chart: function (data) {
-				var columns = _.map(data.groups, function (group) {
+				var columns = R.map(function (group) {
 					return [group.name, group.items.length];
-				});
+				}, data.groups);
 				return { data: { columns: columns, type: 'donut'}};
 			}
 		}
