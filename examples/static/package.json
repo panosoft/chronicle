@@ -1,0 +1,19 @@
+{
+  "name": "static",
+  "version": "1.0.0",
+  "description": "A basic report that uses static data.",
+  "main": "lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node --harmony_arrow_functions test/index.js && open test/test.pdf"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@panosoft/chronicle": "file:../../",
+    "co": "^4.6.0",
+    "prince-promise": "^0.2.0"
+  }
+}
