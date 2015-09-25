@@ -1,0 +1,26 @@
+{
+  "name": "dynamic",
+  "version": "1.0.0",
+  "description": "A realistic report that uses a dynamic data source",
+  "main": "lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "chronicle bundle && chronicle run bundle.js -p '{\"sort\": \"stars\"}' | node_modules/prince-promise/node_modules/prince/prince/lib/prince/bin/prince - -o test/test.pdf && open test/test.pdf"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@panosoft/chronicle": "file:../../",
+    "prince-promise": "^0.2.1"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.5",
+    "co": "^4.6.0",
+    "got": "^4.2.0",
+    "inline-html": "^0.1.9",
+    "moment": "^2.10.6",
+    "octicons": "^2.4.1"
+  }
+}
