@@ -12,39 +12,44 @@ const searchRepositories = (query) => {
 		.then(response => response.body.items);
 };
 
-const data = co.wrap(function * (parameters) {
-	// Get data dynamically
-	var repos = yield searchRepositories({
-		q: 'language:javascript',
-		sort: parameters.sort,
-		order: 'desc',
-		per_page: 100
-	});
-	// Process data: add rank
-	repos = repos.map(function (repo, index) {
-		repo.rank = index + 1;
-		return repo;
-	});
-	// Return report template context
-	return {
-		date: new Date(),
-		repos,
-		title: 'Most Popular Repositories on Github'
-	};
-});
-
 const definition = co.wrap(function * (parameters) {
+
+	// Define method that returns template context
+	const data = co.wrap(function * (parameters) {
+		// Fetch data dynamically
+		var repos = yield searchRepositories({
+			q: 'language:javascript',
+			sort: parameters.sort,
+			order: 'desc',
+			per_page: 100
+		});
+		// Process data: add rank
+		repos = repos.map(function (repo, index) {
+			repo.rank = index + 1;
+			return repo;
+		});
+		// Return report template context
+		return {
+			date: new Date(),
+			repos,
+			title: 'Most Popular Repositories on Github'
+		};
+	});
+
 	// Load template and inline assets
 	const template = yield inlineHtml(path.resolve(__dirname, 'template.hbs'));
+
 	// Define template helpers
 	const helpers = {
 		formatDate: (date, type) => moment(date).format(type)
 	};
+
 	// Define template partials
 	const partials = {
 		page: '<span style="content: counter(page)"></span>',
 		pages: '<span style="content: counter(pages)"></span>'
 	};
+
 	// Return report definition
 	return {
 		data: data,
