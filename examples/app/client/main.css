@@ -1,0 +1,26 @@
+body {
+  padding: 1em;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 1em;
+}
+
+fieldset {
+  display: inline-block;
+  width: 36em;
+}
+
+fieldset div {
+  margin-bottom: 1em;
+}
+
+input[type="radio"] {
+  margin-left: 1em;
+}
+
+input[type="range"] {
+  width: 24em;
+  margin: 0 auto;
+}

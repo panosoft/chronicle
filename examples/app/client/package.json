@@ -1,0 +1,20 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "Chronicle simple app client.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node_modules/.bin/watchify index.js -o bundle.js -v"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^3.3.5",
+    "co": "^4.6.0",
+    "filesaver.js": "^0.2.0",
+    "ramda": "^0.17.1"
+  },
+  "devDependencies": {
+    "watchify": "^3.4.0"
+  }
+}
