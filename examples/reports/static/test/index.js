@@ -3,6 +3,7 @@ var chronicle = require('@panosoft/chronicle');
 var fs = require('fs');
 var path = require('path');
 var prince = require('prince-promise');
+
 var report = require('../lib');
 
 co(function * () {

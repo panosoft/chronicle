@@ -4,17 +4,17 @@ var definition = {
 		<html>
 		<body>
 			<h1>Welcome to Chronicle</h1>
-			<div>Data: date: {{date}}</div>
-			<div>Helpers: help: {{help}}</div>
+			<div>Data: property: {{property}}</div>
+			<div>Helpers: help: {{help "helped"}}</div>
 			<div>Partials: part: {{>part}}</div>
 		</body>
 		</html>
 	`,
 	data: {
-		date: new Date()
+		property: 'value'
 	},
 	helpers: {
-		help: function () {return 'return value';}
+		help: function (value) {return value;}
 	},
 	partials: {
 		part: 'partial template'
