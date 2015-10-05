@@ -14,6 +14,12 @@ Use web technology to build reports and run them with Node.
 npm install @panosoft/chronicle
 ```
 
+## Examples
+
+- [Static Report](examples/reports/static)
+- [Dynamic Report](examples/reports/dynamic)
+- [Simple App](examples/app)
+
 ## Usage
 
 Reports can be run from the command line:
@@ -350,7 +356,3 @@ var definition = co.wrap(function * (parameters) {
   };
 });
 ```
-
-### Examples
-
-Sample reports can be found in the [`examples/`](https://github.com/panosoft/chronicle/tree/master/examples) directory.
