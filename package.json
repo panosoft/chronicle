@@ -1,7 +1,8 @@
 {
   "name": "@panosoft/chronicle",
   "version": "0.5.1",
-  "description": "Use web technology to build reports and run them with Node.",
+  "description": "A Reporting Engine for JavaScript.",
+  "keywords": ["reports", "reporting", "html", "pdf"],
   "repository": "panosoft/chronicle",
   "main": "lib/index.js",
   "bin": {

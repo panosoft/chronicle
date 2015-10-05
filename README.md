@@ -1,6 +1,6 @@
 # Chronicle
 
-Use web technology to build reports and run them with Node.
+A Reporting Engine for JavaScript.
 
 [![npm version](https://img.shields.io/npm/v/@panosoft/chronicle.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
 [![npm license](https://img.shields.io/npm/l/@panosoft/chronicle.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
@@ -22,13 +22,17 @@ npm install @panosoft/chronicle
 
 ## Usage
 
+Finally, a reporting engine for JavaScript! Use Chronicle to define Reports using web technologies and then run them in Node.
+
+Reports are simply CommonJS modules (i.e. Node modules) that export Definitions. Definitions define how Reports get their data and render it as HTML. From there, a tool like PrinceXML can be used to create a paginated PDF!
+
 Reports can be run from the command line:
 
 ```sh
 chronicle run index.js
 ```
 
-Or using the node api:
+Or using the Node api:
 
 ```js
 var chronicle = require('@panosoft/chronicle');
@@ -44,7 +48,7 @@ press.initialize()
   });
 ```
 
-Then, using a renderer like [PrinceXML](http://www.princexml.com/) that supports [CSS Paged Media](https://drafts.csswg.org/css-page-3/), you can take the report HTML and render it as a paginated PDF complete with repeating page headers and footers, page numbers, etc.!
+Then, using a renderer like [PrinceXML](http://www.princexml.com/) that supports [CSS Paged Media](https://drafts.csswg.org/css-page-3/), you can take the report HTML and render it as a paginated PDF, complete with repeating page headers and footers, page numbers, etc.!
 
 If [PrinceXML](http://www.princexml.com/) is installed, we can use the command line:
 
@@ -73,7 +77,129 @@ press.initialize()
   });
 ```
 
+<a name="Report"/>
+## Report
+
+[`Report`](#Report)s can take the form of a bare [`Definition`](#Definition) or a [`Module`](#Module) that exports a [`Definition`](#Definition).
+
+They are [`run`](#run) by Chronicle [`Press`](#Press) which produces static HTML content that can be visually rendered by a browser or other third party HTML renderers.
+
+<a name="Module"/>
+### Module
+
+A report [`Module`](#Module) is simply a CommonJS module (i.e. Node module) that exports a report [`Definition`](#Definition).
+
+Report [`Module`](#Module)s can be optionally bundled using Chronicle [`bundle`](#bundle) so that all of their dependencies are contained within a single file.
+
+Chronicle [`Press`](#Press) can then run a Report using a url that references a bundled Module, a path to a local Module, or by simply passing the Definition itself.
+
+__Example__
+
+```js
+var definition = {
+  // ...
+};
+
+module.exports = definition;
+```
+
+<a name="Definition"/>
+### Definition
+
+The Report [`Definition`](#Definition) tells Chronicle [`Press`](#Press) how get data and render it as HTML.
+
+A report [`Definition`](#Definition) is an object, or a yieldable function that returns an object, that contains some or all of the following properties. If it is a yieldable function, it will be called with the `parameters` supplied when the [`Report`](#Report) is [`run`](#run).
+
+__Properties__
+
+- `data` - An object, or a yieldable function that returns an object, containing the data that will be passed to the [Handlebars](http://handlebarsjs.com/) `template`. If this is a yieldable function, it will be called with the `parameters` supplied when the [`Report`](#Report) is [`run`](#run). Operations such as api calls, deserializing, grouping, sorting, aggregating, etc. can be done here.
+
+- `charts` - An object containing functions that return the [C3](http://c3js.org/) chart configurations for the charts available within the `template`. Each function will be called with the result of the `data` property and the `parameters` supplied when the [`Report`](#Report) is [`run`](#run).
+
+- `helpers` - An object containing the [Handlebars](http://handlebarsjs.com/) helpers available within the `template` and `partials`.
+
+- `partials` - An object containing the [Handlebars](http://handlebarsjs.com/) partials available within the `template`.
+
+- `template` - _(Required)_ A [Handlebars](http://handlebarsjs.com/) template used to produce the report HTML.
+
+__Examples__
+
+Simplistic:
+
+```js
+var definition = {
+  data: {
+    date: new Date()
+  },
+  charts: {
+    chart: (data, parameters) => ({data: {columns: ['data', 1, 2, 3]})
+  },
+  helpers: {
+    help: (string) => string;
+  },
+  partials: {
+    part: 'Parted'
+  },
+  template: `
+    Created: {{date}}, {{charts.chart}}, {{help "Helped"}}, {{> part}}.
+  `
+};
+```
+
+Realistic:
+
+```js
+var co = require('co');
+var inlineHtml = require('inline-html');
+
+var definition = co.wrap(function * (parameters) {
+  // assemble elements of the report definition,
+  // optionally using runtime `parameters`
+
+  var data = co.wrap(function * (parameters) {
+    // fetch and process data, optionally using
+    // runtime `parameters`
+    return result;
+  };
+
+  var charts = {
+    chart: function (data, parameters) {
+      // create the chart config optionally using
+      // runtime `data` and `parameters`
+      return { data: {columns: ['data', 1, 2, 3]} };
+    }
+  };
+
+  var helpers = {
+    // load helpers from separate files
+    // Note: `helpers.js` would export a function
+    help: require('./helpers.js')
+  };
+
+  var partials = {
+    // load partials from separate files
+    // along with their referenced assets
+    part: yield inlineHtml('path/to/partial.html')
+  };
+
+  // load template from a separate file
+  // along with its referenced assets
+  var template = yield inlineHtml('path/to/template.html');
+
+  // return the Definition object
+  return {
+    data: data,
+    charts: charts,
+    helpers: helpers,
+    partials: partials,
+    template: template
+  };
+});
+```
+
 ## CLI
+
+`chronicle`
 
 - [`bundle`](#cli-bundle)
 - [`run`](#cli-run)
@@ -256,103 +382,4 @@ __Example__
 
 ```js
 press.shutdown();
-```
-
-<a name="Report"/>
-## Report
-
-[`Report`](#Report)s can take the form of a [`Definition`](#Definition) or a [`Module`](#Module).
-
-They are [`run`](#run) by Chronicle [`Press`](#Press) which produces static HTML content that can be rendered by a browser or other third party HTML renderers.
-
-<a name="Module"/>
-### Module
-
-A report [`Module`](#Module) is a CommonJS module that exports a report [`Definition`](#Definition).
-
-Report [`Module`](#Module)s can be bundled and transported across a network using Chronicle [`bundle`](#bundle) or simply loaded from the local file system.
-
-__Example__
-
-```js
-var definition = {
-  // ...
-};
-
-module.exports = definition;
-```
-
-<a name="Definition"/>
-### Definition
-
-The report [`Definition`](#Definition) tells Chronicle [`Press`](#Press) how to get data, process it, and finally how to use it to produce HTML.
-
-A report [`Definition`](#Definition) is an object, or a yieldable function that returns an object, that contains some or all of the following properties. If it is a yieldable function, it will be called with the `parameters` supplied when the [`Report`](#Report) is [`run`](#run).
-
-__Properties__
-
-- `data` - An object, or a yieldable function that returns an object, containing the data that will be passed to the [Handlebars](http://handlebarsjs.com/) `template`. If this is a yieldable function, it will be called with the `parameters` supplied when the [`Report`](#Report) is [`run`](#run). Operations such as api calls, deserializing, grouping, sorting, aggregating, etc. can be done here.
-- `charts` - An object containing functions that return the [C3](http://c3js.org/) chart configurations for the charts available within the `template`. Each function will be called with the result of the `data` property and the `parameters` supplied when the [`Report`](#Report) is [`run`](#run).
-- `helpers` - An object containing the [Handlebars](http://handlebarsjs.com/) helpers available within the `template` and `partials`.
-- `partials` - An object containing the [Handlebars](http://handlebarsjs.com/) partials available within the `template`.
-- `template` - _(Required)_ A [Handlebars](http://handlebarsjs.com/) template used to produce the report HTML.
-
-__Examples__
-
-Simplistic:
-
-```js
-var definition = {
-  data: { date: new Date() },
-  charts: { chart: function (data, parameters) { return { data: {columns: ['data', 1, 2, 3]} }; }
-},
-  helpers: { help: function (string) { return string; }},
-  partials: { part: 'Parted' },
-  template: 'Created: {{date}}, {{charts.chart}}, {{help "Helped"}}, {{> part}}.'
-};
-```
-
-Realistic:
-
-```js
-var co = require('co');
-var inlineHtml = require('inline-html');
-
-var definition = co.wrap(function * (parameters) {
-
-  // generate elements of the report definition,
-  // optionally using runtime `parameters`
-
-  var data = co.wrap(function * (parameters) {
-    // fetch and process data, optionally using
-    // runtime `parameters`
-    return result;
-  };
-
-  var charts = {
-    chart: function (data, parameters) {
-      // create the chart config optionally using
-      // runtime `data` and `parameters`
-      return { data: {columns: ['data', 1, 2, 3]} };
-    }
-  };
-
-  var helpers = {
-    help: require('./helpers.js')
-  };
-
-  var partials = {
-    part: yield inlineHtml('path/to/partial.html')
-  };
-
-  var template = yield inlineHtml('path/to/template.html');
-
-  return {
-    data: data,
-    charts: charts,
-    helpers: helpers,
-    partials: partials,
-    template: template
-  };
-});
 ```
