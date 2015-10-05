@@ -80,7 +80,7 @@ press.initialize()
 <a name="Report"/>
 ## Report
 
-[`Report`](#Report)s can take the form of a bare [`Definition`](#Definition) or a [`Module`](#Module) that exports a [`Definition`](#Definition).
+Reports can take the form of a bare [`Definition`](#Definition) or a [`Module`](#Module) that exports a [`Definition`](#Definition).
 
 They are [`run`](#run) by Chronicle [`Press`](#Press) which produces static HTML content that can be visually rendered by a browser or other third party HTML renderers.
 
