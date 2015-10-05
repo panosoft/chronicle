@@ -7,12 +7,13 @@
     "test": "test"
   },
   "scripts": {
-    "test": "chronicle bundle && chronicle run bundle.js -p '{\"sort\": \"stars\"}' | node_modules/prince-promise/node_modules/prince/prince/lib/prince/bin/prince - -o test/test.pdf && open test/test.pdf"
+    "test": "node --harmony_arrow_functions test/index.js"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@panosoft/chronicle": "file:../../",
+    "@panosoft/chronicle": "^0.5.1",
+    "open": "0.0.5",
     "prince-promise": "^0.2.1"
   },
   "dependencies": {
