@@ -24,7 +24,7 @@ npm install @panosoft/chronicle
 
 Finally, a reporting engine for JavaScript! Use Chronicle to define Reports using web technologies and then run them in Node.
 
-Reports are simply CommonJS modules (i.e. Node modules) that export Definitions. Definitions define how Reports get their data and render it as HTML. From there, a tool like PrinceXML can be used to create a paginated PDF!
+Reports are simply CommonJS modules (i.e. Node modules) that export Definitions. Definitions define how Reports get their data and render it as HTML. From there, a tool like [PrinceXML](http://www.princexml.com/) can be used to create a paginated PDF!
 
 Reports can be run from the command line:
 
