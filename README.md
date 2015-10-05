@@ -11,13 +11,14 @@ A Reporting Engine for JavaScript.
 ## Installation
 
 ```sh
-npm install @panosoft/chronicle
+npm install -g @panosoft/chronicle
 ```
 
 ## Examples
 
 - [Static Report](examples/reports/static)
 - [Dynamic Report](examples/reports/dynamic)
+- [Bundle Server](examples/bundle-server)
 - [Simple App](examples/app)
 
 ## Usage
