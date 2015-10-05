@@ -37,9 +37,6 @@ const definition = co.wrap(function * (parameters) {
 		};
 	});
 
-	// Load template and inline assets
-	const template = yield inlineHtml(path.resolve(__dirname, 'template.hbs'));
-
 	// Define template helpers
 	const helpers = {
 		formatDate: (date, type) => moment(date).format(type)
@@ -50,6 +47,9 @@ const definition = co.wrap(function * (parameters) {
 		page: '<span style="content: counter(page)"></span>',
 		pages: '<span style="content: counter(pages)"></span>'
 	};
+
+	// Load template and embed local assets
+	const template = yield inlineHtml(path.resolve(__dirname, 'template.hbs'));
 
 	// Return report definition
 	return {
