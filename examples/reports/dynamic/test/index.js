@@ -12,8 +12,9 @@ var parameters = {
 };
 
 co(function * () {
+	var press;
 	try {
-		var press = chronicle.Press.create();
+		press = chronicle.Press.create();
 		yield press.initialize();
 
 		// Run and render report

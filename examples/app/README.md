@@ -26,11 +26,9 @@ Lastly, open the client in your browser. In a new Terminal tab, run:
 open http://localhost:8080
 ```
 
-# Usage
+# Description
 
-The Client presents a very simple ui that allows you to manipulate a few report parameters and run the dynamic "Most Popular Github Repositories" example report.
-
-The data for the dynamic report is retrieved when the report is run. The "Sort by" parameter lets you choose whether the number of stars or forks is used to determine which repos are the most popular. The "Number of results to display" lets you choose how many results you would like in your report (top 20, top 100, etc.).
+The Client presents a very simple ui that allows you to manipulate a few report parameters and run the dynamic report example: "Most Popular Github Repositories".
 
 When the report is run, the Client makes a request to the Server that includes the report path and the parameters to apply. Then the Server runs the report using a Chronicle Press which loads the report, retrieves the report data, and then presses that data with the report template to generate the report HTML. Finally, PrinceXML is used to visually render the report HTML as a paginated PDF, the file is returned to the Client, and then saved to disk.
 
