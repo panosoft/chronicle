@@ -1,6 +1,6 @@
 # Bundle Server
 
-This example is composed of a simple Bundle Server that serves up our report bundle and a test script that runs that bundled report via it's url.
+This example is composed of a simple Bundle Server that serves up our report bundle and a test script that runs that bundle via it's url.
 
 This is an example of how bundles might be used to produce highly portable reports that can be served up from a central location, like an application server, independently of where Chronicle Press is running.
 
