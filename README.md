@@ -16,10 +16,11 @@ npm install -g @panosoft/chronicle
 
 ## Examples
 
-- [Static Report](examples/reports/static)
-- [Dynamic Report](examples/reports/dynamic)
-- [Bundle Server](examples/bundle-server)
-- [Simple App](examples/app)
+- Static Report ([Source](examples/reports/static), [PDF](examples/reports/static/test/test.pdf))
+- Dynamic Report ([Source](examples/reports/dynamic), [PDF](examples/reports/dynamic/test/test.pdf))
+- Flat Data Report ([Source](examples/reports/flat-data), [PDF](examples/reports/flat-data/test/test.pdf))
+- Bundle Server ([Source](examples/bundle-server))
+- Simple App ([Source](examples/app))
 
 ## Usage
 

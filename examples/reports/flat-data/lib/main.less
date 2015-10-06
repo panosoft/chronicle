@@ -1,0 +1,42 @@
+// Import css libraries
+@import (less) '../node_modules/bootstrap/dist/css/bootstrap.css';
+
+// Layout page
+// Place header and footer in the top and bottom margins, respectively
+@page {
+    @top {content: flow(header);}
+    @bottom {content: flow(footer);}
+}
+@page:first {
+  @top { content: ''; }
+}
+body {
+    > header { flow: static(header); }
+    > footer { flow: static(footer); }
+}
+
+// Style report
+header {
+  text-align: center;
+}
+footer {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  > div {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    &:first-child { text-align: left; }
+    &:last-child { text-align: right; }
+    img {
+        height: 2em;
+    }
+  }
+}
+section {
+  h1 {
+    margin-bottom: 0.6em;
+    text-align: center;
+  }
+}
