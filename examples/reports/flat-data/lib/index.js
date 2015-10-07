@@ -35,45 +35,11 @@ const data = co.wrap(function * () {
   `;
   const results = yield execute(connection, query);
   connection.end();
-  /**
-    [
-      {
-        'biotypes:name': 'Mt_tRNA',
-        'biotypes:genes:id': 'ENSG00000210049',
-        'biotypes:genes:description': 'mitochondrially encoded tRNA phenylalanine [Source:HGNC Symbol;Acc:HGNC:7481]'
-      },
-      {
-        'biotypes:name': 'Mt_rRNA',
-        'biotypes:genes:id': 'ENSG00000211459',
-        'biotypes:genes:description': 'mitochondrially encoded 12S RNA [Source:HGNC Symbol;Acc:HGNC:7470]'
-      },
-      ...
-    ]
-   */
 
   // unflatten
   const tree = new Treeize();
   tree.grow(results);
   const biotypes = tree.getData();
-  /**
-    [
-      {
-        biotype: 'Mt_tRNA',
-        genes: [
-          { id: 'ENSG00000210049', description: 'mitochondrially encoded tRNA phenylalanine [Source:HGNC Symbol;Acc:HGNC:7481]' },
-          ...
-        ]
-      },
-      {
-        biotype: 'Mt_rRNA',
-        genes: [
-          { id: 'ENSG00000211459', description: 'mitochondrially encoded 12S RNA [Source:HGNC Symbol;Acc:HGNC:7470]' },
-          ...
-        ]
-      },
-      ...
-    ]
-   */
 
   return {
     title: 'Genes by Biotype',
