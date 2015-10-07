@@ -20,7 +20,7 @@ npm install -g @panosoft/chronicle
 
 Finally, a reporting engine for JavaScript!
 
-Use Chronicle to define Reports using web technologies and then run them in Node.
+Use Chronicle to create Reports using web technologies and then run them in Node.
 
 [Reports](#report) are simply CommonJS modules (i.e. Node modules) that export Definitions. [Definitions](#definition) define how Reports get their data and render it as HTML. From there, a tool like [PrinceXML](http://www.princexml.com/) that supports [CSS Paged Media](https://drafts.csswg.org/css-page-3/) can be used to create a paginated PDF, complete with headers, footers, page numbers, etc.!
 
@@ -196,7 +196,9 @@ Bundles are completely self contained and thus very portable. For instance, bund
 __Arguments__
 
 - `entry` - The main entry filename of a report [`Module`](#module) to bundle. If an entry is not specified, the `package.json`'s' `main` property will be used. If the `package.json` doesn't exist or if the `main` property is not specified, then `index.js` will be used as the entry.
+
 - `-o, --output` - The filename for the bundled module. Defaults to `bundle.js`.
+
 - `-w, --watch` - Enable watch mode. As files are modified, the bundle will be updated automatically and incrementally.
 
 __Examples__
@@ -223,9 +225,13 @@ __Arguments__
   - A filename - Load a report [`Module`](#module) (bundled or not) from the filesystem.
   - A JSON parseable string - The report [`Definition`](#definition) to run.
   - No value - Read from `stdin`. The value passed in can be any of the above.
+
+
 - `-o, --output` - The destination for the report HTML to be written. Supported values are:
   - A filename - Write to the filesystem.
   - No value - Write to `stdout`
+
+
 - `-p, --parameters` - A JSON parseable string of parameters to run the report with.
 
 __Examples__
@@ -240,14 +246,14 @@ chronicle run bundle.js -o report.html -p '{"sample": "parameter"}'
 
 ## API
 
+`chronicle`
+
 - [`bundle`](#bundle)
-
-[`Press`](#press)
-
-- [`create`](#create)
-- [`initialize`](#initialize)
-- [`run`](#run)
-- [`shutdown`](#shutdown)
+- [`Press`](#press)
+  - [`create`](#create)
+  - [`initialize`](#initialize)
+  - [`run`](#run)
+  - [`shutdown`](#shutdown)
 
 ---
 
@@ -261,6 +267,8 @@ Upon completion, the bundle is written directly to the filesystem per `output` o
 __Arguments__
 
 - `entry` - The main entry filename of a report [`Module`](#module) to bundle. If an entry is not specified, the `package.json`'s' `main` property will be used. If the `package.json` doesn't exist or if the `main` property is not specified, then `index.js` will be used as the entry.
+
+
 - `options`
   - `output` - The filename for the bundled [`Module`](#module). Defaults to `bundle.js`.
   - `watch` - A boolean used to enable watch mode. Supported values are:
@@ -332,6 +340,8 @@ __Arguments__
   - A fully qualified url of a bundled report [`Module`](#module).
   - A filename of a report [`Module`](#module) (bundled or not).
   - A report [`Definition`](#definition).
+
+
 - `parameters` - An object of parameters used to run the report. This object is passed to various elements of the report [`Definition`](#definition) at various stages of the report lifecycle.
 
 __Examples__
