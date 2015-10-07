@@ -1,8 +1,13 @@
 {
   "name": "@panosoft/chronicle",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A Reporting Engine for JavaScript.",
-  "keywords": ["reports", "reporting", "html", "pdf"],
+  "keywords": [
+    "reports",
+    "reporting",
+    "html",
+    "pdf"
+  ],
   "repository": "panosoft/chronicle",
   "main": "lib/index.js",
   "bin": {
