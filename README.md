@@ -8,25 +8,21 @@ A Reporting Engine for JavaScript.
 [![David](https://img.shields.io/david/panosoft/chronicle.svg)](https://david-dm.org/panosoft/chronicle)
 [![npm downloads](https://img.shields.io/npm/dm/@panosoft/chronicle.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
 
+<a name="installation"/>
 ## Installation
 
 ```sh
 npm install -g @panosoft/chronicle
 ```
 
-## Examples
-
-- Static Report ([Source](examples/reports/static), [PDF](examples/reports/static/test/test.pdf))
-- Dynamic Report ([Source](examples/reports/dynamic), [PDF](examples/reports/dynamic/test/test.pdf))
-- Flat Data Report ([Source](examples/reports/flat-data), [PDF](examples/reports/flat-data/test/test.pdf))
-- Bundle Server ([Source](examples/bundle-server))
-- Simple App ([Source](examples/app))
-
+<a name="usage"/>
 ## Usage
 
-Finally, a reporting engine for JavaScript! Use Chronicle to define Reports using web technologies and then run them in Node.
+Finally, a reporting engine for JavaScript!
 
-[Reports](#report) are simply CommonJS modules (i.e. Node modules) that export Definitions. Definitions define how Reports get their data and render it as HTML. From there, a tool like [PrinceXML](http://www.princexml.com/) can be used to create a paginated PDF!
+Use Chronicle to define Reports using web technologies and then run them in Node.
+
+[Reports](#report) are simply CommonJS modules (i.e. Node modules) that export Definitions. [Definitions](#definition) define how Reports get their data and render it as HTML. From there, a tool like [PrinceXML](http://www.princexml.com/) that supports [CSS Paged Media](https://drafts.csswg.org/css-page-3/) can be used to create a paginated PDF, complete with headers, footers, page numbers, etc.!
 
 Reports can be run from the command line:
 
@@ -37,47 +33,29 @@ chronicle run index.js
 Or using the Node api:
 
 ```js
-var chronicle = require('@panosoft/chronicle');
-var press = chronicle.Press.create();
-
-press.initialize()
-  .then(function () {
-    return press.run('index.js');
-  })
-  .then(function (html) {
-    press.shutdown();
-    // ...
-  });
-```
-
-Then, using a renderer like [PrinceXML](http://www.princexml.com/) that supports [CSS Paged Media](https://drafts.csswg.org/css-page-3/), you can take the report HTML and render it as a paginated PDF, complete with repeating page headers and footers, page numbers, etc.!
-
-If [PrinceXML](http://www.princexml.com/) is installed, we can use the command line:
-
-```sh
-chronicle run index.js | prince - -o report.pdf
-```
-
-Alternately, we can use the [`prince-promise`](https://www.npmjs.com/package/prince-promise) library alongside the node api:
-
-```js
+var co = require('co');
 var chronicle = require('@panosoft/chronicle');
 var prince = require('prince-promise');
 
-var press = chronicle.Press.create();
+co(function * () {
+  var press = chronicle.Press.create();
+  yield press.initialize();
 
-press.initialize()
-  .then(function () {
-    return press.run('index.js');
-  })
-  .then(function (html) {
-    press.shutdown();
-    return prince(html);
-  })
-  .then(function (pdf) {
-    // ...
-  });
+  var html = yield press.run('index.js');
+  var pdf = yield prince(html);
+
+  press.shutdown();
+});
 ```
+
+<a name="examples"/>
+## Examples
+
+- Static Report ([Source](examples/reports/static), [PDF](examples/reports/static/test/test.pdf))
+- Dynamic Report ([Source](examples/reports/dynamic), [PDF](examples/reports/dynamic/test/test.pdf))
+- Flat Data Report ([Source](examples/reports/flat-data), [PDF](examples/reports/flat-data/test/test.pdf))
+- Bundle Server ([Source](examples/bundle-server))
+- Simple App ([Source](examples/app))
 
 <a name="report"/>
 ## Report
