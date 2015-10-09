@@ -4,7 +4,6 @@ var expect = require('chai')
 	.use(require('chai-as-promised'))
 	.use(require('sinon-chai'))
 	.expect;
-var fs = require('fs');
 var nock = require('nock');
 var path = require('path');
 var sinon = require('sinon');
@@ -140,65 +139,65 @@ describe('Definition', function () {
 		});
 	});
 
-	describe('data', function () {
+	describe('context', function () {
 		it('optional', function () {
 			var definition = {template: ''};
 			return expect(press.run(definition)).to.eventually.be.fulfilled;
 		});
 		it('can be string', function () {
-			var definition = { template: '', data: '' };
+			var definition = { template: '', context: '' };
 			return expect(press.run(definition)).to.eventually.be.fulfilled;
 		});
 		it('can be number', function () {
-			var definition = { template: '', data: 1 };
+			var definition = { template: '', context: 1 };
 			return expect(press.run(definition)).to.eventually.be.fulfilled;
 		});
 		it('can be boolean', function () {
-			var definition = { template: '', data: true };
+			var definition = { template: '', context: true };
 			return expect(press.run(definition)).to.eventually.be.fulfilled;
 		});
 		it('can be array', function () {
-			var definition = { template: '', data: [] };
+			var definition = { template: '', context: [] };
 			return expect(press.run(definition)).to.eventually.be.fulfilled;
 		});
 		it('can be object', function () {
-			var definition = { template: '', data: {} };
+			var definition = { template: '', context: {} };
 			return expect(press.run(definition)).to.eventually.be.fulfilled;
 		});
 		it('can be function that returns object', function () {
 			var definition = {
 				template: '',
-				data: function () { return {}; }
+				context: function () { return {}; }
 			};
 			return expect(press.run(definition)).to.eventually.be.fulfilled;
 		});
 		it('can be yieldable function', function () {
 			var definition = {
 				template: '',
-				data: co.wrap(function * () { return 1; })
+				context: co.wrap(function * () { return 1; })
 			};
 			return expect(press.run(definition)).to.eventually.be.fulfilled;
 		});
 		it('called with parameters if a function', function () {
 			return co(function * () {
-				var data = sinon.stub().returns({});
-				var definition = { template: '', data: data };
+				var context = sinon.stub().returns({});
+				var definition = { template: '', context: context };
 				var parameters = {};
 				yield press.run(definition, parameters);
-				expect(data).to.be.calledOnce
+				expect(context).to.be.calledOnce
 					.and.to.be.calledWithExactly(parameters);
 			});
 		});
 		it('throw if functions throws', function () {
-			var data = function () {throw new Error();};
-			var definition = {template: '', data: data};
+			var context = function () {throw new Error();};
+			var definition = {template: '', context: context};
 			return expect(press.run(definition))
 				.to.eventually.be.rejectedWith(Error);
 		});
 		it('can be used in template', function () {
 			var template = '{{value}}';
 			var value = 'Test';
-			var definition = { template: template, data: { value: value } };
+			var definition = { template: template, context: { value: value } };
 			return expect(press.run(definition)).to.eventually.equal(value);
 		});
 	});
@@ -240,20 +239,20 @@ describe('Definition', function () {
 			var definition = { template: '', charts: { chart: chart } };
 			return expect(press.run(definition)).to.eventually.be.fulfilled;
 		});
-		it('each chart function called with `data`', function () {
+		it('each chart function called with `context`', function () {
 			return co(function * () {
 				var parameters = {};
-				var data = {};
+				var context = {};
 				var chart = sinon.stub()
 					.returns({ data: {columns: ['data', 1]} });
 				var definition = {
 					template: '',
-					data: data,
+					context: context,
 					charts: { chart: chart }
 				};
 				yield press.run(definition, parameters);
 				expect(chart).to.be.calledOnce
-					.and.to.be.calledWithExactly(data);
+					.and.to.be.calledWithExactly(context);
 			});
 		});
 		it('throw if not object', function () {
