@@ -1,6 +1,6 @@
 {
   "name": "@panosoft/chronicle",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Create Reports with Web Technologies and Run them in Node.",
   "keywords": [
     "reports",
