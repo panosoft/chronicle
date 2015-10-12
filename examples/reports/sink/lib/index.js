@@ -4,7 +4,7 @@ var inline = require('inline-html');
 var path = require('path');
 var R = require('ramda');
 
-var data = co.wrap(function * (parameters) {
+var context = function () {
 	return {
 		title: "Kitchen Sink",
 		string: 'A string',
@@ -29,11 +29,11 @@ var data = co.wrap(function * (parameters) {
 			}
 		]
 	};
-});
+};
 
-var definition = co.wrap(function * (parameters) {
+var definition = co.wrap(function * () {
 	return yield Definition.create({
-		data: data,
+		context,
 		template: yield inline(path.resolve(__dirname, './assets/template.html')),
 		helpers: {
 			embedded: function () { return 'Embedded Helper'; },
@@ -51,7 +51,7 @@ var definition = co.wrap(function * (parameters) {
 				return { data: { columns: columns, type: 'donut'}};
 			}
 		}
-	})
+	});
 });
 
 module.exports = definition;

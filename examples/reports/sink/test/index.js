@@ -1,7 +1,8 @@
-var chronicle = require('../../../lib');
+var chronicle = require('@panosoft/chronicle');
 var co = require('co');
 var fs = require('fs');
 var nock = require('nock');
+var open = require('open');
 var path = require('path');
 var prince = require('prince-promise');
 var url = require('url');
@@ -19,7 +20,7 @@ co(function * () {
 		};
 
 		// Mock Network
-		var bundle = nock(baseUrl)
+		nock(baseUrl)
 			.get(reportPath)
 			.replyWithFile(200, filePath);
 
@@ -35,6 +36,8 @@ co(function * () {
 		// Capture output
 		fs.writeFileSync(path.join(__dirname, './test.html'), html);
 		fs.writeFileSync(path.join(__dirname, './test.pdf'), pdf);
+
+		open(path.join(__dirname, './test.pdf'));
 	}
 	catch (error) {
 		console.trace(error.stack);
