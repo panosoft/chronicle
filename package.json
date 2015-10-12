@@ -1,7 +1,7 @@
 {
   "name": "@panosoft/chronicle",
   "version": "0.5.2",
-  "description": "A Reporting Engine for JavaScript.",
+  "description": "Create Reports with Web Technologies and Run them in Node.",
   "keywords": [
     "reports",
     "reporting",
