@@ -1,7 +1,7 @@
 # Chronicle
 
 
-Create Reports with Web Technologies and Run them in Node.
+Create Reports with Web Technologies and run them in Node.
 
 [![npm version](https://img.shields.io/npm/v/@panosoft/chronicle.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
 [![Travis](https://img.shields.io/travis/panosoft/chronicle.svg)](https://travis-ci.org/panosoft/chronicle)
@@ -11,7 +11,7 @@ Create Reports with Web Technologies and Run them in Node.
 
 Finally, a reporting engine for JavaScript!
 
-Writing a Report is as easy as writing a CommonJS module (i.e. Node module) and Reports can get data from any source (APIs, SQL Servers, Code data generation, etc.).
+Writing Reports is as easy as writing CommonJS modules (i.e. Node modules) and they can pull data from any source (APIs, SQL Servers, Code data generation, etc.).
 
 The following Web Technologies are supported for use in Reports:
 
@@ -23,13 +23,14 @@ The following Web Technologies are supported for use in Reports:
 ## Contents
 
 - [Architecture](#architecture)
+- [Philosophy](#philosophy)
 - [Usage](#usage)
 - [Examples](#examples)
 - [Installation](#installation)
-- [Philosophy](#philosophy)
-- [Report](#report)
+- [Report Structure](#report)
 - [CLI](#cli)
 - [API](#api)
+- [License](#license)
 
 <a name="architecture"/>
 ## Architecture
@@ -45,6 +46,20 @@ Chronicle [`Press`](#press) runs Reports. It accepts a variety of inputs: urls t
 Finally, HTML renderers like [PrinceXML](http://www.princexml.com/) that support [CSS Paged Media](https://drafts.csswg.org/css-page-3/) can be used to create PDFs complete with page headers, footers, numbers, etc.!
 
 ![Architecture](docs/architecture.png)
+
+<a name="philosophy"/>
+## Philosophy
+
+Unlike Crystal Reports, Jasper Reports, BIRT, SQL Server Reporting Services (SSRS), Pentaho, etc., Chronicle doesn't subscribe to the WYSIWYG approach to report development. This is reminiscent of using FrontPage to produce web pages.
+
+With the WYSIWYG approach, most powerful features are hidden and buried under menu items, property sheets and require a half a dozen clicks to expose the correct radio button or check box. And many times, the powerful features just aren't there.
+
+Anyone who has had to suffer through these poorly designed systems has quickly realized that reports are harder than they need to be and that one must contort oneself in order to accomplish what would be trivial in a programming language.
+
+Another big problem with these traditional reporting systems, is that since it has a GUI, people assume that anyone can build a report. While it's true that anyone can, not everyone should.
+Good reports transform data into useful information in a form that's easy to understand. This is not a trivial task that you can give the receptionist or the intern. This requires layout design, data processing and logic. These are all things that good developers are skilled at, particularly web developers.
+
+Chronicle embraces these truths and caters to developers by using standard Web Technologies, viz. HTML/Handlebars, CSS/Less, Javascript, NodeJS, Browserify and PrinceXML to produce high quality PDF reports from any data source.
 
 <a name="usage"/>
 ## Usage
@@ -90,22 +105,8 @@ co(function * () {
 npm install -g @panosoft/chronicle
 ```
 
-<a name="philosophy"/>
-## Philosophy
-
-Unlike Crystal Reports, Jasper Reports, BIRT, SQL Server Reporting Services (SSRS), Pentaho, etc., Chronicle doesn't subscribe to the WYSIWYG approach to report development. This is reminiscent of using FrontPage to produce web pages.
-
-With the WYSIWYG approach, most powerful features are hidden and buried under menu items, property sheets and require a half a dozen clicks to expose the correct radio button or check box. And many times, the powerful features just aren't there.
-
-Anyone who has had to suffer through these poorly designed systems has quickly realized that reports are harder than they need to be and that one must contort oneself in order to accomplish what would be trivial in a programming language.
-
-Another big problem with these traditional reporting systems, is that since it has a GUI, people assume that anyone can build a report. While it's true that anyone can, not everyone should.
-Good reports transform data into useful information in a form that's easy to understand. This is not a trivial task that you can give the receptionist or the intern. This requires layout design, data processing and logic. These are all things that good developers are skilled at, particularly web developers.
-
-Chronicle embraces these truths and caters to developers by using standard Web Technologies, viz. HTML/Handlebars, CSS/Less, Javascript, NodeJS, Browserify and PrinceXML to produce high quality PDF reports from any data source.
-
 <a name="report"/>
-## Report
+## Report Structure
 
 Reports can take the form of a bare [Definition](#definition) or a [Module](#module) that exports a Definition.
 
@@ -415,3 +416,28 @@ __Example__
 ```js
 press.shutdown();
 ```
+
+<a name="license"/>
+## License
+
+The MIT License (MIT)
+
+Copyright (c) <year> <copyright holders>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
