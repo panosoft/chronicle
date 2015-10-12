@@ -4,7 +4,7 @@ This is an example application composed of a client and server that uses Chronic
 
 # Installation
 
-First, make sure that the dynamic report example has been installed and runs successfully. You can find directions on how to get that done [here](../reports/dynamic/README.md).
+First, make sure that the dynamic report example has been installed and runs successfully. You can find directions on how to get that done [here](../reports/api-data/README.md).
 
 Then, install the Client and start the watchify bundler so that changes you make in the source will be reflected when you refresh the page. In a new Terminal tab, change directory to `client/` and run:
 

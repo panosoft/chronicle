@@ -1,4 +1,13 @@
 var definition = {
+	context: {
+		property: 'value'
+	},
+	helpers: {
+		help: function (value) {return value;}
+	},
+	partials: {
+		part: 'partial template'
+	},
 	template: `
 		<!DOCTYPE html>
 		<html>
@@ -9,16 +18,7 @@ var definition = {
 			<div>Partials: part: {{>part}}</div>
 		</body>
 		</html>
-	`,
-	data: {
-		property: 'value'
-	},
-	helpers: {
-		help: function (value) {return value;}
-	},
-	partials: {
-		part: 'partial template'
-	}
+	`
 };
 
 module.exports = definition;

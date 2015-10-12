@@ -17,7 +17,7 @@ After running the above commands, the report pdf should open in a new window of 
 
 # Description
 
-This Report pulls data from the [Ensembl](http://www.ensembl.org/index.html) SQL database and outputs a short list of human genes, grouped by their biotype. In terms of structure, it is very similar to our [Dynamic](../dynamic) report example. Thus, if you have questions to that effect, please reference that example.
+This Report pulls data from the [Ensembl](http://www.ensembl.org/index.html) SQL database and outputs a short list of human genes, grouped by their biotype. In terms of structure, it is very similar to our [Api Data Source](../api-data) report example. Thus, if you have questions to that effect, please reference that example.
 
 That said, the notable difference here is that this report pulls it's data from an API that returns a flat data structure (i.e. a SQL result set). This poses a challenge because we often want to provide our report templates with hierarchical data structures (i.e. nested js objects) that make it simple to create rich reports. As you'll see, we can leverage the [Treeize](https://github.com/kwhitley/treeize) library to overcome this challenge with little effort.
 
@@ -65,4 +65,4 @@ Next, we use Treeize to unflatten the data and obtain the following hierarchical
 
 Finally, the grouped data is combined with any other data that needs to be supplied to the report template and the result is returned.
 
-Aside from this `data` function, the rest of this report operates in an almost identical fashion as the [Dynamic](../dynamic) report example. You can reference that [example](../dynamic) for further explanation or examine the test script for this report ([`test/index.js`](test/index.js)) to see how the report is run.
+Aside from this `data` function, the rest of this report operates in an almost identical fashion as the [Api Data Source](../api-data) report example. You can reference that [example](../api-data) for further explanation or examine the test script for this report ([`test/index.js`](test/index.js)) to see how the report is run.

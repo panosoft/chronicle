@@ -1,7 +1,7 @@
 {
-  "name": "flat-data",
+  "name": "dynamic",
   "version": "1.0.0",
-  "description": "",
+  "description": "A realistic report that uses a dynamic data source",
   "main": "lib/index.js",
   "directories": {
     "test": "test"
@@ -11,18 +11,17 @@
   },
   "author": "",
   "license": "MIT",
+  "devDependencies": {
+    "@panosoft/chronicle": "^0.6.0",
+    "open": "0.0.5",
+    "prince-promise": "^0.2.1"
+  },
   "dependencies": {
     "bootstrap": "^3.3.5",
     "co": "^4.6.0",
-    "inline-html": "^0.1.10",
+    "got": "^4.2.0",
+    "inline-html": "^0.1.9",
     "moment": "^2.10.6",
-    "mysql": "^2.9.0",
-    "treeize": "^2.0.2",
-    "underscore.string": "^3.2.2"
-  },
-  "devDependencies": {
-    "@panosoft/chronicle": "^0.5.1",
-    "open": "0.0.5",
-    "prince-promise": "^0.2.2"
+    "octicons": "^2.4.1"
   }
 }

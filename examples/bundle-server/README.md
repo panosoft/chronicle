@@ -10,13 +10,13 @@ First, some prerequisites:
 
 - Install Chronicle globally. Directions can be found [here](../../).
 
-- Install and test the dynamic report example. Directions can be found [here](../reports/dynamic/).
+- Install and test the dynamic report example. Directions can be found [here](../reports/api-data/).
 
 Once those are setup, we can begin by bundling the dynamic report.
 
 Bundling a report takes a report module, along with all of its dependencies, and combines them into a single file. This makes bundles very portable and also very stable since all of the reports dependencies are baked in. Any npm package that is browserify-able can be included in the bundle.
 
-To bundle the report, open Terminal and change directory to the dynamic report directory ([`../reports/dynamic/`](../reports/dynamic/)). Then run the following:
+To bundle the report, open Terminal and change directory to the dynamic report directory ([`../reports/api-data/`](../reports/api-data/)). Then run the following:
 
 ```sh
 chronicle bundle

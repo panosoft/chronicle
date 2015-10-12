@@ -11,10 +11,10 @@ const searchRepositories = (query) => {
 	return got(url.format(api), {json: true}).then(response => response.body.items);
 };
 
-const definition = co.wrap(function * (parameters) {
+const definition = co.wrap(function * () {
 
 	// Define function that returns template context
-	const data = co.wrap(function * (parameters) {
+	const context = co.wrap(function * (parameters) {
 		// Build query using parameters
 		const query = {
 			q: 'language:javascript',
@@ -53,7 +53,7 @@ const definition = co.wrap(function * (parameters) {
 
 	// Return report definition
 	return {
-		data,
+		context,
 		template,
 		helpers,
 		partials

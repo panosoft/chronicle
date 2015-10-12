@@ -5,7 +5,7 @@ const open = require('open');
 const path = require('path');
 const prince = require('prince-promise');
 
-const reportUrl = 'http://localhost:8888/dynamic/bundle.js';
+const reportUrl = 'http://localhost:8888/api-data/bundle.js';
 const parameters = {
 	sort: 'stars',
 	results: 30

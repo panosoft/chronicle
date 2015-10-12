@@ -13,7 +13,7 @@ const execute = (connection, query) => new Promise((resolve, reject) =>
   connection.query(query, (error, results) => error ? reject(error) : resolve(results))
 );
 
-const data = co.wrap(function * () {
+const context = co.wrap(function * () {
 
   // Connect to SQL server
   const connection = sql.createConnection({
@@ -49,7 +49,7 @@ const data = co.wrap(function * () {
 
 const definition = co.wrap(function * () {
   return {
-    data: data,
+    context,
     helpers: {
       capitalize: (value) => capitalize(value),
   		formatDate: (date, type) => moment(date).format(type)

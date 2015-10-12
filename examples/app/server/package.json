@@ -9,7 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@panosoft/chronicle": "^0.5.1",
+    "@panosoft/chronicle": "^0.6.0",
     "co-body": "^4.0.0",
     "express": "^4.13.3",
     "prince-promise": "^0.2.1"
