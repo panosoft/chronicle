@@ -240,6 +240,8 @@ Bundles a report [Module](#module) along with all of its dependencies into a sin
 
 Bundles are completely self contained and thus very portable. For instance, bundles could be stored on a static file server and requested remotely by Chronicle [`Press`](#press) when run.
 
+Any browserify compatible Module can be bundled. Bundle supports `fs` and [`inline-html`](https://github.com/panosoft/inline-html) via the [`brfs`](https://github.com/substack/brfs) and [html-inlinify](https://github.com/panosoft/html-inlinify) transforms, respectively.
+
 __Arguments__
 
 - `entry` - The main entry filename of a report [Module](#module) to bundle. If an entry is not specified, the `package.json`'s' `main` property will be used. If the `package.json` doesn't exist or if the `main` property is not specified, then `index.js` will be used as the entry.
@@ -309,6 +311,8 @@ chronicle run bundle.js -o report.html -p '{"sample": "parameter"}'
 #### bundle ( entry , options )
 
 Bundles a report [Module](#module) along with all of its dependencies into a single file called a bundle.
+
+Any browserify compatible Module can be bundled. Bundle supports `fs` and [`inline-html`](https://github.com/panosoft/inline-html) via the [`brfs`](https://github.com/substack/brfs) and [html-inlinify](https://github.com/panosoft/html-inlinify) transforms, respectively.
 
 Upon completion, the bundle is written directly to the filesystem per `output` option.
 
