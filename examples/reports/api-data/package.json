@@ -1,7 +1,7 @@
 {
-  "name": "dynamic",
+  "name": "api-data",
   "version": "1.0.0",
-  "description": "A realistic report that uses a dynamic data source",
+  "description": "A realistic report that uses an API data source.",
   "main": "lib/index.js",
   "directories": {
     "test": "test"
@@ -12,7 +12,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@panosoft/chronicle": "^0.6.0",
+    "@panosoft/chronicle": "^0.7.0",
     "open": "0.0.5",
     "prince-promise": "^0.2.1"
   },
@@ -20,7 +20,7 @@
     "bootstrap": "^3.3.5",
     "co": "^4.6.0",
     "got": "^4.2.0",
-    "inline-html": "^0.1.9",
+    "inline-html": "^0.2.0",
     "moment": "^2.10.6",
     "octicons": "^2.4.1"
   }

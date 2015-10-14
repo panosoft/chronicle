@@ -14,14 +14,14 @@
   "dependencies": {
     "bootstrap": "^3.3.5",
     "co": "^4.6.0",
-    "inline-html": "^0.1.10",
+    "inline-html": "^0.2.0",
     "moment": "^2.10.6",
     "mysql": "^2.9.0",
     "treeize": "^2.0.2",
     "underscore.string": "^3.2.2"
   },
   "devDependencies": {
-    "@panosoft/chronicle": "^0.6.0",
+    "@panosoft/chronicle": "^0.7.0",
     "open": "0.0.5",
     "prince-promise": "^0.2.2"
   }

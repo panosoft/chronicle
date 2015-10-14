@@ -34,20 +34,18 @@ var context = function () {
 var definition = co.wrap(function * () {
 	return yield Definition.create({
 		context,
-		template: yield inline(path.resolve(__dirname, './assets/template.html')),
+		template: yield inline.file(path.resolve(__dirname, './assets/template.html')),
 		helpers: {
 			embedded: function () { return 'Embedded Helper'; },
 			imported: require('./assets/helper.js')
 		},
 		partials: {
 			embedded: 'Embedded Partial',
-			imported: yield inline(path.resolve(__dirname, './assets/partial.html'))
+			imported: yield inline.file(path.resolve(__dirname, './assets/partial.html'))
 		},
 		charts: {
 			chart: function (data) {
-				var columns = R.map(function (group) {
-					return [group.name, group.items.length];
-				}, data.groups);
+				var columns = R.map((group) => [group.name, group.items.length], data.groups);
 				return { data: { columns: columns, type: 'donut'}};
 			}
 		}

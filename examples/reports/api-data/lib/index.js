@@ -1,6 +1,6 @@
 const co = require('co');
 const got = require('got');
-const inlineHtml = require('inline-html');
+const inline = require('inline-html');
 const moment = require('moment');
 const path = require('path');
 const url = require('url');
@@ -49,7 +49,7 @@ const definition = co.wrap(function * () {
 	};
 
 	// Load template and embed local assets
-	const template = yield inlineHtml(path.resolve(__dirname, 'template.hbs'));
+	const template = yield inline.file(path.resolve(__dirname, 'template.hbs'));
 
 	// Return report definition
 	return {

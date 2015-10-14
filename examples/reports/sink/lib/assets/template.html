@@ -148,13 +148,13 @@
                 <td>Conditional</td>
                 <td>-</td>
                 <td>{{numberNegative}}</td>
-                <td><span negative="{{isNegative numberNegative}}">{{formatNumber numberNegative}}</span></td>
+                <td><span negative="{{#if (lt numberNegative 0)}}true{{/if}}">{{formatNumber numberNegative}}</span></td>
             </tr>
             <tr>
                 <td>Conditional</td>
                 <td>-</td>
                 <td>{{number}}</td>
-                <td><span negative="{{isNegative number}}">{{formatNumber number}}</span></td>
+                <td><span negative="{{#if (lt number 0)}}true{{/if}}">{{formatNumber number}}</span></td>
             </tr>
             </tbody>
         </table>

@@ -1,6 +1,6 @@
 const capitalize = require('underscore.string/capitalize');
 const co = require('co');
-const inlineHtml = require('inline-html');
+const inline = require('inline-html');
 const moment = require('moment');
 const path = require('path');
 const sql = require('mysql');
@@ -58,7 +58,7 @@ const definition = co.wrap(function * () {
   		page: '<span style="content: counter(page)"></span>',
   		pages: '<span style="content: counter(pages)"></span>'
   	},
-    template: yield inlineHtml(path.resolve(__dirname, './template.hbs'))
+    template: yield inline.file(path.resolve(__dirname, './template.hbs'))
   };
 });
 
