@@ -240,7 +240,7 @@ Bundles a report [Module](#module) along with all of its dependencies into a sin
 
 Bundles are completely self contained and thus very portable. For instance, bundles could be stored on a static file server and requested remotely by Chronicle [`Press`](#press) when run.
 
-Any browserify compatible Module can be bundled. Bundle supports `fs` and [`inline-html`](https://github.com/panosoft/inline-html) via the [`brfs`](https://github.com/substack/brfs) and [html-inlinify](https://github.com/panosoft/html-inlinify) transforms, respectively.
+Since `bundle` uses [Browserify](https://github.com/substack/node-browserify) internally, all Browserify compatible Modules can be bundled. Browserify [transforms](https://www.npmjs.com/browse/keyword/browserify-transform) can also be used simply by including them in the Modules package.json in the [standard](https://github.com/substack/node-browserify#browserifytransform) way.
 
 __Arguments__
 
@@ -312,7 +312,7 @@ chronicle run bundle.js -o report.html -p '{"sample": "parameter"}'
 
 Bundles a report [Module](#module) along with all of its dependencies into a single file called a bundle.
 
-Any browserify compatible Module can be bundled. Bundle supports `fs` and [`inline-html`](https://github.com/panosoft/inline-html) via the [`brfs`](https://github.com/substack/brfs) and [html-inlinify](https://github.com/panosoft/html-inlinify) transforms, respectively.
+Since `bundle` uses [Browserify](https://github.com/substack/node-browserify) internally, all Browserify compatible Modules can be bundled. Browserify [transforms](https://www.npmjs.com/browse/keyword/browserify-transform) can also be used simply by including them in the Modules package.json in the [standard](https://github.com/substack/node-browserify#browserifytransform) way.
 
 Upon completion, the bundle is written directly to the filesystem per `output` option.
 
