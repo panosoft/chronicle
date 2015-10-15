@@ -11,9 +11,15 @@
   },
   "author": "",
   "license": "MIT",
+  "browserify": {
+    "transform": [
+      "html-inlinify"
+    ]
+  },
   "dependencies": {
     "bootstrap": "^3.3.5",
     "co": "^4.6.0",
+    "html-inlinify": "^0.2.0",
     "inline-html": "^0.2.0",
     "moment": "^2.10.6",
     "mysql": "^2.9.0",
@@ -21,7 +27,7 @@
     "underscore.string": "^3.2.2"
   },
   "devDependencies": {
-    "@panosoft/chronicle": "^0.7.0",
+    "@panosoft/chronicle": "^0.8.0",
     "open": "0.0.5",
     "prince-promise": "^0.2.2"
   }

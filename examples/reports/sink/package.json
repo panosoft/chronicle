@@ -8,8 +8,13 @@
   },
   "author": "",
   "license": "MIT",
+  "browserify": {
+    "transform": [
+      "html-inlinify"
+    ]
+  },
   "devDependencies": {
-    "@panosoft/chronicle": "^0.7.0",
+    "@panosoft/chronicle": "^0.8.0",
     "nock": "^2.7.0",
     "open": "0.0.5",
     "prince-promise": "^0.2.0"
@@ -17,6 +22,7 @@
   "dependencies": {
     "@panosoft/report-definition": "^0.4.0",
     "co": "^4.6.0",
+    "html-inlinify": "^0.2.0",
     "inline-html": "^0.2.0",
     "lodash": "^3.9.3"
   }

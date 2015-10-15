@@ -1,6 +1,6 @@
 # Bundle Server
 
-This example is composed of a simple Bundle Server that serves up our report bundle and a test script that runs that bundle via it's url.
+This example is composed of a static server that serves up report bundles and a test script that runs bundles via a url.
 
 This is an example of how bundles might be used to produce highly portable reports that can be served up from a central location, like an application server, independently of where Chronicle Press is running.
 
@@ -12,11 +12,11 @@ First, some prerequisites:
 
 - Install and test the dynamic report example. Directions can be found [here](../reports/api-data/).
 
-Once those are setup, we can begin by bundling the dynamic report.
+Once those are setup, we can begin by bundling the example api data report.
 
 Bundling a report takes a report module, along with all of its dependencies, and combines them into a single file. This makes bundles very portable and also very stable since all of the reports dependencies are baked in. Any npm package that is browserify-able can be included in the bundle.
 
-To bundle the report, open Terminal and change directory to the dynamic report directory ([`../reports/api-data/`](../reports/api-data/)). Then run the following:
+To bundle the report, open Terminal and change directory to the api data report directory ([`../reports/api-data/`](../reports/api-data/)). Then run the following:
 
 ```sh
 chronicle bundle
