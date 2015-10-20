@@ -1,9 +1,9 @@
-#!/usr/bin/env node --harmony_arrow_functions
+#!/bin/sh
+":" //# http://sambal.org/?p=1014 ; exec /usr/bin/env node --harmony_arrow_functions "$0" "$@"
 
 var co = require('co');
 var chronicle = require('../lib');
 var fs = require('mz/fs');
-var path = require('path');
 var pkg = require('../package');
 var program = require('commander');
 var stdin = require('get-stdin');
