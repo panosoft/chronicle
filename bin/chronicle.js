@@ -36,7 +36,6 @@ var run = co.wrap(function * (definition, program) {
 		return console.error(new TypeError('--parameters must be JSON parseable.'));
 	}
 	var press = chronicle.Press.create();
-	yield press.initialize();
 	try {
 		var html = yield press.run(definition, parameters);
 		if (options.output) {
@@ -50,7 +49,6 @@ var run = co.wrap(function * (definition, program) {
 		console.error(error.stack);
 		process.exit(1);
 	}
-	press.shutdown();
 });
 
 program.version(pkg.version)
