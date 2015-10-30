@@ -92,11 +92,11 @@ co(function * () {
 <a name="examples"/>
 ## Examples
 
-- [Static Data Source Report](examples/reports/static-data) ([PDF](examples/reports/static-data/test/test.pdf))
-- [API Data Source Report](examples/reports/api-data) ([PDF](examples/reports/api-data/test/test.pdf))
-- [SQL Data Source Report](examples/reports/sql-data) ([PDF](examples/reports/sql-data/test/test.pdf))
-- [Report Bundle Server](examples/bundle-server)
-- [Simple Reporting App](examples/app)
+- [Static Data Source Report](https://github.com/panosoft/chronicle-examples/reports/static-data) ([PDF](https://github.com/panosoft/chronicle-examples/reports/static-data/test/test.pdf))
+- [API Data Source Report](https://github.com/panosoft/chronicle-examples/reports/api-data) ([PDF](https://github.com/panosoft/chronicle-examples/reports/api-data/test/test.pdf))
+- [SQL Data Source Report](https://github.com/panosoft/chronicle-examples/reports/sql-data) ([PDF](https://github.com/panosoft/chronicle-examples/reports/sql-data/test/test.pdf))
+- [Report Bundle Server](https://github.com/panosoft/chronicle-examples/bundle-server)
+- [Simple Reporting App](https://github.com/panosoft/chronicle-examples/app)
 
 <a name="installation"/>
 ## Installation
