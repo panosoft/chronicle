@@ -1,1 +1,1 @@
-module.exports = {template: 'Test'};
+module.exports = (parameters) => parameters;

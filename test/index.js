@@ -25,21 +25,20 @@ describe('Press', function () {
 		it('throw if no report', function () {
 			return expect(press.run()).to.eventually.be.rejectedWith(TypeError);
 		});
-		it('accept report definition', function () {
+		it('accept report function', function () {
 			var template = 'Test';
-			var definition = {template: template};
-			return expect(press.run(definition)).to.eventually.equal(template);
+			var report = () => template;
+			return expect(press.run(report)).to.eventually.equal(template);
 		});
 		it('optionally accept parameters', function () {
-			var template = 'Test';
-			var definition = {template: template};
-			var parameters = {};
-			return expect(press.run(definition, parameters)).to.eventually.equal(template);
+			var report = (parameters) => parameters;
+			var parameters = 'Test';
+			return expect(press.run(report, parameters)).to.eventually.equal(parameters);
 		});
 		it('accept file path to report module', function () {
 			var modulePath = path.resolve(__dirname, 'fixtures/module.js');
-			var template = require(modulePath).template;
-			return expect(press.run(modulePath)).to.eventually.equal(template);
+			var parameters = 'Test';
+			return expect(press.run(modulePath, parameters)).to.eventually.equal(parameters);
 		});
 
 		// Test network requests
@@ -47,200 +46,47 @@ describe('Press', function () {
 		var domain = 'http://test.com';
 		var bundlePath = path.resolve(__dirname, 'fixtures', filename);
 		var bundleUrl = url.resolve(domain, filename);
-		var template = require(bundlePath).template;
+		var parameters = 'Test';
 		it('accept fully qualified url to bundled report module', function () {
 			// nock request
 			nock(domain)
 				.get(`/${filename}`)
 				.replyWithFile(200, bundlePath);
-			return expect(press.run(bundleUrl)).to.eventually.equal(template);
+			return expect(press.run(bundleUrl, parameters)).to.eventually.equal(parameters);
 		});
 		it('should cache report module bundles', function () {
 			// nock same request (304, return nothing)
 			nock(domain)
 				.get(`/${filename}`)
 				.reply(304);
-			return expect(press.run(bundleUrl)).to.eventually.equal(template);
+			return expect(press.run(bundleUrl, parameters)).to.eventually.equal(parameters);
 		});
 	});
 });
 
 
-describe('Definition', function () {
-	var press;
-	before(function () {
-		press = chronicle.Press.create();
-	});
+describe('Report', function () {
+	var press = chronicle.Press.create();
 
-	it('can be object', function () {
-		var definition = {template: ''};
-		return expect(press.run(definition)).to.eventually.be.fulfilled;
+	it('can be function that returns a string', function () {
+		var html = 'Test';
+		var report = () => html;
+		return expect(press.run(report)).to.eventually.be.fulfilled
+			.and.to.equal(html);
 	});
-	it('can be function that returns an object', function () {
-		var definition = function () { return {template: ''}; };
-		return expect(press.run(definition)).to.eventually.be.fulfilled;
+	it('can be yieldable function that is fulfilled with a string', function () {
+		var html = 'Test';
+		var report = co.wrap(function * () { return html; });
+		return expect(press.run(report)).to.eventually.be.fulfilled
+			.and.to.equal(html);
 	});
-	it('can be yieldable function that is fulfilled with an object', function () {
-		var definition = co.wrap(function * () { return {template: ''}; });
-		return expect(press.run(definition)).to.eventually.be.fulfilled;
-	});
-	it('called with parameters if a function', function () {
+	it('called with parameters', function () {
 		return co(function * () {
 			var parameters = {};
-			var definition = sinon.stub().returns({template: ''});
-			yield press.run(definition, parameters);
-			expect(definition).to.be.calledOnce
+			var report = sinon.stub().returns('Test');
+			yield press.run(report, parameters);
+			expect(report).to.be.calledOnce
 				.and.to.be.calledWithExactly(parameters);
-		});
-	});
-
-	describe('template', function () {
-		it('required', function () {
-			var definition = {};
-			return expect(press.run(definition))
-				.to.eventually.be.rejectedWith(TypeError);
-		});
-		it('used to produce final html output', function () {
-			var template = 'Test';
-			var definition = {template: template};
-			return expect(press.run(definition)).to.eventually.equal(template);
-		});
-		it('throw if not string', function () {
-			var definition = {template: {}};
-			return expect(press.run(definition))
-				.to.eventually.be.rejectedWith(TypeError);
-		});
-	});
-
-	describe('context', function () {
-		it('optional', function () {
-			var definition = {template: ''};
-			return expect(press.run(definition)).to.eventually.be.fulfilled;
-		});
-		it('can be string', function () {
-			var definition = { template: '', context: '' };
-			return expect(press.run(definition)).to.eventually.be.fulfilled;
-		});
-		it('can be number', function () {
-			var definition = { template: '', context: 1 };
-			return expect(press.run(definition)).to.eventually.be.fulfilled;
-		});
-		it('can be boolean', function () {
-			var definition = { template: '', context: true };
-			return expect(press.run(definition)).to.eventually.be.fulfilled;
-		});
-		it('can be array', function () {
-			var definition = { template: '', context: [] };
-			return expect(press.run(definition)).to.eventually.be.fulfilled;
-		});
-		it('can be object', function () {
-			var definition = { template: '', context: {} };
-			return expect(press.run(definition)).to.eventually.be.fulfilled;
-		});
-		it('can be function that returns object', function () {
-			var definition = {
-				template: '',
-				context: function () { return {}; }
-			};
-			return expect(press.run(definition)).to.eventually.be.fulfilled;
-		});
-		it('can be yieldable function', function () {
-			var definition = {
-				template: '',
-				context: co.wrap(function * () { return 1; })
-			};
-			return expect(press.run(definition)).to.eventually.be.fulfilled;
-		});
-		it('called with parameters if a function', function () {
-			return co(function * () {
-				var context = sinon.stub().returns({});
-				var definition = { template: '', context: context };
-				var parameters = {};
-				yield press.run(definition, parameters);
-				expect(context).to.be.calledOnce
-					.and.to.be.calledWithExactly(parameters);
-			});
-		});
-		it('throw if functions throws', function () {
-			var context = function () {throw new Error();};
-			var definition = {template: '', context: context};
-			return expect(press.run(definition))
-				.to.eventually.be.rejectedWith(Error);
-		});
-		it('can be used in template', function () {
-			var template = '{{value}}';
-			var value = 'Test';
-			var definition = { template: template, context: { value: value } };
-			return expect(press.run(definition)).to.eventually.equal(value);
-		});
-	});
-
-	describe('partials', function () {
-		it('optional', function () {
-			var definition = {template: ''};
-			return expect(press.run(definition)).to.eventually.be.fulfilled;
-		});
-		it('object containing partials', function () {
-			var definition = { template: '', partials: {part: 'Test'} };
-			return expect(press.run(definition)).to.eventually.be.fulfilled;
-		});
-		it('throw if not object', function () {
-			var definition = { template: 'Test', partials: 'Test' };
-			return expect(press.run(definition))
-				.to.eventually.be.rejectedWith(TypeError);
-		});
-		it('throw if object properties aren\'t all strings', function () {
-			var definition = { template: 'Test', partials: { part: {} } };
-			return expect(press.run(definition))
-				.to.eventually.be.rejectedWith(TypeError);
-		});
-		it('can be used in template', function () {
-			var template = '{{> part}}';
-			var value = 'Test';
-			var definition = { template: template, partials: {part: value} };
-			return expect(press.run(definition)).to.eventually.equal(value);
-		});
-	});
-
-	describe('helpers', function () {
-		it('optional', function () {
-			var definition = {template: ''};
-			return expect(press.run(definition)).to.eventually.be.fulfilled;
-		});
-		it('object containing helper functions', function () {
-			var definition = { template: '', helpers: { help: function () {} } };
-			return expect(press.run(definition)).to.eventually.be.fulfilled;
-		});
-		it('throw if not object', function () {
-			var definition = { template: '', helpers: 'Test' };
-			return expect(press.run(definition)).to.eventually.be.rejectedWith(TypeError);
-		});
-		it('throw if object properties aren\'t all functions', function () {
-			var definition = { template: '', helpers: {help: 'Test'} };
-			return expect(press.run(definition)).to.eventually.be.rejectedWith(TypeError);
-		});
-		it('can be used in template', function () {
-			var value = 'Test';
-			var definition = {
-				template: '{{help}}',
-				helpers: {
-					help: function () { return value; }
-				}
-			};
-			return expect(press.run(definition)).to.eventually.equal(value);
-		});
-		it('can be used in partials', function () {
-			var value = 'Test';
-			var definition = {
-				template: '{{> part}}',
-				partials: {
-					part: '{{help}}'
-				},
-				helpers: {
-					help: function () { return value; }
-				}
-			};
-			return expect(press.run(definition)).to.eventually.equal(value);
 		});
 	});
 });
