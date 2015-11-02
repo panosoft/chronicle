@@ -17,26 +17,22 @@ var bundle = function (entry, program) {
 	chronicle.bundle(entry, program.opts());
 };
 /**
- *
- * @param definition {String|JSON}
+ * @param report {String}
  * @param program
  */
-var run = co.wrap(function * (definition, program) {
-	var options = program.opts();
-	if (!definition) definition = yield stdin();
+var run = co.wrap(function * (report, program) {
 	try {
-		definition = (definition ? JSON.parse(definition) : {});
-	}
-	catch (error) {} // definition left unchanged if cannot be parsed
-	try {
-		var parameters = (options.parameters ? JSON.parse(options.parameters) : {});
-	}
-	catch (error) {
-		return console.error(new TypeError('--parameters must be JSON parseable.'));
-	}
-	var press = chronicle.Press.create();
-	try {
-		var html = yield press.run(definition, parameters);
+		var options = program.opts();
+		if (!report) report = yield stdin();
+		var parameters;
+		try {
+			parameters = (options.parameters ? JSON.parse(options.parameters) : {});
+		}
+		catch (error) {
+			throw new TypeError('--parameters must be JSON parseable.');
+		}
+		var press = chronicle.Press.create();
+		var html = yield press.run(report, parameters);
 		if (options.output) {
 			yield fs.writeFile(options.output, html);
 		}
