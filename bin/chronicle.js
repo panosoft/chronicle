@@ -1,5 +1,4 @@
-#!/bin/sh
-":" //# http://sambal.org/?p=1014 ; exec /usr/bin/env node --harmony_arrow_functions "$0" "$@"
+#!/usr/bin/env node
 
 var co = require('co');
 var chronicle = require('../lib');
