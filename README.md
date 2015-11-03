@@ -40,11 +40,14 @@ Report [Functions](#function) accept runtime parameters, retrieve data, and gene
 
 Chronicle [`bundle`](#bundle) can be used to bundle Reports. Bundling reduces a Report Module, and all of it's dependencies, into a single, portable, version locked file. As such, bundling makes transporting Reports across networks a trivial task.
 
-Chronicle [`Press`](#press) runs Reports. It accepts a variety of inputs: urls to Bundles, paths to Modules, or references to Report functions. Running a Report loads the Report function, evaluates it, and returns it's HTML output.
+Chronicle [`Press`](#press) runs Reports. It accepts a variety of inputs: urls to Bundles, paths to Modules, or references to Report Functions. Running a Report loads the Report Function, evaluates it, and returns it's HTML output.
 
 Finally, HTML renderers like [PrinceXML](http://www.princexml.com/) that support [CSS Paged Media](https://drafts.csswg.org/css-page-3/) can be used to generate PDFs complete with page headers, footers, numbers, etc.!
 
+<br/>
 ![Architecture](docs/architecture.png)
+<br/>
+<br/>
 
 <a name="philosophy"/>
 ## Philosophy
@@ -189,9 +192,7 @@ const report = co.wrap(function * (parameters) {
 ## CLI
 
 `chronicle`
-
 - [`bundle`](#cli-bundle)
-
 - [`run`](#cli-run)
 
 ---
@@ -259,13 +260,9 @@ chronicle run bundle.js -o report.html -p '{"sample": "parameter"}'
 ## API
 
 `chronicle`
-
 - [`bundle`](#bundle)
-
 - [`Press`](#press)
-
   - [`create`](#create)
-
   - [`run`](#run)
 
 ---
