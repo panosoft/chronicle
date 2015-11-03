@@ -1,6 +1,5 @@
 # Chronicle
 
-
 Create Reports with Web Technologies and run them in Node.
 
 [![npm version](https://img.shields.io/npm/v/@panosoft/chronicle.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
@@ -35,15 +34,15 @@ The following Web Technologies are supported for use in Reports:
 <a name="architecture"/>
 ## Architecture
 
-[Reports](#report) are CommonJS modules (i.e. Node modules) that export Definitions.
+[Reports](#report) are CommonJS modules (i.e. Node modules) that export a Report Function.
 
-[Definitions](#definition) describe how to retrieve data and generate HTML.
+Report [Functions](#function) accept runtime parameters, retrieve data, and generate HTML.
 
 Chronicle [`bundle`](#bundle) can be used to bundle Reports. Bundling reduces a Report Module, and all of it's dependencies, into a single, portable, version locked file. As such, bundling makes transporting Reports across networks a trivial task.
 
-Chronicle [`Press`](#press) runs Reports. It accepts a variety of inputs: urls to Bundles, paths to Modules, or references to Definition objects. Running a Report loads the Report Definition, retrieves data, and generates HTML.
+Chronicle [`Press`](#press) runs Reports. It accepts a variety of inputs: urls to Bundles, paths to Modules, or references to Report functions. Running a Report loads the Report function, evaluates it, and returns it's HTML output.
 
-Finally, HTML renderers like [PrinceXML](http://www.princexml.com/) that support [CSS Paged Media](https://drafts.csswg.org/css-page-3/) can be used to create PDFs complete with page headers, footers, numbers, etc.!
+Finally, HTML renderers like [PrinceXML](http://www.princexml.com/) that support [CSS Paged Media](https://drafts.csswg.org/css-page-3/) can be used to generate PDFs complete with page headers, footers, numbers, etc.!
 
 ![Architecture](docs/architecture.png)
 
@@ -57,6 +56,7 @@ With the WYSIWYG approach, most powerful features are hidden and buried under me
 Anyone who has had to suffer through these poorly designed systems has quickly realized that reports are harder than they need to be and that one must contort oneself in order to accomplish what would be trivial in a programming language.
 
 Another big problem with these traditional reporting systems, is that since it has a GUI, people assume that anyone can build a report. While it's true that anyone can, not everyone should.
+
 Good reports transform data into useful information in a form that's easy to understand. This is not a trivial task that you can give the receptionist or the intern. This requires layout design, data processing and logic. These are all things that good developers are skilled at, particularly web developers.
 
 Chronicle embraces these truths and caters to developers by using standard Web Technologies, viz. HTML/Handlebars, CSS/Less, Javascript, NodeJS, Browserify and PrinceXML to produce high quality PDF reports from any data source.
@@ -80,9 +80,7 @@ var prince = require('prince-promise');
 co(function * () {
 
   var press = chronicle.Press.create();
-  yield press.initialize();
   var html = yield press.run('report.js');
-  press.shutdown();
 
   var pdf = yield prince(html);
 
@@ -108,118 +106,82 @@ npm install -g @panosoft/chronicle
 <a name="report"/>
 ## Report Structure
 
-Reports can take the form of a bare [Definition](#definition) or a [Module](#module) that exports a Definition.
+Reports can take the form of a simple [Function](#function) or a [Module](#module) that exports a Function.
 
-They are run by Chronicle [`Press`](#press) which produces static HTML content that can be visually rendered by a browser or other third party HTML renderers.
+They are run by Chronicle [`Press`](#press) which returns static HTML content that can be visually rendered by a browser or other third party HTML renderers.
 
 <a name="module"/>
 ### Module
 
-A report Module is simply a CommonJS module (i.e. Node module) that exports a report [Definition](#definition).
+A report Module is simply a CommonJS module (i.e. Node module) that exports a report [Function](#function).
 
 Report Modules can optionally be bundled using Chronicle [`bundle`](#bundle) so that all of their dependencies are contained within a single file.
 
-Chronicle [`Press`](#press) can then run a Report using a url that references a bundled Module, a path to a local Module, or by simply passing the Definition itself.
+Chronicle [`Press`](#press) can then run a Report using a url that references a bundled Module, a path to a local Module, or by simply passing the Function itself.
 
 __Example__
 
 ```js
-var definition = {
+var report = function (parameters) {
   // ...
 };
 
-module.exports = definition;
+module.exports = report;
 ```
 
-<a name="definition"/>
-### Definition
+<a name="function"/>
+### Function
 
-The Report Definition tells Chronicle [`Press`](#press) how to get data and render it as HTML.
+The Report Function retrieves data and renders it as HTML.
 
-A report Definition is an object, or a yieldable function that returns an object, that contains some or all of the following properties. If it is a yieldable function, it will be called with the `parameters` supplied when the Report is run.
-
-__Properties__
-
-- `context` - An object, or a yieldable function that returns an object, containing the context that will be passed to the [Handlebars](http://handlebarsjs.com/) `template`. If this is a yieldable function, it will be called with the `parameters` supplied when the [Report](#report) is run. Operations such as api calls, deserializing, grouping, sorting, aggregating, etc. can be done here.
-
-- `charts` - An object containing functions that return the [C3](http://c3js.org/) chart configurations for the charts available within the `template`. Each function will be called with the result of the `context` property and the `parameters` supplied when the [Report](#report) is [`run`](#run).
-
-- `helpers` - An object containing the [Handlebars](http://handlebarsjs.com/) helpers available within the `template` and `partials`.
-
-- `partials` - An object containing the [Handlebars](http://handlebarsjs.com/) partials available within the `template`.
-
-- `template` - _(Required)_ A [Handlebars](http://handlebarsjs.com/) template used to produce the report HTML.
+This can be an ordinary or a yieldable function that accepts runtime parameters and returns static HTML.
 
 __Examples__
 
 Simplistic:
 
 ```js
-var definition = {
-  context: {
-    date: new Date()
-  },
-  charts: {
-    chart: (context, parameters) => ({data: {columns: ['data', 1, 2, 3]})
-  },
-  helpers: {
-    help: (string) => string;
-  },
-  partials: {
-    part: 'Parted'
-  },
-  template: `Created: {{date}}, {{charts.chart}}, {{help "Helped"}}, {{> part}}.`
+const report = function (parameters) {
+  const context = { date: parameters.date };
+  const html = `Created: ${{context.date}}`;
+  return html;
 };
 ```
 
 Realistic:
 
 ```js
-var co = require('co');
-var inlineHtml = require('inline-html');
+const co = require('co');
+const Handlebars = require('handlebars');
+const inlineHtml = require('inline-html');
 
-var definition = co.wrap(function * (parameters) {
-  // assemble elements of the report definition,
-  // optionally using runtime `parameters`
+const getContext = co.wrap(function * (parameters) {
+  // Fetch and process data
+  // return the template context.
+  return context;
+};
 
-  var context = co.wrap(function * (parameters) {
-    // fetch and process data, optionally using runtime `parameters`.
-    // return the template context.
-    return context;
+const render = co.wrap(function * (context) {
+  // Define helpers
+  const helpers = {
+    // ...
   };
-
-  var charts = {
-    chart: function (context, parameters) {
-      // create the chart config optionally using
-      // runtime `context` and `parameters`
-      return { data: {columns: ['data', 1, 2, 3]} };
-    }
+  // Define partials
+  const partials = {
+    // ...
   };
+  // Load template source
+  const source = yield inlineHtml.file('path/to/template.html');
+  // Compile source and evaluate template
+  const template = Handlebars.compile(source);
+  const html = template(context, { helpers, partials });
+  return html;
+});
 
-  var helpers = {
-    // load helpers from separate files
-    // Note: `helpers.js` would export a function
-    help: require('./helpers.js')
-  };
-
-  var partials = {
-    // load partials from separate files
-    // along with their referenced assets
-    part: yield inlineHtml('path/to/partial.html')
-  };
-
-  // load template from a separate file
-  // along with its referenced assets
-  var template = yield inlineHtml('path/to/template.html');
-
-  // return the Definition object
-  return {
-    context,
-    charts,
-    helpers,
-    partials,
-    template
-  };
+const report = co.wrap(function * (parameters) {
+  const context = yield getContext(parameters);
+  const html = yield render(context);
+  return html;
 });
 ```
 
@@ -229,6 +191,7 @@ var definition = co.wrap(function * (parameters) {
 `chronicle`
 
 - [`bundle`](#cli-bundle)
+
 - [`run`](#cli-run)
 
 ---
@@ -272,7 +235,6 @@ __Arguments__
 - `report` - The report to run. Supported values are:
   - A fully qualified url - Load a bundled report [Module](#module) from a url.
   - A filename - Load a report [Module](#module) (bundled or not) from the filesystem.
-  - A JSON parseable string - The report [Definition](#definition) to run.
   - No value - Read from `stdin`. The value passed in can be any of the above.
 
 
@@ -299,11 +261,12 @@ chronicle run bundle.js -o report.html -p '{"sample": "parameter"}'
 `chronicle`
 
 - [`bundle`](#bundle)
+
 - [`Press`](#press)
+
   - [`create`](#create)
-  - [`initialize`](#initialize)
+
   - [`run`](#run)
-  - [`shutdown`](#shutdown)
 
 ---
 
@@ -346,7 +309,7 @@ chronicle.bundle(entry, options);
 <a name="create"/>
 #### create ( options )
 
-Creates an instance of Chronicle [`Press`](#press). Presses are used to run [Reports](#report) and produce HTML output.
+Creates an instance of Chronicle [`Press`](#press). Presses are used to run [Reports](#report) and return HTML output.
 
 __Arguments__
 
@@ -361,40 +324,22 @@ var press = chronicle.Press.create();
 
 ---
 
-<a name="initialize"/>
-#### initialize ( )
-
-Initializes the press. This method must be called before the press can be used.
-
-Returns a `Promise` that is fulfilled once the initialization is complete.
-
-__Example__
-
-```js
-press.initialize()
-  .then(function () {
-    // ...
-  })
-```
-
----
-
 <a name="run"/>
 #### run ( report , parameters )
 
 Runs a [Report](#report) and returns a `Promise` that is fulfilled with the HTML produced.
 
-The [Report](#report) is loaded, context is retrieved, pre-processors are run, and the HTML output is finally produced and returned.
+The [Report](#report) is loaded, evaluated, and the HTML output is returned.
 
 __Arguments__
 
 - `report` - The [Report](#report) to run. Supported values are:
   - A fully qualified url of a bundled report [Module](#module).
   - A filename of a report [Module](#module) (bundled or not).
-  - A report [Definition](#definition).
+  - A report [Function](#function).
 
 
-- `parameters` - An object of parameters used to run the report. This object is passed to various elements of the report [Definition](#definition) at various stages of the report lifecycle.
+- `parameters` - An object of parameters used to run the report. This object is passed to the report [Function](#function) at runtime.
 
 __Examples__
 
@@ -406,19 +351,6 @@ press.run(report, parameters)
   .then(function (html) {
     // ...
   });
-```
-
----
-
-<a name="shutdown"/>
-#### shutdown ( )
-
-Shuts the press down. The press instance cannot be used after this method is called unless it is re-initialized.
-
-__Example__
-
-```js
-press.shutdown();
 ```
 
 <a name="license"/>
