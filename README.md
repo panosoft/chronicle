@@ -229,7 +229,7 @@ chronicle bundle entry.js -o output.js -w
 <a name="cli-run"/>
 #### run [report] [--parameters] [--output]
 
-Runs a report and returns the HTML produced.
+Runs a report and returns the output. If the output is an `Array` or `Object`, it is returned as a JSON string.
 
 __Arguments__
 
