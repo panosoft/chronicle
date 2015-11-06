@@ -3,19 +3,18 @@
 var co = require('co');
 var chronicle = require('../lib');
 var fs = require('mz/fs');
+var is = require('is_js');
 var pkg = require('../package');
 var program = require('commander');
 var stdin = require('get-stdin');
 var UpdateNotifier = require('update-notifier');
 
 UpdateNotifier({
-	pkg: pkg,
+	pkg,
 	updateCheckInterval: 1000 * 60 * 60 // once an hour
 }).notify({defer: false});
 
-var bundle = function (entry, program) {
-	chronicle.bundle(entry, program.opts());
-};
+var bundle = (entry, program) => chronicle.bundle(entry, program.opts());
 /**
  * @param report {String}
  * @param program
@@ -32,12 +31,14 @@ var run = co.wrap(function * (report, program) {
 			throw new TypeError('--parameters must be JSON parseable.');
 		}
 		var press = chronicle.Press.create();
-		var html = yield press.run(report, parameters);
+		var output = yield press.run(report, parameters);
+		// output: can be any type => string buffer number date boolean | array object
+		if (is.array(output) || is.object(output)) output = JSON.stringify(output);
 		if (options.output) {
-			yield fs.writeFile(options.output, html);
+			yield fs.writeFile(options.output, output);
 		}
 		else {
-			console.log(html);
+			console.log(output);
 		}
 	}
 	catch (error) {
