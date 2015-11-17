@@ -14,7 +14,7 @@
     "chronicle": "bin/chronicle.js"
   },
   "scripts": {
-    "test": "mocha --harmony_arrow_functions test lib/press/file-loader/test"
+    "test": "mocha test lib/press/file-loader/test"
   },
   "author": "",
   "license": "MIT",
