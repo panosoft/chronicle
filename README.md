@@ -2,7 +2,7 @@
 
 Create Reports with Web Technologies and run them in Node.
 
-<h1 align="center"><img src="docs/logo.png" alt="Chronicle"/></h1><br/>
+<h3 align="center"><img src="docs/logo.png" alt="Chronicle"/></h3>
 
 [![npm version](https://img.shields.io/npm/v/@panosoft/chronicle.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
 [![Travis](https://img.shields.io/travis/panosoft/chronicle.svg)](https://travis-ci.org/panosoft/chronicle)
