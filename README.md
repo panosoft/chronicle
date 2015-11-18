@@ -2,7 +2,7 @@
 
 Create Reports with Web Technologies and run them in Node.
 
-<div style="text-align: center;"><img src="docs/logo.png" alt="Chronicle"/></div>
+<h1 align="center"><img src="docs/logo.png" alt="Chronicle"/></h1><br/>
 
 [![npm version](https://img.shields.io/npm/v/@panosoft/chronicle.svg)](https://www.npmjs.com/package/@panosoft/chronicle)
 [![Travis](https://img.shields.io/travis/panosoft/chronicle.svg)](https://travis-ci.org/panosoft/chronicle)
@@ -92,13 +92,13 @@ co(function * () {
 <a name="examples"/>
 ## Examples
 
-- [Static Data Source Report](https://github.com/panosoft/chronicle-examples/reports/data-static) ([PDF](https://github.com/panosoft/chronicle-examples/reports/data-static/test/test.pdf))
-- [API Data Source Report](https://github.com/panosoft/chronicle-examples/reports/data-json) ([PDF](https://github.com/panosoft/chronicle-examples/reports/data-json/test/test.pdf))
-- [SQL Data Source Report](https://github.com/panosoft/chronicle-examples/reports/data-sql) ([PDF](https://github.com/panosoft/chronicle-examples/reports/data-sql/test/test.pdf))
-- [Static Chart Report](https://github.com/panosoft/chronicle-examples/reports/chart-static) ([PDF](https://github.com/panosoft/chronicle-examples/reports/chart-static/test/test.pdf))
-- [Dynamic Chart Report](https://github.com/panosoft/chronicle-examples/reports/chart-dynamic) ([PDF](https://github.com/panosoft/chronicle-examples/reports/chart-dynamic/test/test.pdf))
-- [Report Bundle Server](https://github.com/panosoft/chronicle-examples/bundle-server)
-- [Simple Reporting App](https://github.com/panosoft/chronicle-examples/app)
+- [Static Data Source Report](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-static) ([PDF](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-static/test/test.pdf))
+- [API Data Source Report](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-json) ([PDF](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-json/test/test.pdf))
+- [SQL Data Source Report](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-sql) ([PDF](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-sql/test/test.pdf))
+- [Static Chart Report](https://github.com/panosoft/chronicle-examples/tree/master/reports/chart-static) ([PDF](https://github.com/panosoft/chronicle-examples/tree/master/reports/chart-static/test/test.pdf))
+- [Dynamic Chart Report](https://github.com/panosoft/chronicle-examples/tree/master/reports/chart-dynamic) ([PDF](https://github.com/panosoft/chronicle-examples/tree/master/reports/chart-dynamic/test/test.pdf))
+- [Report Bundle Server](https://github.com/panosoft/chronicle-examples/tree/master/bundle-server)
+- [Simple Reporting App](https://github.com/panosoft/chronicle-examples/tree/master/app)
 
 <a name="installation"/>
 ## Installation
