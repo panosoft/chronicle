@@ -28,14 +28,14 @@ describe('Press', () => {
 			expect(output).to.equal(parameters);
 		}));
 		it('accept absolute report path', () => co(function * () {
-			const modulePath = path.resolve(__dirname, 'fixtures/module.js');
+			const modulePath = path.resolve(__dirname, 'fixtures/report.js');
 			const parameters = 'Test';
 			const output = yield run(modulePath, parameters);
 			expect(output).to.equal(parameters);
 		}));
 		it('accept relative report path relative to cwd', () => co(function * () {
 			const relativePath = path.relative('.', __dirname);
-			const modulePath = path.join(relativePath, 'fixtures/module.js');
+			const modulePath = path.join(relativePath, 'fixtures/report.js');
 			const parameters = 'Test';
 			const output = yield run(modulePath, parameters);
 			expect(output).to.equal(parameters);
