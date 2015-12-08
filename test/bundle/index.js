@@ -1,3 +1,4 @@
-var bundle = require('../../lib/bundle');
+const bundle = require('../../lib/bundler');
+const path = require('path');
 
-bundle('./fixtures/entry.js');
+bundle(path.resolve(__dirname, '../fixtures/report.js'));

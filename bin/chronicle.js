@@ -1,27 +1,28 @@
 #!/usr/bin/env node
 
-var co = require('co');
-var chronicle = require('../lib');
-var fs = require('mz/fs');
-var is = require('is_js');
-var pkg = require('../package');
-var program = require('commander');
-var stdin = require('get-stdin');
-var UpdateNotifier = require('update-notifier');
+const co = require('co');
+const chronicle = require('../lib');
+const fs = require('mz/fs');
+const is = require('is_js');
+const pkg = require('../package');
+const program = require('commander');
+const stdin = require('get-stdin');
+const UpdateNotifier = require('update-notifier');
 
 UpdateNotifier({
 	pkg,
 	updateCheckInterval: 1000 * 60 * 60 // once an hour
 }).notify({defer: false});
 
-var bundle = (entry, program) => chronicle.bundle(entry, program.opts());
+const bundle = (entry, program) => chronicle.bundle(entry, program.opts());
 /**
  * @param report {String}
+ *        path to report file (local or remote)
  * @param program
  */
-var run = co.wrap(function * (report, program) {
+const run = co.wrap(function * (report, program) {
 	try {
-		var options = program.opts();
+		const options = program.opts();
 		if (!report) report = yield stdin();
 		var parameters;
 		try {
@@ -30,10 +31,9 @@ var run = co.wrap(function * (report, program) {
 		catch (error) {
 			throw new TypeError('--parameters must be JSON parseable.');
 		}
-		var press = chronicle.Press.create();
-		var output = yield press.run(report, parameters);
+		var output = yield chronicle.run(report, parameters);
 		// output: can be any type => string buffer number date boolean | array object
-		if (is.array(output) || is.object(output)) output = JSON.stringify(output);
+		if (is.array(output) || is.json(output)) output = JSON.stringify(output);
 		if (options.output) {
 			yield fs.writeFile(options.output, output);
 		}

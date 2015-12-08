@@ -39,7 +39,7 @@ Report [Functions](#function) accept runtime parameters, retrieve data, and gene
 
 Chronicle [`bundle`](#bundle) can be used to bundle Reports. Bundling reduces a Report Module, and all of it's dependencies, into a single, portable, version locked file. As such, bundling makes transporting Reports across networks a trivial task.
 
-Chronicle [`Press`](#press) runs Reports. It accepts a variety of inputs: urls to Bundles, paths to Modules, or references to Report Functions. Running a Report loads the Report Function, evaluates it, and returns it's HTML output.
+Chronicle runs Reports. It accepts a variety of inputs: urls to Bundles, paths to Modules, or references to Report Functions. Running a Report loads the Report Function, evaluates it, and returns it's HTML output.
 
 Finally, HTML renderers like [PrinceXML](http://www.princexml.com/) that support [CSS Paged Media](https://drafts.csswg.org/css-page-3/) can be used to generate PDFs complete with page headers, footers, numbers, etc.!
 
@@ -81,8 +81,7 @@ var prince = require('prince-promise');
 
 co(function * () {
 
-  var press = chronicle.Press.create();
-  var html = yield press.run('report.js');
+  var html = yield chronicle.run('report.js');
 
   var pdf = yield prince(html);
 
@@ -112,7 +111,7 @@ npm install -g @panosoft/chronicle
 
 Reports can take the form of a simple [Function](#function) or a [Module](#module) that exports a Function.
 
-They are run by Chronicle [`Press`](#press) which returns static HTML content that can be visually rendered by a browser or other third party HTML renderers.
+They are run by Chronicle which returns static HTML content that can be visually rendered by a browser or any other third party HTML renderers.
 
 <a name="module"/>
 ### Module
@@ -121,7 +120,7 @@ A report Module is simply a CommonJS module (i.e. Node module) that exports a re
 
 Report Modules can optionally be bundled using Chronicle [`bundle`](#bundle) so that all of their dependencies are contained within a single file.
 
-Chronicle [`Press`](#press) can then run a Report using a url that references a bundled Module, a path to a local Module, or by simply passing the Function itself.
+Chronicle can then [`run`](#run) a Report using a url that references a bundled Module, a path to a local Module, or by simply passing the Function itself.
 
 __Example__
 
@@ -203,7 +202,7 @@ const report = co.wrap(function * (parameters) {
 
 Bundles a report [Module](#module) along with all of its dependencies into a single file called a bundle.
 
-Bundles are completely self contained and thus very portable. For instance, bundles could be stored on a static file server and requested remotely by Chronicle [`Press`](#press) when run.
+Bundles are completely self contained and thus very portable. For instance, bundles could be stored on a static file server and requested remotely by Chronicle when run.
 
 Since `bundle` uses [Browserify](https://github.com/substack/node-browserify) internally, all Browserify compatible Modules can be bundled. Browserify [transforms](https://www.npmjs.com/browse/keyword/browserify-transform) can also be used simply by including them in the Modules package.json in the [standard](https://github.com/substack/node-browserify#browserifytransform) way.
 
@@ -262,9 +261,7 @@ chronicle run bundle.js -o report.html -p '{"sample": "parameter"}'
 
 `chronicle`
 - [`bundle`](#bundle)
-- [`Press`](#press)
-  - [`create`](#create)
-  - [`run`](#run)
+- [`run`](#run)
 
 ---
 
@@ -301,27 +298,6 @@ chronicle.bundle(entry, options);
 
 ---
 
-<a name="Press"/>
-### Press
-
-<a name="create"/>
-#### create ( options )
-
-Creates an instance of Chronicle [`Press`](#press). Presses are used to run [Reports](#report) and return HTML output.
-
-__Arguments__
-
-- `options`
-  -  `cacheMax` - A number used to determine the maximum number of remotely requested report [Module](#module) bundles to cache. Once this limit is hit, the least recently used bundles will be replaced as new bundles are requested.
-
-__Example__
-
-```js
-var press = chronicle.Press.create();
-```
-
----
-
 <a name="run"/>
 #### run ( report , parameters )
 
@@ -350,28 +326,3 @@ press.run(report, parameters)
     // ...
   });
 ```
-
-<a name="license"/>
-## License
-
-The MIT License (MIT)
-
-Copyright (c) <year> <copyright holders>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.

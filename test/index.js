@@ -1,92 +1,82 @@
-var chronicle = require('../lib');
-var co = require('co');
-var expect = require('chai')
+const chronicle = require('../lib');
+const co = require('co');
+const expect = require('chai')
 	.use(require('chai-as-promised'))
 	.use(require('sinon-chai'))
 	.expect;
-var nock = require('nock');
-var path = require('path');
-var sinon = require('sinon');
-var url = require('url');
+const nock = require('nock');
+const path = require('path');
+const sinon = require('sinon');
+const url = require('url');
+
+const run = chronicle.run;
 
 // TODO describe('bundle')
 
-describe('Press', function () {
-	var press;
-
-	describe('create', function () {
-		it('return instance of Press', function () {
-			press = chronicle.Press.create();
-			expect(press).to.have.all.keys(['run']);
-		});
-	});
-
-	describe('run', function () {
-		it('throw if no report', function () {
-			return expect(press.run()).to.eventually.be.rejectedWith(TypeError);
-		});
-		it('accept report function', function () {
-			var template = 'Test';
-			var report = () => template;
-			return expect(press.run(report)).to.eventually.equal(template);
-		});
-		it('optionally accept parameters', function () {
-			var report = (parameters) => parameters;
-			var parameters = 'Test';
-			return expect(press.run(report, parameters)).to.eventually.equal(parameters);
-		});
-		it('accept file path to report module', function () {
-			var modulePath = path.resolve(__dirname, 'fixtures/module.js');
-			var parameters = 'Test';
-			return expect(press.run(modulePath, parameters)).to.eventually.equal(parameters);
-		});
-
-		// Test network requests
-		var filename = 'bundle.js';
-		var domain = 'http://test.com';
-		var bundlePath = path.resolve(__dirname, 'fixtures', filename);
-		var bundleUrl = url.resolve(domain, filename);
-		var parameters = 'Test';
-		it('accept fully qualified url to bundled report module', function () {
-			// nock request
+describe('Press', () => {
+	describe('run', () => {
+		it('accept report function', () => co(function * () {
+			const template = 'Test';
+			const report = () => template;
+			const output = yield run(report);
+			expect(output).to.equal(template);
+		}));
+		it('optionally accept parameters', () => co(function * () {
+			const report = (parameters) => parameters;
+			const parameters = 'Test';
+			const output = yield run(report, parameters);
+			expect(output).to.equal(parameters);
+		}));
+		it('accept absolute report path', () => co(function * () {
+			const modulePath = path.resolve(__dirname, 'fixtures/module.js');
+			const parameters = 'Test';
+			const output = yield run(modulePath, parameters);
+			expect(output).to.equal(parameters);
+		}));
+		it('accept relative report path relative to cwd', () => co(function * () {
+			const relativePath = path.relative('.', __dirname);
+			const modulePath = path.join(relativePath, 'fixtures/module.js');
+			const parameters = 'Test';
+			const output = yield run(modulePath, parameters);
+			expect(output).to.equal(parameters);
+		}));
+		it('accept fully qualified url to bundled report module', () => co(function * () {
+			const filename = 'bundle.js';
+			const domain = 'http://test.com';
+			const bundlePath = path.resolve(__dirname, 'fixtures', filename);
+			const bundleUrl = url.resolve(domain, filename);
+			const parameters = 'Test';
 			nock(domain)
 				.get(`/${filename}`)
 				.replyWithFile(200, bundlePath);
-			return expect(press.run(bundleUrl, parameters)).to.eventually.equal(parameters);
-		});
-		it('should cache report module bundles', function () {
-			// nock same request (304, return nothing)
-			nock(domain)
-				.get(`/${filename}`)
-				.reply(304);
-			return expect(press.run(bundleUrl, parameters)).to.eventually.equal(parameters);
-		});
+			const output = yield run(bundleUrl, parameters);
+			expect(output).to.equal(parameters);
+		}));
+		it('throw if no report', () =>
+			expect(run()).to.eventually.be.rejectedWith(TypeError, /report: must be defined/));
+		it('throw if report is not a Function', () =>
+			expect(run({})).to.eventually.be.rejectedWith(TypeError, /report: must be a Function/));
 	});
 });
 
-
 describe('Report', function () {
-	var press = chronicle.Press.create();
-
-	it('can be function that returns a string', function () {
-		var html = 'Test';
-		var report = () => html;
-		return expect(press.run(report)).to.eventually.be.fulfilled
-			.and.to.equal(html);
-	});
-	it('can be yieldable function that is fulfilled with a string', function () {
-		var html = 'Test';
-		var report = co.wrap(function * () { return html; });
-		return expect(press.run(report)).to.eventually.be.fulfilled
-			.and.to.equal(html);
-	});
-	it('called with parameters', function () {
-		return co(function * () {
-			var parameters = {};
-			var report = sinon.stub().returns('Test');
-			yield press.run(report, parameters);
-			expect(report).to.be.calledOnce
-				.and.to.be.calledWithExactly(parameters);
-		});
-	});
+	it('can be function that returns a string', () => co(function * () {
+		const html = 'Test';
+		const report = () => html;
+		const output = yield run(report);
+		return expect(output).to.equal(html);
+	}));
+	it('can be yieldable function that is fulfilled with a string', () => co(function * () {
+		const html = 'Test';
+		const report = () => Promise.resolve(html);
+		const output = yield run(report);
+		return expect(output).to.equal(html);
+	}));
+	it('called with parameters', () => co(function * () {
+		const parameters = {};
+		const report = sinon.stub().returns('Test');
+		yield run(report, parameters);
+		expect(report).to.be.calledOnce
+			.and.to.be.calledWithExactly(parameters);
+	}));
 });

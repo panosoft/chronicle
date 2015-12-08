@@ -6,6 +6,3 @@ bundle.js
 **/test/test.html
 !**/test/node_modules
 !**/test/fixtures/**
-
-!examples/reports/**/test.pdf
-!examples/app/**/bundle.js

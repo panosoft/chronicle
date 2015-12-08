@@ -14,10 +14,11 @@
     "chronicle": "bin/chronicle.js"
   },
   "scripts": {
-    "test": "mocha test lib/press/file-loader/test"
+    "test": "mocha",
+    "test:debug": "mocha --debug-brk"
   },
   "author": "",
-  "license": "MIT",
+  "license": "ISC",
   "dependencies": {
     "@panosoft/ramda-utils": "^0.2.0",
     "@panosoft/require-string": "^0.1.0",
@@ -27,16 +28,12 @@
     "commander": "^2.8.1",
     "get-stdin": "^5.0.1",
     "got": "^5.1.0",
-    "is-local-path": "^0.1.0",
-    "is-plain-object": "^2.0.1",
     "is_js": "^0.7.4",
-    "lru-cache": "^2.6.4",
     "moment": "^2.10.6",
     "mz": "^2.0.0",
     "ramda": "^0.18.0",
     "rimraf": "^2.4.4",
     "update-notifier": "^0.5.0",
-    "validator": "^4.0.0",
     "watchify": "^3.6.1"
   },
   "devDependencies": {
