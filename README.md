@@ -94,6 +94,7 @@ co(function * () {
 - [Static Data Source Report](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-static) ([PDF](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-static/test/test.pdf))
 - [API Data Source Report](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-json) ([PDF](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-json/test/test.pdf))
 - [SQL Data Source Report](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-sql) ([PDF](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-sql/test/test.pdf))
+- [SQL Data Source, CSV Output Report](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-sql-csv) ([CSV](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-sql-csv/test/test.csv))
 - [Static Chart Report](https://github.com/panosoft/chronicle-examples/tree/master/reports/chart-static) ([PDF](https://github.com/panosoft/chronicle-examples/tree/master/reports/chart-static/test/test.pdf))
 - [Dynamic Chart Report](https://github.com/panosoft/chronicle-examples/tree/master/reports/chart-dynamic) ([PDF](https://github.com/panosoft/chronicle-examples/tree/master/reports/chart-dynamic/test/test.pdf))
 - [Report Bundle Server](https://github.com/panosoft/chronicle-examples/tree/master/bundle-server)
