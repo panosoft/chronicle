@@ -17,7 +17,7 @@ The following Web Technologies are supported for use in Reports:
 - CSS + LESS
 - JavaScript + Browserify + npm
 
-<a name="contents"/>
+<a name="contents"></a>
 ## Contents
 
 - [Architecture](#architecture)
@@ -30,7 +30,7 @@ The following Web Technologies are supported for use in Reports:
 - [API](#api)
 - [License](#license)
 
-<a name="architecture"/>
+<a name="architecture"></a>
 ## Architecture
 
 [Reports](#report) are CommonJS modules (i.e. Node modules) that export a Report Function.
@@ -48,7 +48,7 @@ Finally, HTML renderers like [PrinceXML](http://www.princexml.com/) that support
 <br/>
 <br/>
 
-<a name="philosophy"/>
+<a name="philosophy"></a>
 ## Philosophy
 
 Unlike Crystal Reports, Jasper Reports, BIRT, SQL Server Reporting Services (SSRS), Pentaho, etc., Chronicle doesn't subscribe to the WYSIWYG approach to report development. This is reminiscent of using FrontPage to produce web pages.
@@ -63,7 +63,7 @@ Good reports transform data into useful information in a form that's easy to und
 
 Chronicle embraces these truths and caters to developers by using standard Web Technologies, viz. HTML/Handlebars, CSS/Less, Javascript, NodeJS, Browserify and PrinceXML to produce high quality PDF reports from any data source.
 
-<a name="usage"/>
+<a name="usage"></a>
 ## Usage
 
 Reports can be run from the command line:
@@ -88,7 +88,7 @@ co(function * () {
 });
 ```
 
-<a name="examples"/>
+<a name="examples"></a>
 ## Examples
 
 - [Static Data Source Report](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-static) ([PDF](https://github.com/panosoft/chronicle-examples/tree/master/reports/data-static/test/test.pdf))
@@ -100,21 +100,21 @@ co(function * () {
 - [Report Bundle Server](https://github.com/panosoft/chronicle-examples/tree/master/bundle-server)
 - [Simple Reporting App](https://github.com/panosoft/chronicle-examples/tree/master/app)
 
-<a name="installation"/>
+<a name="installation"></a>
 ## Installation
 
 ```sh
 npm install -g @panosoft/chronicle
 ```
 
-<a name="report"/>
+<a name="report"></a>
 ## Report Structure
 
 Reports can take the form of a simple [Function](#function) or a [Module](#module) that exports a Function.
 
 They are run by Chronicle which returns static HTML content that can be visually rendered by a browser or any other third party HTML renderers.
 
-<a name="module"/>
+<a name="module"></a>
 ### Module
 
 A report Module is simply a CommonJS module (i.e. Node module) that exports a report [Function](#function).
@@ -133,7 +133,7 @@ var report = function (parameters) {
 module.exports = report;
 ```
 
-<a name="function"/>
+<a name="function"></a>
 ### Function
 
 The Report Function retrieves data and renders it as HTML.
@@ -189,7 +189,7 @@ const report = co.wrap(function * (parameters) {
 });
 ```
 
-<a name="cli"/>
+<a name="cli"></a>
 ## CLI
 
 `chronicle`
@@ -198,7 +198,7 @@ const report = co.wrap(function * (parameters) {
 
 ---
 
-<a name="cli-bundle"/>
+<a name="cli-bundle"></a>
 #### bundle [entry] [--output] [--watch]
 
 Bundles a report [Module](#module) along with all of its dependencies into a single file called a bundle.
@@ -227,7 +227,7 @@ chronicle bundle entry.js -o output.js -w
 
 ---
 
-<a name="cli-run"/>
+<a name="cli-run"></a>
 #### run [report] [--parameters] [--output]
 
 Runs a report and returns the output. If the output is an `Array` or `Object`, it is returned as a JSON string.
@@ -257,7 +257,7 @@ chronicle run index.js
 chronicle run bundle.js -o report.html -p '{"sample": "parameter"}'
 ```
 
-<a name="api"/>
+<a name="api"></a>
 ## API
 
 `chronicle`
@@ -266,7 +266,7 @@ chronicle run bundle.js -o report.html -p '{"sample": "parameter"}'
 
 ---
 
-<a name="bundle"/>
+<a name="bundle"></a>
 #### bundle ( entry , options )
 
 Bundles a report [Module](#module) along with all of its dependencies into a single file called a bundle.
@@ -299,7 +299,7 @@ chronicle.bundle(entry, options);
 
 ---
 
-<a name="run"/>
+<a name="run"></a>
 #### run ( report , parameters )
 
 Runs a [Report](#report) and returns a `Promise` that is fulfilled with the HTML produced.
